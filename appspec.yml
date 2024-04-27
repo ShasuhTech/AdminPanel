@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/Sites/admin-panel/
+permissions:
+  - object: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    type:
+      - directory
+      - file
+hooks:
+  ApplicationStart:
+    - location: deploy.sh
+      timeout: 700
+      runas: ubuntu

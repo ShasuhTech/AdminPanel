@@ -1,0 +1,689 @@
+import React, { useState } from "react";
+import { styled, useTheme } from "@mui/material/styles";
+import MuiDrawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { useRouter } from "next/router";
+import HomeIcon from "@mui/icons-material/Home";
+import NearMeOutlined from "@mui/icons-material/NearMeOutlined";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
+import SalonSvg from "@/components/SvgIcons/SalonSvg";
+import ServicesSvg from "@/components/SvgIcons/ServicesSvg";
+import { Collapse, useMediaQuery } from "@mui/material";
+import { eraseCookie } from "@/utilities/cookies";
+import { Cookies } from "@/config/cookies";
+import LogoutIcon from "@mui/icons-material/Logout";
+import TableRowsIcon from "@mui/icons-material/TableRows";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import ServicesIcon from "@/components/SvgIcons/ServiceSvg";
+import ReportIcon from "@/components/SvgIcons/ReportSvg";
+import ActiveList from "@mui/icons-material/FactCheckOutlined";
+import InActiveList from "@mui/icons-material/DoNotDisturbOnOutlined";
+import Onboarding from "@mui/icons-material/DirectionsRunOutlined";
+import RequestChange from "@mui/icons-material/ManageHistoryOutlined";
+import OfferPending from "@mui/icons-material/Inventory2Outlined";
+import ComboPending from "@mui/icons-material/PendingActionsOutlined";
+import ServiceList from "@mui/icons-material/ListAltOutlined";
+import Booking from "@mui/icons-material/BookOnlineOutlined";
+import ProfileDetails from "@mui/icons-material/BadgeOutlined";
+import Rating from "@mui/icons-material/ReviewsOutlined";
+import RatingSalon from "@mui/icons-material/StarsOutlined";
+
+// import PendingApproval from "@mui/icons-material/PendingActionsOutlined";
+import PendingApproval from "@mui/icons-material/WorkHistoryOutlined";
+// import { useMediaQuery } from "@material-ui/core";
+
+const drawerWidth = 250;
+
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const DrawerHeader = styled("div")(({ theme, open }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  padding: theme.spacing(0, 1),
+  height: !open ? "100px" : "50px",
+  backgroundColor: "#84484F",
+  borderTopRightRadius: !open ? "10px" : "0px",
+}));
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
+}));
+
+const DrawerList = ({
+  path,
+  text,
+  Icon,
+  children,
+  open,
+  title,
+  ind,
+  logout,
+  handleDrawerOpen,
+  handleDrawerClose,
+}) => {
+  const router = useRouter();
+  const isActive = router.pathname === path;
+  const [sublistOpen, setSublistOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width:600px)"); // Adjust breakpoint as needed
+
+  const toggleSublist = () => {
+    setSublistOpen(!sublistOpen);
+  };
+
+  const handleItemClick = () => {
+    if (!children) {
+      router.push({
+        pathname: path,
+        query: { title: title }, // Add your query parameter here
+      });
+    }
+    if (logout) {
+      eraseCookie(Cookies.TOKEN);
+    } else {
+      toggleSublist();
+    }
+  };
+
+  return (
+    <>
+      <ListItem disablePadding sx={{ display: "block" }} className="group">
+        <ListItemButton
+          button
+          onClick={handleItemClick}
+          // onMouseEnter={handleDrawerOpen} // Add onMouseEnter event
+          // onMouseLeave={handleDrawerClose} // Add onMouseLeave event
+          sx={{
+            justifyContent: "initial",
+            padding: "5px",
+            marginTop: "15px",
+            height: "36px",
+            paddingLeft: open ? "20px" : "10px",
+            // color: isActive ? "#616477" : "#000000",
+            color: isActive ? "#000" : "#000000",
+            backgroundColor: isActive ? "#FFFFFF" : "transparent",
+            borderRadius: open ? "10px" : "0px",
+            "&:hover": {
+              backgroundColor: isActive ? "#FFFFFF" : "#D9D9D933",
+              padding: "5px",
+              height: "36px",
+              paddingLeft: open ? "20px" : "10px",
+              color: "transparent",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: 0, mr: 3.5, justifyContent: "center" }}>
+            <Icon
+              className={`${!isActive ? "text-white" : "text-black"} `}
+              sx={!children && ind !== 1 && { fontSize: "15px" }}
+              // fill={!isActive ? "#000" : "#84484F"}
+              fill={!isActive ? "#fff" : "#fff"}
+            />
+          </ListItemIcon>
+          <ListItemText
+            primary={text}
+            primaryTypographyProps={
+              !children && ind !== 1
+                ? { fontSize: "13px" }
+                : { fontSize: "15px" }
+            }
+            // primaryTypographyProps={{  fontWeight: "bold" }} // Adjust the font size here
+            // className={`${isActive ? "text-primary" : "text-[#616477]"} `}
+            className={`${isActive ? "text-black" : "text-[#fff]"} `}
+          />
+          {children && (
+            <IconButton onClick={toggleSublist}>
+              {sublistOpen ? (
+                <KeyboardArrowUpIcon
+                  className={`${isActive ? "text-primary" : "text-white"}`}
+                />
+              ) : (
+                <KeyboardArrowDownIcon
+                  className={`${isActive ? "text-primary" : "text-white"}`}
+                />
+              )}
+            </IconButton>
+          )}
+        </ListItemButton>
+      </ListItem>
+      <Collapse in={sublistOpen} timeout={500}>
+        {
+          <List
+            style={{
+              width: "100%",
+              transition: "transform 0.3s",
+              padding: "0px 10px",
+            }}
+            component="div"
+            className={`
+            px-3 items-center justify-center text-center mr-6
+            transition-all duration-300
+            ${
+              sublistOpen
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 hidden"
+            }
+          `}
+          >
+            {children}
+          </List>
+        }
+      </Collapse>
+    </>
+  );
+};
+
+const DrawerPath = ({
+  open,
+  handleDrawerOpen,
+  handleDrawerClose,
+  viewportWidth,
+}) => {
+  const router = useRouter();
+  const theme = useTheme();
+  console.log(open, "---");
+  const isMobile = useMediaQuery("(max-width:600px)"); // Adjust breakpoint as needed
+
+  return (
+    <>
+      {isMobile && open && (
+        <Drawer
+          variant="permanent"
+          open={open}
+          className={"bg-[#0E0E0E] absolute"}
+        >
+          <List
+            className="bg-[#0E0E0E] h-[840px] rounded-br-lg px-4 overflow-y-auto"
+            style={{
+              padding: "5px 5px",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+            // onMouseEnter={handleDrawerOpen} // Add onMouseEnter event
+            // onMouseLeave={handleDrawerClose} // Add onMouseLeave event
+            // onClick={handleDrawerClose}
+          >
+            <img
+              onClick={() => router.push("/")}
+              src={open ? "/images/Logo.png" : "/images/Logo.png"}
+              className={
+                open
+                  ? "w-[88px] h-[119px] cursor-pointer mt-3 ml-auto mr-auto mb-12"
+                  : "w-[150px] h-[50px] cursor-pointer"
+              }
+            />
+            <DrawerList
+              path={"/"}
+              text={"Dashboard"}
+              Icon={HomeIcon}
+              open={open}
+              title={"Dashboard"}
+              ind={1}
+            />
+            <DrawerList
+              path={""}
+              text={"Salon"}
+              Icon={DashboardOutlinedIcon}
+              open={open}
+              disabled={true}
+            >
+              <DrawerList
+                path={"/salon/active"}
+                text={"Active List"}
+                Icon={ActiveList}
+                open={open}
+                title={"Salon >> Active"}
+              />
+              <DrawerList
+                path={"/salon/inactive"}
+                text={"Inactive List"}
+                Icon={InActiveList}
+                open={open}
+                title={"Salon >> Inactive"}
+              />
+              <DrawerList
+                path={"/salon/pending"}
+                text={"Pending for Approval"}
+                Icon={PendingApproval}
+                open={open}
+                title={"Salon >> Pending for Approval"}
+              />
+              <DrawerList
+                path={"/salon/onboarding-initiation"}
+                text={"Onboarding Initiation"}
+                Icon={Onboarding}
+                open={open}
+                title={"Salon >> Onboarding Initiation"}
+              />
+              <DrawerList
+                path={"/salon/requestchange"}
+                text={"Request Change"}
+                Icon={RequestChange}
+                open={open}
+                title={"Salon >> Request Change"}
+              />
+              <DrawerList
+                path={"/salon/pending-offers"}
+                text={"Offers Pending Approval"}
+                Icon={OfferPending}
+                open={open}
+                title={"Salon >> Pending Offers"}
+              />
+              <DrawerList
+                path={"/salon/pending-combos"}
+                text={"Combo Pending Approval"}
+                Icon={ComboPending}
+                open={open}
+                title={"Salon >> Pending Combos"}
+              />
+            </DrawerList>
+            <DrawerList
+              path={""}
+              text={"Services"}
+              Icon={ServicesIcon}
+              open={open}
+            >
+              <DrawerList
+                path={"/services"}
+                text={"Services List"}
+                Icon={ServiceList}
+                open={open}
+                title={"Services >> Service List"}
+              />
+              <DrawerList
+                path={"/services/change-status"}
+                text={"Pending for Approval"}
+                Icon={PendingApproval}
+                open={open}
+                title={"Services >> Pending for Approval"}
+              />
+            </DrawerList>
+
+            <DrawerList
+              path={"/report"}
+              text={"Report"}
+              Icon={ReportIcon}
+              open={open}
+              title={"Report"}
+              ind={1}
+            >
+              <DrawerList
+                path={"/report/booking"}
+                text={"Booking"}
+                Icon={Booking}
+                open={open}
+                title={"Report >> Booking"}
+              />
+            </DrawerList>
+
+            <DrawerList
+              path={"/report"}
+              text={"Report"}
+              Icon={ReportIcon}
+              open={open}
+              title={"Report"}
+              ind={1}
+            />
+            <DrawerList
+              path={"/ratings"}
+              text={"Ratings"}
+              Icon={Rating}
+              open={open}
+              title={"Ratings"}
+              ind={1}
+            >
+              <DrawerList
+                path={"/ratings/approved-review"}
+                text={"Approved Review"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Approved Review"}
+              />
+              <DrawerList
+                path={"/ratings/rejected-review"}
+                text={"Rejected Review"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Rejected Review"}
+              />
+              <DrawerList
+                path={"/ratings/pending-approval"}
+                text={"Pending Approval"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Pending Approval"}
+              />
+            </DrawerList>
+
+
+            <DrawerList
+              path={"/broadcasting-notification"}
+              text={"Broadcasting Notification"}
+              Icon={Rating}
+              open={open}
+              title={"Broadcasting Notification"}
+              ind={1}
+            >
+              {/* <DrawerList
+                path={"/ratings/approved-review"}
+                text={"Approved Review"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Approved Review"}
+              />
+              <DrawerList
+                path={"/ratings/rejected-review"}
+                text={"Rejected Review"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Rejected Review"}
+              />
+              <DrawerList
+                path={"/ratings/pending-approval"}
+                text={"Pending Approval"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Pending Approval"}
+              /> */}
+            </DrawerList>
+            {/* 
+
+            <DrawerList
+              path={" "}
+              text={"Profile"}
+              Icon={AccountCircleOutlinedIcon}
+              open={open}
+              title={"Profile"}
+              ind={1}
+            >
+              <DrawerList
+                path={"/profile"}
+                text={"Profile Details"}
+                Icon={ProfileDetails}
+                open={open}
+                title={"Profile >> Profile Details"}
+              />
+            </DrawerList> */}
+
+            {/* Always import in last  */}
+            {/* <DrawerList
+          path={"/logout"}
+          text={"Logout"}
+          Icon={LogoutIcon}
+          open={open}
+          title={"Report"}
+          logout={true}
+          ind={1}
+        /> */}
+          </List>
+          <Divider />
+        </Drawer>
+      )}
+      {!isMobile && (
+        <Drawer variant="permanent" open={open} className={"bg-primary"}>
+          <List
+            className="bg-[#0E0E0E] h-[100vh] rounded-br-lg  px-4 overflow-y-auto"
+            style={{
+              padding: "5px 5px",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+            // onMouseEnter={handleDrawerOpen} // Add onMouseEnter event
+            // onMouseLeave={handleDrawerClose} // Add onMouseLeave event
+          >
+            <img
+              onClick={() => router.push("/")}
+              src={open ? "/images/Logo.png" : "/images/Logo.png"}
+              className={
+                open
+                  ? "w-[88px] h-[119px] cursor-pointer mt-3 ml-auto mr-auto mb-12"
+                  : "w-[150px] h-[50px] cursor-pointer"
+              }
+            />
+            <DrawerList
+              path={"/"}
+              text={"Dashboards"}
+              Icon={HomeIcon}
+              open={open}
+              title={"Dashboards"}
+              ind={1}
+            />
+            <DrawerList
+              path={""}
+              text={"Salon"}
+              Icon={DashboardOutlinedIcon}
+              open={open}
+              disabled={true}
+            >
+              <DrawerList
+                path={"/salon/active"}
+                text={"Active List"}
+                Icon={ActiveList}
+                open={open}
+                title={"Salon >> Active"}
+              />
+              <DrawerList
+                path={"/salon/inactive"}
+                text={"Inactive List"}
+                Icon={InActiveList}
+                open={open}
+                title={"Salon >> Inactive"}
+              />
+              <DrawerList
+                path={"/salon/pending"}
+                text={"Pending for Approval"}
+                Icon={PendingApproval}
+                open={open}
+                title={"Salon >> Pending for Approval"}
+              />
+              <DrawerList
+                path={"/salon/onboarding-initiation"}
+                text={"Onboarding Initiation"}
+                Icon={Onboarding}
+                open={open}
+                title={"Salon >> Onboarding Initiation"}
+              />
+              <DrawerList
+                path={"/salon/requestchange"}
+                text={"Request Change"}
+                Icon={RequestChange}
+                open={open}
+                title={"Salon >> Request Change"}
+              />
+              <DrawerList
+                path={"/salon/pending-offers"}
+                text={"Offers Pending Approvals"}
+                Icon={OfferPending}
+                open={open}
+                title={"Salon >> Pending Offers"}
+              />
+              <DrawerList
+                path={"/salon/pending-combos"}
+                text={"Combo Pending Approval"}
+                Icon={ComboPending}
+                open={open}
+                title={"Salon >> Pending Combos"}
+              />
+            </DrawerList>
+            <DrawerList
+              path={""}
+              text={"Services"}
+              Icon={ServicesIcon}
+              open={open}
+            >
+              <DrawerList
+                path={"/services"}
+                text={"Services List"}
+                Icon={ServiceList}
+                open={open}
+                title={"Services >> Service List"}
+              />
+              <DrawerList
+                path={"/services/change-status"}
+                text={"Pending for Approval"}
+                Icon={PendingApproval}
+                open={open}
+                title={"Services >> Pending for Approval"}
+              />
+            </DrawerList>
+            <DrawerList
+              path={"/report"}
+              text={"Report"}
+              Icon={ReportIcon}
+              open={open}
+              title={"Report"}
+              ind={1}
+            >
+              <DrawerList
+                path={"/report/booking"}
+                text={"Booking"}
+                Icon={Booking}
+                open={open}
+                title={"Report >> Booking"}
+              />
+            </DrawerList>
+            <DrawerList
+              path={"/ratings"}
+              text={"Ratings"}
+              Icon={Rating}
+              open={open}
+              title={"Ratings"}
+              ind={1}
+            >
+              <DrawerList
+                path={"/ratings/approved-review"}
+                text={"Approved Review"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Approved Review"}
+              />
+              <DrawerList
+                path={"/ratings/rejected-review"}
+                text={"Rejected Review"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Rejected Review"}
+              />
+              <DrawerList
+                path={"/ratings/pending-approval"}
+                text={"Pending Approval"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Pending Approval"}
+              />
+            </DrawerList>
+
+            <DrawerList
+              path={"/broadcasting-notification"}
+              text={"Broadcasting Notification"}
+              Icon={Rating}
+              open={open}
+              title={"Broadcasting Notification"}
+              ind={1}
+            >
+              {/* <DrawerList
+                path={"/ratings/approved-review"}
+                text={"Approved Review"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Approved Review"}
+              />
+              <DrawerList
+                path={"/ratings/rejected-review"}
+                text={"Rejected Review"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Rejected Review"}
+              />
+              <DrawerList
+                path={"/ratings/pending-approval"}
+                text={"Pending Approval"}
+                Icon={RatingSalon}
+                open={open}
+                title={"Ratings >> Pending Approval"}
+              /> */}
+            </DrawerList>
+
+
+
+            
+
+            {/* 
+            <DrawerList
+              path={" "}
+              text={"Profile"}
+              Icon={AccountCircleOutlinedIcon}
+              open={open}
+              title={"Profile"}
+              ind={1}
+            >
+              <DrawerList
+                path={"/profile"}
+                text={"Profile Details"}
+                Icon={ProfileDetails}
+                open={open}
+                title={"Profile >> Profile Details"}
+              />
+            </DrawerList> */}
+
+            {/* Always import in last  */}
+            {/* <DrawerList
+          path={"/logout"}
+          text={"Logout"}
+          Icon={LogoutIcon}
+          open={open}
+          title={"Report"}
+          logout={true}
+          ind={1}
+        /> */}
+          </List>
+          <Divider />
+        </Drawer>
+      )}
+    </>
+  );
+};
+
+export default DrawerPath;

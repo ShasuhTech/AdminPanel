@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18  # Use your preferred Node.js version
+
+  build:
+    commands:
+      - npm i -f
+      - npm run build
+
+artifacts:
+  files:
+    - 'deploy.sh'
+    - 'appspec.yml'
+  base-directory: '.'
