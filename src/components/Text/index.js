@@ -1,9 +1,30 @@
-import React from 'react'
+import { Typography } from "@mui/material";
+import React from "react";
 
-const CommonText = () => {
+const CommonText = ({
+  showText,
+  fontSize,
+  children,
+  fontWeight,
+  onPress,
+  color,
+}) => {
+  // Define styles based on props
+  const styles = {
+    fontWeight: fontWeight ? fontWeight : 'medium',
+    color: color || 'black',
+    fontSize:  '18px'
+  };
+
   return (
-    <div className='bg-red-400' >CommonText</div>
-  )
-}
+    <p
+      onPress={onPress}
+      style={styles}
+      className="p-0 m-0"
+    >
+      {showText || children}
+    </p>
+  );
+};
 
-export default CommonText
+export default CommonText;

@@ -85,7 +85,7 @@ const UserDropdown = () => {
     <Fragment>
       <div className="profileDrop" onClick={handleDropdownOpen}>
         <div className="pro" style={{ position: "relative" }}>
-          <Avatar
+          {/* <Avatar
             alt="John Doe"
             // onClick={handleDropdownOpen}
             sx={{ width: 32, height: 32 }}
@@ -94,14 +94,14 @@ const UserDropdown = () => {
                 ? ProfilePic
                 : `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=0D8ABC&color=fff`
             }
-          />
-          <Badge
+          /> */}
+          {/* <Badge
             overlap="circular"
             sx={{ ml: 2, cursor: "pointer" }}
             badgeContent={<BadgeContentSpan />}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             className="iconcercle"
-          ></Badge>
+          ></Badge> */}
         </div>
         {/* 
         <img
@@ -110,7 +110,7 @@ const UserDropdown = () => {
         /> */}
         <div className="w-[90.36px] h-[37.5px] flex flex-col">
           <div className="h-[19.5px] text-[#495057] whitespace-nowrap">
-            {firstName} {lastName}
+            School Express
           </div>
           <div className="w-[49.48px] h-[18px] text-[#878A99]">Admin</div>
         </div>
@@ -126,7 +126,7 @@ const UserDropdown = () => {
       >
         <Box sx={{ pt: 2, pb: 3, px: 4 }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Badge
+            {/* <Badge
               overlap="circular"
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -140,7 +140,7 @@ const UserDropdown = () => {
                 }
                 sx={{ width: "2.5rem", height: "2.5rem" }}
               />
-            </Badge>
+            </Badge> */}
             <Box
               sx={{
                 display: "flex",
@@ -150,7 +150,7 @@ const UserDropdown = () => {
               }}
             >
               <Typography sx={{ fontWeight: 600 }}>
-                {firstName} {lastName}
+              School Express
               </Typography>
               <Typography
                 variant="body2"

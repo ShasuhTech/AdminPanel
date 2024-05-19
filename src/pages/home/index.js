@@ -465,7 +465,7 @@ const Home = () => {
                   }}
                 >
                   {/* Top 10 {process.env.NEXT_PUBLIC_TITLE} */}
-                  Top 10 Style Lounge
+                  Top 10 School
                 </Typography>
               </Grid>
               <Grid item>

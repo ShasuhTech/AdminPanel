@@ -1,65 +1,53 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Magnify from "mdi-material-ui/Magnify";
-import { Tooltip } from "@mui/material";
+/* eslint-disable no-unused-vars */
+// ** React Imports
+import { ChangeEvent } from 'react'
+
+// ** MUI Imports
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import IconButton from '@mui/material/IconButton'
+import { GridToolbarFilterButton } from '@mui/x-data-grid'
+
+// ** Icons Imports
+import Close from 'mdi-material-ui/Close'
+import Magnify from 'mdi-material-ui/Magnify'
+import { Tooltip } from '@mui/material'
 
 const QuickSearchToolbar = (props) => {
-  const handleFilterClick = () => {
-    if (props.onFilterClick) {
-      props.onFilterClick();
-    }
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      handleFilterClick();
-    }
-  };
-
   return (
     <Box
       sx={
         props.rootSx || {
           p: !props.isNotDataGrid ? 2 : 0,
           pb: 0,
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          marginLeft: props.isNotDataGrid ? 4 : 2,
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          marginLeft: props.isNotDataGrid ? 4 : 2
         }
       }
     >
-      <Tooltip title={props?.title ? props?.title : "Search by Name & Id"}>
+      {/* {!props.isNotDataGrid && (
+        <Box>
+          <GridToolbarFilterButton />
+        </Box>
+      )} */}
+      <Tooltip title={props?.isTeamMember ? props?.isTeamMember : 'Search by id, name'}>
         <TextField
-          variant={"standard"}
+          variant={props?.variant || 'standard'}
           value={props.value}
           onChange={props.onChange}
-          className="searchinput"
-          placeholder={props?.title ? props?.title : "Search by Name & Id"}
+          fullWidth
+          placeholder={props?.isTeamMember ? props?.isTeamMember : 'Search by id, name'}
           InputProps={{
-            startAdornment: (
-              <Magnify
-                style={{ cursor: "pointer" }}
-                fontSize="small"
-                onClick={handleFilterClick}
-              />
-            ),
+           
           }}
-          onKeyDown={handleKeyDown}
-          sx={{
-            width: props.width
-              ? "100%"
-              : {
-                  xs: 1,
-                  sm: 250,
-                },
-          }}
+         
         />
       </Tooltip>
     </Box>
-  );
-};
+  )
+}
 
-export default QuickSearchToolbar;
+export default QuickSearchToolbar

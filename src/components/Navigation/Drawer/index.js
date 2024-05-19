@@ -37,7 +37,7 @@ import Booking from "@mui/icons-material/BookOnlineOutlined";
 import ProfileDetails from "@mui/icons-material/BadgeOutlined";
 import Rating from "@mui/icons-material/ReviewsOutlined";
 import RatingSalon from "@mui/icons-material/StarsOutlined";
-
+import SchoolIcon from "@mui/icons-material/School";
 // import PendingApproval from "@mui/icons-material/PendingActionsOutlined";
 import PendingApproval from "@mui/icons-material/WorkHistoryOutlined";
 // import { useMediaQuery } from "@material-ui/core";
@@ -256,207 +256,31 @@ const DrawerPath = ({
             />
             <DrawerList
               path={"/"}
-              text={"Dashboard"}
+              text={"Dashboards"}
               Icon={HomeIcon}
               open={open}
-              title={"Dashboard"}
+              title={"Dashboards"}
               ind={1}
             />
-            <DrawerList
-              path={""}
-              text={"Salon"}
-              Icon={DashboardOutlinedIcon}
-              open={open}
-              disabled={true}
-            >
+
+            <DrawerList path={""} text={"School"} Icon={SchoolIcon} open={open}>
               <DrawerList
-                path={"/salon/active"}
-                text={"Active List"}
-                Icon={ActiveList}
-                open={open}
-                title={"Salon >> Active"}
-              />
-              <DrawerList
-                path={"/salon/inactive"}
-                text={"Inactive List"}
-                Icon={InActiveList}
-                open={open}
-                title={"Salon >> Inactive"}
-              />
-              <DrawerList
-                path={"/salon/pending"}
-                text={"Pending for Approval"}
-                Icon={PendingApproval}
-                open={open}
-                title={"Salon >> Pending for Approval"}
-              />
-              <DrawerList
-                path={"/salon/onboarding-initiation"}
-                text={"Onboarding Initiation"}
-                Icon={Onboarding}
-                open={open}
-                title={"Salon >> Onboarding Initiation"}
-              />
-              <DrawerList
-                path={"/salon/requestchange"}
-                text={"Request Change"}
-                Icon={RequestChange}
-                open={open}
-                title={"Salon >> Request Change"}
-              />
-              <DrawerList
-                path={"/salon/pending-offers"}
-                text={"Offers Pending Approval"}
-                Icon={OfferPending}
-                open={open}
-                title={"Salon >> Pending Offers"}
-              />
-              <DrawerList
-                path={"/salon/pending-combos"}
-                text={"Combo Pending Approval"}
-                Icon={ComboPending}
-                open={open}
-                title={"Salon >> Pending Combos"}
-              />
-            </DrawerList>
-            <DrawerList
-              path={""}
-              text={"Services"}
-              Icon={ServicesIcon}
-              open={open}
-            >
-              <DrawerList
-                path={"/services"}
-                text={"Services List"}
+                path={"/school"}
+                text={"School List"}
                 Icon={ServiceList}
                 open={open}
-                title={"Services >> Service List"}
-              />
-              <DrawerList
-                path={"/services/change-status"}
-                text={"Pending for Approval"}
-                Icon={PendingApproval}
-                open={open}
-                title={"Services >> Pending for Approval"}
+                title={"School >> School List"}
               />
             </DrawerList>
-
-            <DrawerList
-              path={"/report"}
-              text={"Report"}
-              Icon={ReportIcon}
-              open={open}
-              title={"Report"}
-              ind={1}
-            >
+            <DrawerList path={""} text={"Student"} Icon={SchoolIcon} open={open}>
               <DrawerList
-                path={"/report/booking"}
-                text={"Booking"}
-                Icon={Booking}
+                path={"/school"}
+                text={"Student Entry"}
+                Icon={ServiceList}
                 open={open}
-                title={"Report >> Booking"}
+                title={"School >> School List"}
               />
             </DrawerList>
-
-            <DrawerList
-              path={"/report"}
-              text={"Report"}
-              Icon={ReportIcon}
-              open={open}
-              title={"Report"}
-              ind={1}
-            />
-            <DrawerList
-              path={"/ratings"}
-              text={"Ratings"}
-              Icon={Rating}
-              open={open}
-              title={"Ratings"}
-              ind={1}
-            >
-              <DrawerList
-                path={"/ratings/approved-review"}
-                text={"Approved Review"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Approved Review"}
-              />
-              <DrawerList
-                path={"/ratings/rejected-review"}
-                text={"Rejected Review"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Rejected Review"}
-              />
-              <DrawerList
-                path={"/ratings/pending-approval"}
-                text={"Pending Approval"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Pending Approval"}
-              />
-            </DrawerList>
-
-
-            <DrawerList
-              path={"/broadcasting-notification"}
-              text={"Broadcasting Notification"}
-              Icon={Rating}
-              open={open}
-              title={"Broadcasting Notification"}
-              ind={1}
-            >
-              {/* <DrawerList
-                path={"/ratings/approved-review"}
-                text={"Approved Review"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Approved Review"}
-              />
-              <DrawerList
-                path={"/ratings/rejected-review"}
-                text={"Rejected Review"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Rejected Review"}
-              />
-              <DrawerList
-                path={"/ratings/pending-approval"}
-                text={"Pending Approval"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Pending Approval"}
-              /> */}
-            </DrawerList>
-            {/* 
-
-            <DrawerList
-              path={" "}
-              text={"Profile"}
-              Icon={AccountCircleOutlinedIcon}
-              open={open}
-              title={"Profile"}
-              ind={1}
-            >
-              <DrawerList
-                path={"/profile"}
-                text={"Profile Details"}
-                Icon={ProfileDetails}
-                open={open}
-                title={"Profile >> Profile Details"}
-              />
-            </DrawerList> */}
-
-            {/* Always import in last  */}
-            {/* <DrawerList
-          path={"/logout"}
-          text={"Logout"}
-          Icon={LogoutIcon}
-          open={open}
-          title={"Report"}
-          logout={true}
-          ind={1}
-        /> */}
           </List>
           <Divider />
         </Drawer>
@@ -470,8 +294,6 @@ const DrawerPath = ({
               scrollbarWidth: "none",
               msOverflowStyle: "none",
             }}
-            // onMouseEnter={handleDrawerOpen} // Add onMouseEnter event
-            // onMouseLeave={handleDrawerClose} // Add onMouseLeave event
           >
             <img
               onClick={() => router.push("/")}
@@ -490,194 +312,67 @@ const DrawerPath = ({
               title={"Dashboards"}
               ind={1}
             />
-            <DrawerList
-              path={""}
-              text={"Salon"}
-              Icon={DashboardOutlinedIcon}
-              open={open}
-              disabled={true}
-            >
+            <DrawerList path={""} text={"School"} Icon={SchoolIcon} open={open}>
               <DrawerList
-                path={"/salon/active"}
-                text={"Active List"}
-                Icon={ActiveList}
-                open={open}
-                title={"Salon >> Active"}
-              />
-              <DrawerList
-                path={"/salon/inactive"}
-                text={"Inactive List"}
-                Icon={InActiveList}
-                open={open}
-                title={"Salon >> Inactive"}
-              />
-              <DrawerList
-                path={"/salon/pending"}
-                text={"Pending for Approval"}
-                Icon={PendingApproval}
-                open={open}
-                title={"Salon >> Pending for Approval"}
-              />
-              <DrawerList
-                path={"/salon/onboarding-initiation"}
-                text={"Onboarding Initiation"}
-                Icon={Onboarding}
-                open={open}
-                title={"Salon >> Onboarding Initiation"}
-              />
-              <DrawerList
-                path={"/salon/requestchange"}
-                text={"Request Change"}
-                Icon={RequestChange}
-                open={open}
-                title={"Salon >> Request Change"}
-              />
-              <DrawerList
-                path={"/salon/pending-offers"}
-                text={"Offers Pending Approvals"}
-                Icon={OfferPending}
-                open={open}
-                title={"Salon >> Pending Offers"}
-              />
-              <DrawerList
-                path={"/salon/pending-combos"}
-                text={"Combo Pending Approval"}
-                Icon={ComboPending}
-                open={open}
-                title={"Salon >> Pending Combos"}
-              />
-            </DrawerList>
-            <DrawerList
-              path={""}
-              text={"Services"}
-              Icon={ServicesIcon}
-              open={open}
-            >
-              <DrawerList
-                path={"/services"}
-                text={"Services List"}
+                path={"/school"}
+                text={"School List"}
                 Icon={ServiceList}
                 open={open}
-                title={"Services >> Service List"}
+                title={"School >> School List"}
               />
               <DrawerList
-                path={"/services/change-status"}
-                text={"Pending for Approval"}
-                Icon={PendingApproval}
+                path={"/school/school-overview"}
+                text={"School Overview"}
+                Icon={ServiceList}
                 open={open}
-                title={"Services >> Pending for Approval"}
+                title={"School >> School Overview"}
               />
             </DrawerList>
-            <DrawerList
-              path={"/report"}
-              text={"Report"}
-              Icon={ReportIcon}
-              open={open}
-              title={"Report"}
-              ind={1}
-            >
+            <DrawerList path={""} text={"Student"} Icon={SchoolIcon} open={open}>
+              
               <DrawerList
-                path={"/report/booking"}
-                text={"Booking"}
-                Icon={Booking}
+                path={"/student/student-list"}
+                text={"Student List"}
+                Icon={ServiceList}
                 open={open}
-                title={"Report >> Booking"}
+                title={"Student >> Student List"}
+              />
+              <DrawerList
+                path={"/student/rollno-assign"}
+                text={"Roll No Assign"}
+                Icon={ServiceList}
+                open={open}
+                title={"Student >> Roll No Assign"}
+              />
+              <DrawerList
+                path={"/student/transfer-certificate"}
+                text={"Transfer Certificate"}
+                Icon={ServiceList}
+                open={open}
+                title={"Student >> Transfer Certificate"}
+              />
+              <DrawerList
+                path={"/student/dropout-details"}
+                text={"Dropout Details"}
+                Icon={ServiceList}
+                open={open}
+                title={"Student >> Dropout Details"}
+              />
+              <DrawerList
+                path={"/student/promotion"}
+                text={"Promotion"}
+                Icon={ServiceList}
+                open={open}
+                title={"Promotion"}
+              />
+              <DrawerList
+                path={"/student/student-updation"}
+                text={"Field Updation"}
+                Icon={ServiceList}
+                open={open}
+                title={"Field Updation"}
               />
             </DrawerList>
-            <DrawerList
-              path={"/ratings"}
-              text={"Ratings"}
-              Icon={Rating}
-              open={open}
-              title={"Ratings"}
-              ind={1}
-            >
-              <DrawerList
-                path={"/ratings/approved-review"}
-                text={"Approved Review"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Approved Review"}
-              />
-              <DrawerList
-                path={"/ratings/rejected-review"}
-                text={"Rejected Review"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Rejected Review"}
-              />
-              <DrawerList
-                path={"/ratings/pending-approval"}
-                text={"Pending Approval"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Pending Approval"}
-              />
-            </DrawerList>
-
-            <DrawerList
-              path={"/broadcasting-notification"}
-              text={"Broadcasting Notification"}
-              Icon={Rating}
-              open={open}
-              title={"Broadcasting Notification"}
-              ind={1}
-            >
-              {/* <DrawerList
-                path={"/ratings/approved-review"}
-                text={"Approved Review"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Approved Review"}
-              />
-              <DrawerList
-                path={"/ratings/rejected-review"}
-                text={"Rejected Review"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Rejected Review"}
-              />
-              <DrawerList
-                path={"/ratings/pending-approval"}
-                text={"Pending Approval"}
-                Icon={RatingSalon}
-                open={open}
-                title={"Ratings >> Pending Approval"}
-              /> */}
-            </DrawerList>
-
-
-
-            
-
-            {/* 
-            <DrawerList
-              path={" "}
-              text={"Profile"}
-              Icon={AccountCircleOutlinedIcon}
-              open={open}
-              title={"Profile"}
-              ind={1}
-            >
-              <DrawerList
-                path={"/profile"}
-                text={"Profile Details"}
-                Icon={ProfileDetails}
-                open={open}
-                title={"Profile >> Profile Details"}
-              />
-            </DrawerList> */}
-
-            {/* Always import in last  */}
-            {/* <DrawerList
-          path={"/logout"}
-          text={"Logout"}
-          Icon={LogoutIcon}
-          open={open}
-          title={"Report"}
-          logout={true}
-          ind={1}
-        /> */}
           </List>
           <Divider />
         </Drawer>

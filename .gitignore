@@ -7,7 +7,7 @@
 .yarn/install-state.gz
 .package.json
 /package.json
-
+.env
 # testing
 /coverage
 

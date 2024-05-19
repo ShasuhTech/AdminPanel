@@ -116,9 +116,9 @@ const DetailsTable = ({ topTenSalonData }) => {
       <Table aria-label="collapsible table" className="">
         <TableHead style={{backgroundColor:'#F3F6F9'}}>
           <TableRow style={{ fontWeight: "500", color: "#000" }}>
-          <StyledTableCell align="center"> Salon ID</StyledTableCell>
-            <StyledTableCell align="center"> Salon Name</StyledTableCell>
-            <StyledTableCell align="center">Total Booking</StyledTableCell>
+          <StyledTableCell align="center"> School ID</StyledTableCell>
+            <StyledTableCell align="center"> School Name</StyledTableCell>
+            <StyledTableCell align="center">Total Student</StyledTableCell>
             <StyledTableCell align="center">Completed</StyledTableCell>
             <StyledTableCell align="center">Ongoing</StyledTableCell>
             <StyledTableCell align="center">Pending</StyledTableCell>

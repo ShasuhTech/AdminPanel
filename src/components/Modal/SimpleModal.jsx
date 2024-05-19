@@ -1,11 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useEffect } from "react";
-import { Close } from "mdi-material-ui";
-import { Grid } from "@mui/material";
+import Slide from '@mui/material/Slide';
 
 const style = {
   position: "absolute",
@@ -19,6 +15,10 @@ const style = {
   p: 4,
   borderRadius: "10px",
 };
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function SimpleModal({
   open,
@@ -36,6 +36,7 @@ export default function SimpleModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       className="rounded-lg"
+      TransitionComponent={Transition}
     >
       <Box
         sx={{ ...style, width: !isMobile ? width : "100%", height: "auto%" }}

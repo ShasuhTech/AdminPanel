@@ -31,7 +31,7 @@ import {
 import { serviceList } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
 import { exportToCSV } from "@/components/Common";
-import CustomButton from "@/components/CommonButton/FilterButton";
+import CustomButton from "@/components/CommonButton/CustomButton";
 import ResetButton from "@/components/CommonButton/ResetButton";
 import Select from '@mui/material/Select';
 import axios from "axios";

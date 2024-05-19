@@ -24,9 +24,10 @@ if (token) {
       return response;
     },
     (error) => {
+      console.log(error,'-dfsdf')
       // Handle errors globally
       if (error.response && error.response.status === 500) {
-        toast.error("Internal Server Error"); // Show toast message for 500 error
+        // toast.error("Internal Server Error"); // Show toast message for 500 error
       }
       return Promise.reject(error);
     }
