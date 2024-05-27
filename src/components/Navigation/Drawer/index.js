@@ -373,6 +373,81 @@ const DrawerPath = ({
                 title={"Field Updation"}
               />
             </DrawerList>
+            <DrawerList path={""} text={"registration"} Icon={SchoolIcon} open={open}>
+              
+              <DrawerList
+                path={"/registration/student-registration"}
+                text={"Student Registration"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> student registration"}
+              />
+              <DrawerList
+                path={"/registration/registration-start-details"}
+                text={"Registration Start Details"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Registration Start Details"}
+              />
+              <DrawerList
+                path={"/registration/followup-mood"}
+                text={"Followup Mode"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Followup Mode"}
+              />
+              <DrawerList
+                path={"/registration/selection-process"}
+                text={"Selection Process"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Selection Process"}
+              />
+              <DrawerList
+                path={"/registration/student-enquiry"}
+                text={"Student Enquiry"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Student Enquiry"}
+              />
+          
+              <DrawerList
+                path={"/registration/student-transfer"}
+                text={"Student Transfer"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Student Transfer"}
+              />
+              <DrawerList
+                path={"/registration/subject-assigner"}
+                text={"Subject Assigner"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Subject Assigner"}
+              />
+              <DrawerList
+                path={"/registration/subject-master"}
+                text={"Subject Master"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Subject Master"}
+              />
+              <DrawerList
+                path={"/registration/time-slot-master"}
+                text={"Time Slot Master"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Time Slot Master"}
+              />
+              <DrawerList
+                path={"/registration/age-criteria"}
+                text={"Age Criteria"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Age Criteria"}
+              />
+            </DrawerList>
+           
           </List>
           <Divider />
         </Drawer>

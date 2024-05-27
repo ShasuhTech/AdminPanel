@@ -65,13 +65,7 @@ const ParentDetails = () => {
     setSubmitting(false);
   };
 
-  const qualifications = [
-    { id: "1", name: "High School" },
-    { id: "2", name: "Bachelor's Degree" },
-    { id: "3", name: "Master's Degree" },
-    { id: "4", name: "PhD" },
-    { id: "5", name: "Professional Certification" },
-  ];
+const qualifications=[]
 
   const cities = [
     { id: "1", name: "New York" },
@@ -97,7 +91,7 @@ const ParentDetails = () => {
         fee_no: "",
         parent_id: "",
         father_name: "",
-        qualifications: [],
+        qualifications: '',
         occupation: "",
         designation: "",
         org_name: "",
@@ -193,40 +187,24 @@ const ParentDetails = () => {
                     />
                   </div>
                   <div className="lg:w-[32%] w-[100%]">
-                    <FormControl fullWidth variant="outlined">
-                      <InputLabel id="qualifications-label">
-                        Qualifications
-                      </InputLabel>
-                      <Field
-                        name="qualifications"
-                        as={Select}
-                        label="qualifications"
-                        multiple
-                        value={values.qualifications}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={false}
-                        renderValue={(selected) =>
-                          selected
-                            .map(
-                              (value) =>
-                                qualifications.find((qual) => qual.id === value)
-                                  ?.name || ""
-                            )
-                            .join(", ")
-                        }
-                      >
-                        {qualifications.map((qualification) => (
-                          <MenuItem
-                            key={qualification.id}
-                            value={qualification.id}
-                          >
-                            {qualification.name}
-                          </MenuItem>
-                        ))}
-                      </Field>
-                      <ErrorMessage name="qualifications" component="div" />
-                    </FormControl>
+                  <Field
+                      name="qualification"
+                      as={TextField}
+                      select
+                      label="Qualification"
+                      variant="outlined"
+                      fullWidth
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={false}
+                      helperText={<ErrorMessage name="qualification" />}
+                    >
+                      {qualifications.map((option) => (
+                        <MenuItem key={option?.name} value={option?.name}>
+                          {option.name}
+                        </MenuItem>
+                      ))}
+                    </Field>
                   </div>
                   <div className="lg:w-[32%] w-[100%]">
                     <Field

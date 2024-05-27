@@ -492,6 +492,14 @@ const SchoolBusOptions = [
   },
   // Add more options as needed
 ];
+const qualifications =[ {
+  value: "1",
+  label: "Available",
+},
+{
+  value: "2",
+  label: "Not Available",
+},]
 export default {
   ClassList,
   SectionList,
@@ -512,4 +520,6 @@ export default {
   PaymentTypes,
   HouseTypes,
   SchoolBusOptions,
+  qualifications,
+
 };

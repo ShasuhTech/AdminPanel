@@ -25,12 +25,9 @@ import { useRouter } from "next/router";
 
 const BasicDetails = ({ setSlectedTab, studenData }) => {
   const router = useRouter();
-  // new Date("2024-05-17T15:27:09.000Z");
-  // ("2024-05-17T00:00:00.000Z");
-  console.log(studenData, "studenData");
+
   const [presentState, setPresentState] = useState("");
   const [confirmAddress, setConfrimAddress] = useState(false);
-  console.log(presentState);
   const {
     data: allState,
     status: stateStatus,
@@ -62,7 +59,6 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
     };
     if (presentState || studenData?.address?.present_address?.state) {
       const res = await cityData(payload);
-      console.log(res, "---sdf");
       return res?.data;
     }
   });
@@ -177,89 +173,65 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
   };
   const initialValues = {
     search: studenData.search || "",
-    sibling_adm_no: studenData ? studenData?.sibling_admission_number : "",
-    admission_no: studenData ? studenData?.admission_number : "",
-    fee_no: studenData ? studenData?.fee_number : "",
-    parent_id: studenData ? studenData : "",
-    first_name: studenData ? studenData?.name?.first_name : "",
-    middle_name: studenData ? studenData?.name?.middle_name : "",
-    last_name: studenData ? studenData?.name?.last_name : "",
-    class: studenData ? studenData?.class : "",
-    section: studenData ? studenData?.section : "",
-    stream: studenData ? studenData?.stream : "",
-    fee_group: studenData ? studenData?.fee_group : "",
-    fee_apply_form: studenData ? studenData?.fee_apply_form : "",
-    dob: studenData ? studenData?.date_of_birth : new Date(),
-    doj: studenData ? studenData?.joining_date : new Date(),
-    doa: studenData ? studenData?.admission_date : new Date(),
-    admission: studenData ? studenData?.admission : "",
-    roll_no: studenData ? studenData?.roll_number : "",
-    gender: studenData ? studenData?.gender : "",
-    // father_name: studenData? studenData : "",
-    // mother_name: studenData? studenData : "",
-    emergency_no: studenData ? studenData?.emergency_number : "",
-    // admitted_class: studenData? studenData : "",
-    house: studenData ? studenData?.house : "",
-    social_category: studenData ? studenData?.social_category : "",
-    religion: studenData ? studenData?.religion : "",
-    caste: studenData ? studenData?.caste : "",
-    mother_tongue: studenData ? studenData?.mother_tongue : "",
-    concession_type: studenData ? studenData?.concession_type : "",
-    nationality: studenData ? studenData?.nationality : "",
-    blood_group: studenData ? studenData?.blood_group : "",
-    boarding_category: studenData ? studenData?.boarding_category : "",
-    board_reg_no: studenData ? studenData?.board_reg_no : "",
-    board: studenData ? studenData?.board : "",
-    board_roll_no: studenData ? studenData?.board_roll_no : "",
-    email_id: studenData ? studenData?.email_id : "",
-    school_bus: studenData ? studenData?.school_bus : "",
-    adhar_card_no: studenData ? studenData?.adhar_card_no : "",
-    route_stop_name: studenData ? studenData?.route_stop_name : "",
-    sms_no: studenData ? studenData : "",
-    remark: studenData ? studenData?.remark : "",
-    fee_remark: studenData ? studenData : "",
-    payment_mode: studenData ? studenData?.payment_mode : "",
-    student_type: studenData ? studenData?.student_type : "",
-    present_address: studenData
-      ? studenData?.address?.present_address?.address
-      : "",
-    present_city: studenData ? studenData?.address?.present_address?.city : "",
-    present_state: studenData
-      ? studenData?.address?.present_address?.state
-      : "",
-    present_pincode: studenData
-      ? studenData?.address?.present_address?.pin_code
-      : "",
-    present_locality: studenData
-      ? studenData?.address?.present_address?.locality
-      : "",
-    present_country: studenData
-      ? studenData?.address?.present_address?.country
-      : "india",
-    present_telephone: studenData
-      ? studenData?.address?.present_address?.telephone
-      : "",
-    permanent_address: studenData
-      ? studenData?.address?.permanent_address?.address
-      : "",
-    permanent_city: studenData
-      ? studenData?.address?.permanent_address?.city
-      : "",
-    permanent_state: studenData
-      ? studenData?.address?.permanent_address?.state
-      : "",
-    permanent_pincode: studenData
-      ? studenData?.address?.permanent_address?.pin_code
-      : "",
-    permanent_locality: studenData
-      ? studenData?.address?.permanent_address?.locality
-      : "",
-    permanent_country: studenData
-      ? studenData?.address?.permanent_address?.country
-      : "india",
-    permanent_telephone: studenData
-      ? studenData?.address?.permanent_address?.telephone
-      : "",
+    sibling_adm_no: studenData?.sibling_admission_number || "",
+    admission_no: studenData?.admission_number || "",
+    fee_no: studenData?.fee_number || "",
+    parent_id: studenData || "",
+    first_name: studenData?.name?.first_name || "",
+    middle_name: studenData?.name?.middle_name || "",
+    last_name: studenData?.name?.last_name || "",
+    class: studenData?.class || "",
+    section: studenData?.section || "",
+    stream: studenData?.stream || "",
+    fee_group: studenData?.fee_group || "",
+    fee_apply_form: studenData?.fee_apply_form || "",
+    dob: studenData?.date_of_birth || new Date(),
+    doj: studenData?.joining_date || new Date(),
+    doa: studenData?.admission_date || new Date(),
+    admission: studenData?.admission || "",
+    roll_no: studenData?.roll_number || "",
+    gender: studenData?.gender || "",
+    // father_name: studenData? studenData ||'',
+    // mother_name: studenData? studenData ||'',
+    emergency_no: studenData?.emergency_number || "",
+    // admitted_class: studenData? studenData ||'',
+    house: studenData?.house || "",
+    social_category: studenData?.social_category || "",
+    religion: studenData?.religion || "",
+    caste: studenData?.caste || "",
+    mother_tongue: studenData?.mother_tongue || "",
+    concession_type: studenData?.concession_type || "",
+    nationality: studenData?.nationality || "",
+    blood_group: studenData?.blood_group || "",
+    boarding_category: studenData?.boarding_category || "",
+    board_reg_no: studenData?.board_reg_no || "",
+    board: studenData?.board || "",
+    board_roll_no: studenData?.board_roll_no || "",
+    email_id: studenData?.email_id || "",
+    school_bus: studenData?.school_bus || "",
+    adhar_card_no: studenData?.adhar_card_no || "",
+    route_stop_name: studenData?.route_stop_name || "",
+    sms_no: studenData || "",
+    remark: studenData?.remark || "",
+    fee_remark: studenData || "",
+    payment_mode: studenData?.payment_mode || "",
+    student_type: studenData?.student_type || "",
+    present_address: studenData?.address?.present_address?.address || "",
+    present_city: studenData?.address?.present_address?.city || "",
+    present_state: studenData?.address?.present_address?.state || "",
+    present_pincode: studenData?.address?.present_address?.pin_code || "",
+    present_locality: studenData?.address?.present_address?.locality || "",
+    present_country: studenData?.address?.present_address?.country || "india",
+    present_telephone: studenData?.address?.present_address?.telephone || "",
+    permanent_address: studenData?.address?.permanent_address?.address || "",
+    permanent_city: studenData?.address?.permanent_address?.city || "",
+    permanent_state: studenData?.address?.permanent_address?.state || "",
+    permanent_pincode: studenData?.address?.permanent_address?.pin_code || "",
+    permanent_locality: studenData?.address?.permanent_address?.locality || "",
+    permanent_country:
+      studenData?.address?.permanent_address?.country || "india",
+    permanent_telephone:
+      studenData?.address?.permanent_address?.telephone || "",
   };
 
   const validationSchema = Yup.object().shape({
