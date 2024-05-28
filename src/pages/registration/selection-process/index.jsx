@@ -22,6 +22,7 @@ import {
   Checkbox,
   ListItemText,
   FormControlLabel,
+  FormControl,
 } from "@mui/material";
 import { GetStudentLsit } from "@/services/api";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
@@ -59,7 +60,6 @@ const SelectionProcess = () => {
     setFolloeupModeModal(true);
   };
 
-
   return (
     <div className="">
       <div sx={{ marginTop: "5rem" }} style={{ backgroundColor: "#fff" }}>
@@ -76,12 +76,12 @@ const SelectionProcess = () => {
               <TableHead>
                 <TableRow style={{ fontWeight: "500", color: "#000" }}>
                   <StyledTableCell align="left">Sl.No</StyledTableCell>
-                  <StyledTableCell align="left">Class</StyledTableCell>
-                  <StyledTableCell align="left">Session</StyledTableCell>
-                  <StyledTableCell align="left">Min Birth Date</StyledTableCell>
-                  <StyledTableCell align="left">Max Birth Date</StyledTableCell>
-                  <StyledTableCell align="left">Comments</StyledTableCell>
-                  <StyledTableCell align="left">Action</StyledTableCell>
+                  <StyledTableCell align="left">Application</StyledTableCell>
+                  <StyledTableCell align="left">Name</StyledTableCell>
+                  <StyledTableCell align="left">Total Marks</StyledTableCell>
+                  <StyledTableCell align="left">Marks in(%)</StyledTableCell>
+                  <StyledTableCell align="left">Select Status</StyledTableCell>
+                  <StyledTableCell align="left">Select</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody
@@ -142,7 +142,6 @@ const SelectionProcess = () => {
         </Paper>
       </div>{" "}
       <RegStartModal open={folloeupModeModal} handleClose={handleclose} />
-     
     </div>
   );
 };
@@ -150,10 +149,15 @@ const SelectionProcess = () => {
 export default SelectionProcess;
 
 const Row = (props) => {
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const { row, salonDetails, setSalonDetails, index, router } = props;
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [age, setAge] = React.useState("");
 
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -179,28 +183,36 @@ const Row = (props) => {
           <Typography>{index + 1}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "100px" }}>
-          <Typography>{"Nursary"}</Typography>
+          <Typography>{"1271"}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"2023"}</Typography>
+          <Typography>{"Rahat Tufail"}</Typography>
         </StyledTableCell>
 
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"01/07/2023"}</Typography>
+          <Typography>{"1020"}</Typography>
         </StyledTableCell>
 
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"01/07/2023"}</Typography>
+          <Typography>{"20%"}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="left" style={{ minWidth: "250px" }}>
-          <Typography>{"Comments"}</Typography>
+        <StyledTableCell align="left" style={{ minWidth: "200px", gap: 2 }}>
+          <FormControl fullWidth>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={age}
+              // label="Age"
+              onChange={handleChange}
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
         </StyledTableCell>
-
-        <StyledTableCell align="left" style={{ minWidth: "100px", gap: 2 }}>
-          <Button variant="outlined">Edit</Button>
-          <Button sx={{ marginLeft: "10px" }} variant="outlined" color="error">
-            Delete
-          </Button>
+        <StyledTableCell align="left" style={{ minWidth: "100px" }}>
+          <Checkbox {...label} />
         </StyledTableCell>
       </TableRow>
     </React.Fragment>
@@ -209,7 +221,7 @@ const Row = (props) => {
 
 const RegStartModal = ({ open, handleClose }) => {
   return (
-    <SimpleModal open={open} handleClose={handleClose} width={800}>
+    <SimpleModal open={open} handleClose={handleClose} width={1000}>
       <Typography variant="h5">Selection Process</Typography>
 
       <Formik
@@ -320,8 +332,178 @@ const RegStartModal = ({ open, handleClose }) => {
                   helperText={<ErrorMessage name="first_name" />}
                 />
               </Grid>
+              <Grid item xs={12} sm={12} md={5}>
+                <Field
+                  name="class"
+                  as={TextField}
+                  select
+                  label="Select Criteria"
+                  variant="outlined"
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  value={values.class}
+                  helperText={<ErrorMessage name="class" />}
+                >
+                  {Config?.ClassList.map((option) => (
+                    <MenuItem key={option.label} value={option.label}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2}>
+                <Field
+                  name="class"
+                  as={TextField}
+                  select
+                  label="Condition"
+                  variant="outlined"
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  value={values.class}
+                  helperText={<ErrorMessage name="class" />}
+                >
+                  {Config?.ClassList.map((option) => (
+                    <MenuItem key={option.label} value={option.label}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={12} md={5}>
+                <Field
+                  name="first_name"
+                  as={TextField}
+                  label="Criteria Value"
+                  variant="outlined"
+                  // required
+                  value={values.first_name}
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  helperText={<ErrorMessage name="first_name" />}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={5}>
+                <Field
+                  name="class"
+                  as={TextField}
+                  select
+                  label="Select Criteria"
+                  variant="outlined"
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  value={values.class}
+                  helperText={<ErrorMessage name="class" />}
+                >
+                  {Config?.ClassList.map((option) => (
+                    <MenuItem key={option.label} value={option.label}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2}>
+                <Field
+                  name="class"
+                  as={TextField}
+                  select
+                  label="Condition"
+                  variant="outlined"
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  value={values.class}
+                  helperText={<ErrorMessage name="class" />}
+                >
+                  {Config?.ClassList.map((option) => (
+                    <MenuItem key={option.label} value={option.label}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={12} md={5}>
+                <Field
+                  name="first_name"
+                  as={TextField}
+                  label="Criteria Value"
+                  variant="outlined"
+                  // required
+                  value={values.first_name}
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  helperText={<ErrorMessage name="first_name" />}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={5}>
+                <Field
+                  name="class"
+                  as={TextField}
+                  select
+                  label="Select Criteria"
+                  variant="outlined"
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  value={values.class}
+                  helperText={<ErrorMessage name="class" />}
+                >
+                  {Config?.ClassList.map((option) => (
+                    <MenuItem key={option.label} value={option.label}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2}>
+                <Field
+                  name="class"
+                  as={TextField}
+                  select
+                  label="Condition"
+                  variant="outlined"
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  value={values.class}
+                  helperText={<ErrorMessage name="class" />}
+                >
+                  {Config?.ClassList.map((option) => (
+                    <MenuItem key={option.label} value={option.label}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={12} sm={12} md={5}>
+                <Field
+                  name="first_name"
+                  as={TextField}
+                  label="Criteria Value"
+                  variant="outlined"
+                  // required
+                  value={values.first_name}
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={false}
+                  helperText={<ErrorMessage name="first_name" />}
+                />
+              </Grid>
 
-             
               <Grid item xs={12}>
                 <Button
                   type="submit"
@@ -339,5 +521,3 @@ const RegStartModal = ({ open, handleClose }) => {
     </SimpleModal>
   );
 };
-
-

@@ -65,8 +65,6 @@ const ClassList = [
   },
 ];
 
-
-
 const SectionList = [
   {
     value: "A",
@@ -492,14 +490,34 @@ const SchoolBusOptions = [
   },
   // Add more options as needed
 ];
-const qualifications =[ {
-  value: "1",
-  label: "Available",
-},
-{
-  value: "2",
-  label: "Not Available",
-},]
+const qualifications = [
+  {
+    value: "1",
+    label: "Available",
+  },
+  {
+    value: "2",
+    label: "Not Available",
+  },
+];
+const joiningYear = [
+  {
+    value: "1",
+    label: "2024",
+  },
+  {
+    value: "2",
+    label: "2023",
+  },
+  {
+    value: "3",
+    label: "2022",
+  },
+  {
+    value: "4",
+    label: "2021",
+  },
+];
 export default {
   ClassList,
   SectionList,
@@ -521,5 +539,5 @@ export default {
   HouseTypes,
   SchoolBusOptions,
   qualifications,
-
+  joiningYear,
 };

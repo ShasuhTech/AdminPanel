@@ -374,7 +374,13 @@ const DrawerPath = ({
               />
             </DrawerList>
             <DrawerList path={""} text={"registration"} Icon={SchoolIcon} open={open}>
-              
+            <DrawerList
+                path={"/registration/student-enquiry"}
+                text={"Student Enquiry"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Student Enquiry"}
+              />
               <DrawerList
                 path={"/registration/student-registration"}
                 text={"Student Registration"}
@@ -403,13 +409,7 @@ const DrawerPath = ({
                 open={open}
                 title={"registration >> Selection Process"}
               />
-              <DrawerList
-                path={"/registration/student-enquiry"}
-                text={"Student Enquiry"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >> Student Enquiry"}
-              />
+             
           
               <DrawerList
                 path={"/registration/student-transfer"}

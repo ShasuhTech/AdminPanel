@@ -4,19 +4,14 @@ import * as Yup from "yup";
 import TextInput from "@/components/TextInput";
 import {
   Autocomplete,
-  Button,
   Checkbox,
-  FormControl,
-  FormControlLabel,
-  InputLabel,
   MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Select } from "antd";
 import CustomButton from "@/components/CommonButton/CustomButton";
-import { AddStudent, StateData, cityData, countryData } from "@/services/api";
+import { AddStudent, StateData, cityData } from "@/services/api";
 import { useQuery } from "react-query";
 import Config from "@/utilities/Config";
 import moment from "moment";
@@ -87,57 +82,35 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
   const handleSubmit = async (values) => {
     console.log(values, "-dsfsdfdsfsfsd");
     const payload = {};
-    payload.admission_number = values?.admission_no;
-    payload.fee_number = values?.fee_no;
-    payload.sibling_admission_number = values?.sibling_adm_no;
-    // payload.parent_id = values?.parent_id; // no required
+    payload.search = values.search;
+    payload.enquiry_id = values.enquiry_id;
+    payload.enquiry_id = values.enquiry_id;
     payload.name = {
       first_name: values?.first_name,
       middle_name: values?.middle_name,
       last_name: values?.last_name,
     };
-    // payload.name.first_name = values?.first_name;
-    // payload.name.middle_name = values?.middle_name;
-    // payload.name.last_name = values?.last_name;
-    payload.class = values?.class;
-    payload.section = values?.section;
-    payload.stream = values?.stream;
-    payload.fee_group = values?.fee_group;
-    payload.fee_apply_form = values?.fee_apply_form;
-    payload.date_of_birth = moment(values?.dob).format("YYYY-MM-DD");
-    payload.joining_date = moment(values?.doj).format("YYYY-MM-DD");
-    payload.admission_date = moment(values?.doa).format("YYYY-MM-DD");
-    payload.roll_number = values?.roll_no;
     payload.gender = values?.gender;
-    payload.emergency_number = values?.emergency_no;
-    // payload.admitted_class = values?.admitted_class;
-    payload.house = values?.house;
-    payload.admission = values?.admission;
-    payload.religion = values?.religion;
-    payload.mother_tongue = values?.mother_tongue;
-    payload.caste = values?.caste;
-    payload.social_category = values?.social_category;
+    payload.selected_status = values?.selected_status;
+    payload.date_of_birth = moment(values?.dob).format("YYYY-MM-DD");
+    payload.class = values?.class;
+    payload.present_class = values?.present_class;
+    payload.joining_year = values?.joining_year;
+    payload.present_school = values?.present_school;
+    payload.reason = values?.reason;
     payload.nationality = values?.nationality;
-    payload.concession_type = values?.concession_type;
-    payload.blood_group = values?.blood_group;
-    payload.boarding_category = values?.boarding_category;
-    payload.board_reg_no = values?.board_reg_no;
-    payload.board = values?.board;
-    payload.board_roll_no = values?.board_roll_no;
-    payload.email_id = values?.email_id;
-    payload.school_bus = values?.school_bus;
-    payload.adhar_card_no = values?.adhar_card_no;
-    payload.route_stop_name = values?.route_stop_name;
-    payload.payment_mode = values?.payment_mode;
-    (payload.remark = values?.remark),
-      (payload.present_address = {
-        country: values.present_country,
-        city: values.present_city,
-        state: values.present_state,
-        pin_code: values.present_pincode,
-        address: values.present_address,
-        locality: values.present_locality,
-      }),
+    payload.social_category = values?.social_category;
+    payload.email = values?.email;
+    payload.same_present_add = values?.same_present_add;
+    payload.emergency_number = values?.emergency_no;
+    (payload.present_address = {
+      country: values.present_country,
+      city: values.present_city,
+      state: values.present_state,
+      pin_code: values.present_pincode,
+      address: values.present_address,
+      locality: values.present_locality,
+    }),
       (payload.permanent_address = {
         country: confirmAddress
           ? values.present_country
@@ -154,6 +127,34 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
           ? values.present_locality
           : values.permanent_locality,
       });
+    payload.father_name = values?.father_name;
+    payload.father_qualifications = values?.father_qualifications;
+    payload.father_occupation = values?.father_occupation;
+    payload.father_email = values?.father_email;
+    payload.father_email = values?.father_email;
+    payload.father_org_name = values?.father_org_name;
+    payload.father_org_address = values?.father_org_address;
+    payload.father_nationality = values?.father_nationality;
+    payload.father_country = values?.father_country;
+    payload.father_state = values?.father_state;
+    payload.father_city = values?.father_city;
+    payload.father_pincode = values?.father_pincode;
+    payload.father_annual_income = values?.father_annual_income;
+    payload.father_mobile = values?.father_mobile;
+    payload.mother_name = values?.mother_name;
+    payload.mother_qualifications = values?.mother_qualifications;
+    payload.mother_occupation = values?.mother_occupation;
+    payload.mother_email = values?.mother_email;
+    payload.mother_email = values?.mother_email;
+    payload.mother_org_name = values?.mother_org_name;
+    payload.mother_org_address = values?.mother_org_address;
+    payload.mother_nationality = values?.mother_nationality;
+    payload.mother_country = values?.mother_country;
+    payload.mother_state = values?.mother_state;
+    payload.mother_city = values?.mother_city;
+    payload.mother_pincode = values?.mother_pincode;
+    payload.mother_annual_income = values?.mother_annual_income;
+    payload.mother_mobile = values?.mother_mobile;
 
     console.log(payload, "----payload");
     try {
@@ -173,49 +174,23 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
   };
   const initialValues = {
     search: studenData?.search || "",
-    sibling_adm_no: studenData?.sibling_admission_number || "",
-    admission_no: studenData?.admission_number || "",
-    fee_no: studenData?.fee_number || "",
-    parent_id: studenData || "",
+    enquiry_id: studenData?.enquiry_id || "",
     first_name: studenData?.name?.first_name || "",
     middle_name: studenData?.name?.middle_name || "",
     last_name: studenData?.name?.last_name || "",
-    class: studenData?.class || "",
-    section: studenData?.section || "",
-    stream: studenData?.stream || "",
-    fee_group: studenData?.fee_group || "",
-    fee_apply_form: studenData?.fee_apply_form || "",
-    dob: studenData?.date_of_birth || new Date(),
-    doj: studenData?.joining_date || new Date(),
-    doa: studenData?.admission_date || new Date(),
-    admission: studenData?.admission || "",
-    roll_no: studenData?.roll_number || "",
     gender: studenData?.gender || "",
-    // father_name: studenData? studenData ||'',
-    // mother_name: studenData? studenData ||'',
-    emergency_no: studenData?.emergency_number || "",
-    // admitted_class: studenData? studenData ||'',
-    house: studenData?.house || "",
-    social_category: studenData?.social_category || "",
-    religion: studenData?.religion || "",
-    caste: studenData?.caste || "",
-    mother_tongue: studenData?.mother_tongue || "",
-    concession_type: studenData?.concession_type || "",
+    dob: studenData?.date_of_birth || new Date(),
+    class: studenData?.class || "",
+    present_class: studenData?.present_class || "",
+    joining_year: studenData?.joining_year || "",
+    present_school: studenData?.present_school || "",
+    selected_status: studenData?.selected_status || "",
+    reason: studenData?.reason || "",
     nationality: studenData?.nationality || "",
-    blood_group: studenData?.blood_group || "",
-    boarding_category: studenData?.boarding_category || "",
-    board_reg_no: studenData?.board_reg_no || "",
-    board: studenData?.board || "",
-    board_roll_no: studenData?.board_roll_no || "",
-    email_id: studenData?.email_id || "",
-    school_bus: studenData?.school_bus || "",
-    adhar_card_no: studenData?.adhar_card_no || "",
-    route_stop_name: studenData?.route_stop_name || "",
-    sms_no: studenData || "",
-    remark: studenData?.remark || "",
-    fee_remark: studenData || "",
-    payment_mode: studenData?.payment_mode || "",
-    student_type: studenData?.student_type || "",
+    social_category: studenData?.social_category || "",
+    email: studenData?.email || "",
+    same_present_add: studenData?.same_present_add || "",
+    emergency_no: studenData?.emergency_number || "",
     present_address: studenData?.address?.present_address?.address || "",
     present_city: studenData?.address?.present_address?.city || "",
     present_state: studenData?.address?.present_address?.state || "",
@@ -232,27 +207,108 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
       studenData?.address?.permanent_address?.country || "india",
     permanent_telephone:
       studenData?.address?.permanent_address?.telephone || "",
+
+    father_name: "",
+    father_qualifications: "",
+    father_occupation: "",
+    father_email: "",
+    father_org_name: "",
+    father_org_address: "",
+    father_nationality: "",
+    father_country: "",
+    father_state: "",
+    father_city: "",
+    father_pincode: "",
+    father_annual_income: "",
+    father_mobile: "",
+
+    mother_name: "",
+    mother_qualifications: "",
+    mother_occupation: "",
+    mother_email: "",
+    mother_org_name: "",
+    mother_org_address: "",
+    mother_nationality: "",
+    mother_country: "",
+    mother_state: "",
+    mother_city: "",
+    mother_pincode: "",
+    mother_annual_income: "",
+    mother_mobile: "",
   };
 
+  const optionalString = Yup.string()
+    .nullable()
+    .transform((_, val) => (val === "" ? null : val));
+
   const validationSchema = Yup.object().shape({
-    // name: Yup.string().required("Name is required"),
-    // admission_no: Yup.string().required("Admission no is required"),
-    // fee_no: Yup.string().required("Fee no is required"),
-    // parent_id: Yup.string().required("Parent id is required"),
-    // first_name: Yup.string().required("First name is required"),
-    // last_name: Yup.string().required("Last Name is required"),
-    // class: Yup.string().required("Class Name is required"),
-    // section: Yup.string().required("Section is required"),
-    // stream: Yup.string().required("Stream is required"),
-    // fee_group: Yup.string().required("Fee Group is required"),
-    // fee_apply_form: Yup.string().required("Fee Apply From is required"),
-    // // dob: Yup.required("Date of birth is required"),
-    // // doj: Yup.required("Date of join is required"),
-    // // doa: Yup.string().required("Date of admission is required"),
-    // fee_apply_form: Yup.string().required("Fee Apply From is required"),
-    // fee_apply_form: Yup.string().required("Fee Apply From is required"),
-    // fee_apply_form: Yup.string().required("Fee Apply From is required"),
-    // gender: Yup.string().required("Gender is required"),
+    search: optionalString,
+    enquiry_id: optionalString,
+    first_name: Yup.string().required("First name is required"),
+    middle_name: optionalString,
+    last_name: Yup.string().required("Last name is required"),
+    gender: Yup.string().required("Gender is required"),
+    dob: Yup.date().required("Date of birth is required").nullable(),
+    class: optionalString,
+    present_class: optionalString,
+    joining_year: optionalString,
+    present_school: optionalString,
+    reason: optionalString,
+    nationality: optionalString,
+    social_category: optionalString,
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    same_present_add: optionalString,
+    emergency_no: Yup.string().required("Emergency number is required"),
+
+    present_address: optionalString,
+    present_city: optionalString,
+    present_state: optionalString,
+    present_pincode: optionalString,
+    present_locality: optionalString,
+    present_country: optionalString.default("india"),
+    present_telephone: optionalString,
+
+    permanent_address: optionalString,
+    permanent_city: optionalString,
+    permanent_state: optionalString,
+    permanent_pincode: optionalString,
+    permanent_locality: optionalString,
+    permanent_country: optionalString.default("india"),
+    permanent_telephone: optionalString,
+
+    father_name: optionalString,
+    father_qualifications: optionalString,
+    father_occupation: optionalString,
+    father_email: Yup.string().email("Invalid email format"),
+    father_org_name: optionalString,
+    father_org_address: optionalString,
+    father_nationality: optionalString,
+    father_country: optionalString,
+    father_state: optionalString,
+    father_city: optionalString,
+    father_pincode: optionalString,
+    father_annual_income: Yup.number()
+      .nullable()
+      .transform((_, val) => (val === "" ? null : val)),
+    father_mobile: optionalString,
+
+    mother_name: optionalString,
+    mother_qualifications: optionalString,
+    mother_occupation: optionalString,
+    mother_email: Yup.string().email("Invalid email format"),
+    mother_org_name: optionalString,
+    mother_org_address: optionalString,
+    mother_nationality: optionalString,
+    mother_country: optionalString,
+    mother_state: optionalString,
+    mother_city: optionalString,
+    mother_pincode: optionalString,
+    mother_annual_income: Yup.number()
+      .nullable()
+      .transform((_, val) => (val === "" ? null : val)),
+    mother_mobile: optionalString,
   });
 
   const cities = [
@@ -290,20 +346,7 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
           <div className="mt-[40px] ">
             <div className=" ">
               <div className="lg:flex w-[100%] gap-4">
-                {/* <div className=" lg:w-[20%] w-[100%]  flex justify-center items-center ">
-                  <div className="w-[200px] h-[200px] rounded-full ">
-                    <div>
-                      <img
-                        src={"/images/user.png"}
-                        alt="Picture of the author"
-                        className="border rounded-full object-contain w-[200px] h-[200px]"
-                      />
-                    </div>
-                  </div>
-                </div> */}
-
                 <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
-                  {/* Not Required */}
                   <div className="lg:w-[100%] w-[100%]">
                     <Field
                       name="search"
@@ -323,17 +366,17 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
 
                   <div className="lg:w-[32.5%] w-[100%]">
                     <Field
-                      name="parent_id"
+                      name="enquiry_id"
                       as={TextField}
                       label="Enquiry Id"
                       variant="outlined"
                       // required
-                      value={values.parent_id}
+                      value={values.enquiry_id}
                       fullWidth
                       onBlur={handleBlur}
                       onChange={handleChange}
                       error={false}
-                      helperText={<ErrorMessage name="parent_id" />}
+                      helperText={<ErrorMessage name="enquiry_id" />}
                     />
                   </div>
                   <div className="lg:w-[32.5%]  w-[100%]">
@@ -446,7 +489,7 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                   </div>
                   <div className="lg:w-[32.4%]  w-[100%]">
                     <Field
-                      name="class"
+                      name="present_class"
                       as={TextField}
                       select
                       label="Present Class"
@@ -455,8 +498,8 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       error={false}
-                      value={values.class}
-                      helperText={<ErrorMessage name="class" />}
+                      value={values.present_class}
+                      helperText={<ErrorMessage name="present_class" />}
                     >
                       {Config?.ClassList.map((option) => (
                         <MenuItem key={option.label} value={option.label}>
@@ -468,7 +511,7 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
 
                   <div className="lg:w-[32.4%]  w-[100%]">
                     <Field
-                      name="section"
+                      name="joining_year"
                       as={TextField}
                       select
                       label="Joining Year"
@@ -477,20 +520,20 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       error={false}
-                      value={values.section}
-                      helperText={<ErrorMessage name="section" />}
+                      value={values.joining_year}
+                      helperText={<ErrorMessage name="joining_year" />}
                     >
-                      {Config?.SectionList.map((option) => (
+                      {Config?.joiningYear.map((option) => (
                         <MenuItem key={option.label} value={option.label}>
                           {option.label}
                         </MenuItem>
                       ))}
                     </Field>
                   </div>
-                  {Number(values.class) >= 10 && (
+                  {
                     <div className="lg:w-[32.4%]  w-[100%]">
                       <Field
-                        name="stream"
+                        name="selected_status"
                         as={TextField}
                         select
                         label="Selected Status"
@@ -499,8 +542,8 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        value={values.stream}
-                        helperText={<ErrorMessage name="stream" />}
+                        value={values.selected_status}
+                        helperText={<ErrorMessage name="selected_status" />}
                       >
                         {Config?.StreamList.map((option) => (
                           <MenuItem key={option.label} value={option.label}>
@@ -509,33 +552,33 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         ))}
                       </Field>
                     </div>
-                  )}
+                  }
                   <div className="lg:w-[32.5%]  w-[100%]">
                     <Field
-                      name="sibling_adm_no"
+                      name="present_school"
                       as={TextField}
                       label="Present School"
                       variant="outlined"
                       fullWidth
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.sibling_adm_no}
+                      value={values.present_school}
                       error={false}
-                      helperText={<ErrorMessage name="sibling_adm_no" />}
+                      helperText={<ErrorMessage name="present_school" />}
                     />
                   </div>
                   <div className="lg:w-[32.5%]  w-[100%]">
                     <Field
-                      name="sibling_adm_no"
+                      name="reason"
                       as={TextField}
                       label="Reason"
                       variant="outlined"
                       fullWidth
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.sibling_adm_no}
+                      value={values.reason}
                       error={false}
-                      helperText={<ErrorMessage name="sibling_adm_no" />}
+                      helperText={<ErrorMessage name="reason" />}
                     />
                   </div>
                   <div className="lg:w-[32.5%]  w-[100%]">
@@ -582,7 +625,7 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                   </div>
                   <div className="lg:w-[32.5%]  w-[100%]">
                     <Field
-                      name="email_id"
+                      name="email"
                       as={TextField}
                       label="Email"
                       variant="outlined"
@@ -590,7 +633,7 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       error={false}
-                      helperText={<ErrorMessage name="email_id" />}
+                      helperText={<ErrorMessage name="email" />}
                     />
                   </div>
                   <div className="lg:w-[32.5%]  w-[100%]">
@@ -993,7 +1036,7 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                     </div>
                     <div className="lg:w-[32.5%] w-[100%]">
                       <Field
-                        name="qualification"
+                        name="father_qualifications"
                         as={TextField}
                         select
                         label="Qualification"
@@ -1002,7 +1045,9 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="qualification" />}
+                        helperText={
+                          <ErrorMessage name="father_qualifications" />
+                        }
                       >
                         {Config?.qualifications?.map((option) => (
                           <MenuItem key={option?.name} value={option?.name}>
@@ -1013,7 +1058,7 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                     </div>
                     <div className="lg:w-[32.5%] w-[100%]">
                       <Field
-                        name="occupation"
+                        name="father_occupation"
                         as={TextField}
                         select
                         label="Occupation"
@@ -1022,7 +1067,7 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="occupation" />}
+                        helperText={<ErrorMessage name="father_occupation" />}
                       >
                         {genders.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
@@ -1031,10 +1076,10 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         ))}
                       </Field>
                     </div>
-                   
+
                     <div className="lg:w-[32.5%] w-[100%]">
                       <Field
-                        name="email"
+                        name="father_email"
                         as={TextField}
                         label="Email"
                         variant="outlined"
@@ -1042,12 +1087,12 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="email" />}
+                        helperText={<ErrorMessage name="father_email" />}
                       />
                     </div>
                     <div className="lg:w-[32.5%] w-[100%]">
                       <Field
-                        name="org_name"
+                        name="father_org_name"
                         as={TextField}
                         label="Org Name"
                         variant="outlined"
@@ -1055,12 +1100,12 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="org_name" />}
+                        helperText={<ErrorMessage name="father_org_name" />}
                       />
                     </div>
-                    <div className="w-[66%]">
+                    <div className="lg:w-[66%] w-[100%]">
                       <Field
-                        name="org_address"
+                        name="father_org_address"
                         as={TextField}
                         label="Org Address"
                         variant="outlined"
@@ -1068,97 +1113,124 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="org_address" />}
+                        helperText={<ErrorMessage name="father_org_address" />}
                       />
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="father_nationality"
+                        as={TextField}
+                        select
+                        label="Nationality"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.father_nationality}
+                        helperText={<ErrorMessage name="father_nationality" />}
+                      >
+                        {Config?.Nationalities?.map((option) => (
+                          <MenuItem key={option.label} value={option.label}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </Field>
                     </div>
 
-                    <div className="lg:w-[32.5%] w-[100%]">
-                      <Autocomplete
-                        options={cities}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Nationality"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={<ErrorMessage name="nationality" />}
-                          />
-                        )}
-                        value={null}
-                        onChange={(event, value) =>
-                          setFieldValue("nationality", value ? value.name : "")
-                        }
-                        onBlur={() => {}}
-                      />
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      {
+                        <Autocomplete
+                          options={[]}
+                          getOptionLabel={(option) => option.name}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Country"
+                              variant="outlined"
+                              fullWidth
+                              error={false}
+                              helperText={
+                                <ErrorMessage name="father_country" />
+                              }
+                            />
+                          )}
+                          value={
+                            allState?.find(
+                              (option) =>
+                                option?.name === values?.present_country
+                            ) || null
+                          }
+                          onChange={(event, value) => {
+                            setFieldValue(
+                              "father_country",
+                              value ? value.name : ""
+                            ); // Update Formik's state with the selected state's name
+                          }}
+                          onBlur={handleBlur}
+                        />
+                      }
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
-                      <Autocomplete
-                        options={cities}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Country"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={<ErrorMessage name="country" />}
-                          />
-                        )}
-                        value={null}
-                        onChange={(event, value) =>
-                          setFieldValue("country", value ? value.name : "")
-                        }
-                        onBlur={() => {}}
-                      />
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      {
+                        <Field
+                          name="father_state"
+                          as={TextField}
+                          select
+                          label="State"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={(event) => {
+                            const selectedState = event.target.value;
+                            setFieldValue("father_state", selectedState);
+                            setPresentState(selectedState);
+                          }}
+                          error={false}
+                          value={values.father_state}
+                          helperText={<ErrorMessage name="father_state" />}
+                        >
+                          {allState?.length > 0 &&
+                            allState.map((option) => (
+                              <MenuItem
+                                key={option.name}
+                                onChange={(e) =>
+                                  setPresentState(e?.target?.value)
+                                }
+                                value={option.name}
+                              >
+                                {option.name}
+                              </MenuItem>
+                            ))}
+                        </Field>
+                      }
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
-                      <Autocomplete
-                        options={cities}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="State"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={<ErrorMessage name="state" />}
-                          />
-                        )}
-                        value={null}
-                        onChange={(event, value) =>
-                          setFieldValue("state", value ? value.name : "")
-                        }
-                        onBlur={() => {}}
-                      />
-                    </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
-                      <Autocomplete
-                        options={cities}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="City"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={<ErrorMessage name="city" />}
-                          />
-                        )}
-                        value={null}
-                        onChange={(event, value) =>
-                          setFieldValue("city", value ? value.name : "")
-                        }
-                        onBlur={() => {}}
-                      />
-                    </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.5%]  w-[100%]">
                       <Field
-                        name="pincode"
+                        name="father_city"
+                        as={TextField}
+                        select
+                        label="City"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.father_city}
+                        helperText={<ErrorMessage name="father_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="father_pincode"
                         as={TextField}
                         label="Pincode"
                         variant="outlined"
@@ -1166,12 +1238,12 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="pincode" />}
+                        helperText={<ErrorMessage name="father_pincode" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.5%]  w-[100%]">
                       <Field
-                        name="annual_income"
+                        name="father_annual_income"
                         as={TextField}
                         label="Annual Income"
                         variant="outlined"
@@ -1179,33 +1251,22 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="annual_income" />}
+                        helperText={
+                          <ErrorMessage name="father_annual_income" />
+                        }
                       />
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.5%]  w-[100%]">
                       <Field
-                        name="telephone"
+                        name="father_mobile"
                         as={TextField}
-                        label="Telephone"
+                        label="Mobile Number"
                         variant="outlined"
                         fullWidth
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="telephone" />}
-                      />
-                    </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
-                      <Field
-                        name="mobile"
-                        as={TextField}
-                        label="Mobile"
-                        variant="outlined"
-                        fullWidth
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={false}
-                        helperText={<ErrorMessage name="mobile" />}
+                        helperText={<ErrorMessage name="father_mobile" />}
                       />
                     </div>
                   </div>
@@ -1217,24 +1278,23 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                   Mother's Details
                 </span>
                 <div className=" border  p-6 rounded-2xl mt-3">
-                    
-                    <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
-                      <div className="lg:w-[66%] w-[100%]">
-                        <Field
-                          name="mother_name"
-                          as={TextField}
-                          label="Mother's Name"
-                          variant="outlined"
-                          fullWidth
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          error={false}
-                          helperText={<ErrorMessage name="mother_name" />}
-                        />
-                      </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
+                    <div className="lg:w-[66%] w-[100%]">
                       <Field
-                        name="qualification"
+                        name="father_name"
+                        as={TextField}
+                        label="Father's Name"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="father_name" />}
+                      />
+                    </div>
+                    <div className="lg:w-[32.5%] w-[100%]">
+                      <Field
+                        name="mother_qualifications"
                         as={TextField}
                         select
                         label="Qualification"
@@ -1243,7 +1303,9 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="qualification" />}
+                        helperText={
+                          <ErrorMessage name="mother_qualifications" />
+                        }
                       >
                         {Config?.qualifications?.map((option) => (
                           <MenuItem key={option?.name} value={option?.name}>
@@ -1252,38 +1314,18 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         ))}
                       </Field>
                     </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
-                        <Field
-                          name="mother_occupation"
-                          as={TextField}
-                          select
-                          label="Occupation"
-                          variant="outlined"
-                          fullWidth
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          error={false}
-                          helperText={<ErrorMessage name="mother_occupation" />}
-                        >
-                          {genders.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Field>
-                      </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.5%] w-[100%]">
                       <Field
-                        name="designation"
+                        name="mother_occupation"
                         as={TextField}
                         select
-                        label="Designation"
+                        label="Occupation"
                         variant="outlined"
                         fullWidth
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="designation" />}
+                        helperText={<ErrorMessage name="mother_occupation" />}
                       >
                         {genders.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
@@ -1292,135 +1334,161 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         ))}
                       </Field>
                     </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
-                        <Field
-                          name="mother_org_name"
-                          as={TextField}
-                          label="Org Name"
-                          variant="outlined"
-                          fullWidth
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          error={false}
-                          helperText={<ErrorMessage name="mother_org_name" />}
-                        />
-                      </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
-                        <Field
-                          name="mother_email"
-                          as={TextField}
-                          label="Email"
-                          variant="outlined"
-                          fullWidth
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          error={false}
-                          helperText={<ErrorMessage name="mother_email" />}
-                        />
-                      </div>
-                      <div className="lg:w-[66%] w-[100%]">
-                        <Field
-                          name="mother_org_address"
-                          as={TextField}
-                          label="Org Address"
-                          variant="outlined"
-                          fullWidth
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          error={false}
-                          helperText={
-                            <ErrorMessage name="mother_org_address" />
-                          }
-                        />
-                      </div>
-                      
-                      <div className="lg:w-[32.5%] w-[100%]">
-                      <Autocomplete
-                        options={cities}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Nationality"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={<ErrorMessage name="nationality" />}
-                          />
-                        )}
-                        value={null}
-                        onChange={(event, value) =>
-                          setFieldValue("nationality", value ? value.name : "")
-                        }
-                        onBlur={() => {}}
-                      />
-                    </div>
+
                     <div className="lg:w-[32.5%] w-[100%]">
-                      <Autocomplete
-                        options={cities}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Country"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={<ErrorMessage name="country" />}
-                          />
-                        )}
-                        value={null}
-                        onChange={(event, value) =>
-                          setFieldValue("country", value ? value.name : "")
-                        }
-                        onBlur={() => {}}
-                      />
-                    </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
-                      <Autocomplete
-                        options={cities}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="State"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={<ErrorMessage name="state" />}
-                          />
-                        )}
-                        value={null}
-                        onChange={(event, value) =>
-                          setFieldValue("state", value ? value.name : "")
-                        }
-                        onBlur={() => {}}
-                      />
-                    </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
-                      <Autocomplete
-                        options={cities}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="City"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={<ErrorMessage name="city" />}
-                          />
-                        )}
-                        value={null}
-                        onChange={(event, value) =>
-                          setFieldValue("city", value ? value.name : "")
-                        }
-                        onBlur={() => {}}
+                      <Field
+                        name="mother_email"
+                        as={TextField}
+                        label="Email"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="mother_email" />}
                       />
                     </div>
                     <div className="lg:w-[32.5%] w-[100%]">
                       <Field
-                        name="pincode"
+                        name="mother_org_name"
+                        as={TextField}
+                        label="Org Name"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="mother_org_name" />}
+                      />
+                    </div>
+                    <div className="lg:w-[66%] w-[100%]">
+                      <Field
+                        name="mother_org_address"
+                        as={TextField}
+                        label="Org Address"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="mother_org_address" />}
+                      />
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="mother_nationality"
+                        as={TextField}
+                        select
+                        label="Nationality"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.mother_nationality}
+                        helperText={<ErrorMessage name="mother_nationality" />}
+                      >
+                        {Config?.Nationalities?.map((option) => (
+                          <MenuItem key={option.label} value={option.label}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </div>
+
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      {
+                        <Autocomplete
+                          options={[]}
+                          getOptionLabel={(option) => option.name}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Country"
+                              variant="outlined"
+                              fullWidth
+                              error={false}
+                              helperText={
+                                <ErrorMessage name="mother_country" />
+                              }
+                            />
+                          )}
+                          value={
+                            allState?.find(
+                              (option) =>
+                                option?.name === values?.present_country
+                            ) || null
+                          }
+                          onChange={(event, value) => {
+                            setFieldValue(
+                              "mother_country",
+                              value ? value.name : ""
+                            ); // Update Formik's state with the selected state's name
+                          }}
+                          onBlur={handleBlur}
+                        />
+                      }
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      {
+                        <Field
+                          name="mother_state"
+                          as={TextField}
+                          select
+                          label="State"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={(event) => {
+                            const selectedState = event.target.value;
+                            setFieldValue("mother_state", selectedState);
+                            setPresentState(selectedState);
+                          }}
+                          error={false}
+                          value={values.mother_state}
+                          helperText={<ErrorMessage name="mother_state" />}
+                        >
+                          {allState?.length > 0 &&
+                            allState.map((option) => (
+                              <MenuItem
+                                key={option.name}
+                                onChange={(e) =>
+                                  setPresentState(e?.target?.value)
+                                }
+                                value={option.name}
+                              >
+                                {option.name}
+                              </MenuItem>
+                            ))}
+                        </Field>
+                      }
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="mother_city"
+                        as={TextField}
+                        select
+                        label="City"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.mother_city}
+                        helperText={<ErrorMessage name="mother_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="mother_pincode"
                         as={TextField}
                         label="Pincode"
                         variant="outlined"
@@ -1428,12 +1496,12 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="pincode" />}
+                        helperText={<ErrorMessage name="mother_pincode" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.5%]  w-[100%]">
                       <Field
-                        name="annual_income"
+                        name="mother_annual_income"
                         as={TextField}
                         label="Annual Income"
                         variant="outlined"
@@ -1441,40 +1509,27 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="annual_income" />}
+                        helperText={
+                          <ErrorMessage name="mother_annual_income" />
+                        }
                       />
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.5%]  w-[100%]">
                       <Field
-                        name="telephone"
+                        name="mother_mobile"
                         as={TextField}
-                        label="Telephone"
+                        label="Mobile Number"
                         variant="outlined"
                         fullWidth
                         onBlur={handleBlur}
                         onChange={handleChange}
                         error={false}
-                        helperText={<ErrorMessage name="telephone" />}
+                        helperText={<ErrorMessage name="mother_mobile" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
-                      <Field
-                        name="mobile"
-                        as={TextField}
-                        label="Mobile"
-                        variant="outlined"
-                        fullWidth
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={false}
-                        helperText={<ErrorMessage name="mobile" />}
-                      />
-                    </div>
-                    </div>
-
-                  <div className="  flex-wrap flex mt-5  gap-4">
-                   
                   </div>
+
+                  <div className="  flex-wrap flex mt-5  gap-4"></div>
                 </div>
               </div>
             </div>
@@ -1498,25 +1553,6 @@ const EnquiryMaster = ({ setSlectedTab, studenData }) => {
               {isSubmitting ? "Submitting..." : "Submit"}
             </CustomButton>
           </div>
-          {/* <div className="bg-black gap-5  py-5 w-[80%] flex items-center justify-center fixed z-[999] bottom-0">
-            <CustomButton>New</CustomButton>
-            <CustomButton>Edit</CustomButton>
-            <CustomButton
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-              className="bg-red-200 py-1 px-5"
-              sx={{ py: 1, px: 5, fontWeight: "bold", fontSize: "16px" }}
-            >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </CustomButton>
-
-            <CustomButton>Details</CustomButton>
-            <CustomButton>Tc</CustomButton>
-            <CustomButton>Dropouts</CustomButton>
-            <CustomButton>Audit Logs</CustomButton>
-          </div> */}
         </Form>
       )}
     </Formik>

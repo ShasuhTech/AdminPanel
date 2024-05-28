@@ -1651,6 +1651,112 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
             </div>
             <div className="mt-[20px] ">
               <span className="font-black text-[18px] ">
+                Other Details
+              </span>
+              <div className=" border  p-6 rounded-2xl mt-3">
+                
+                <div className=" w-[100%] ">
+                  <div className="flex  flex-wrap gap-4">
+                    <div className="lg:w-[32.5%] w-[100%] ">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Any Physical Disability"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%]">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Any Treatment Undertak/Required"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%] mb-2 ">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label='Any Allergies'
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex  flex-wrap gap-4">
+                    <div className="lg:w-[32.5%] w-[100%] ">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Interest And Hobbies"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%] ">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Sports/Games"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%] ">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Co-Curriclar Activities"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%] ">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Any Other Relevent Information"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-[20px] ">
+              <span className="font-black text-[18px] ">
                 Previous School Details
               </span>
               <div className=" border  p-6 rounded-2xl mt-3">
@@ -1798,6 +1904,392 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
               </div>
             </div>
             <div className="mt-[20px] ">
+              <span className="font-black text-[18px] ">
+                Marks Grades Obtained In The Previous School
+              </span>
+              <div className=" border  p-6 rounded-2xl mt-3">
+                <div className=" lg:flex w-[100%] gap-4">
+                  <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
+           
+                    <TableContainer sx={{ overflowX: "auto" }}>
+                      <Table aria-label="collapsible table">
+                        <TableHead>
+                          <TableRow
+                            style={{ fontWeight: "500", color: "#000" }}
+                          >
+                            <StyledTableCell align="center">
+                              Subjects
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Max. Marks
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Marks Obatined
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Grade
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                             %
+                            </StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody
+                          style={{
+                            height: "auto",
+                            position: "relative",
+                          }}
+                        >
+                          <>
+                            {[
+                              "ENGLISH",
+                              "HINDI",
+                              "MATHEMATICS",
+                              "SCIENCE",
+                              "SOCIAL SCIENCE",
+                              "Total",
+                            ]?.map((row, index) => (
+                              <Row
+                                key={index}
+                                row={row}
+                                index={index}
+                                router={router}
+                              />
+                            ))}
+                          </>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-[20px] ">
+              <span className="font-black text-[18px] ">
+               Pre Board Details
+              </span>
+              <div className=" border  p-6 rounded-2xl mt-3">
+                <div className=" lg:flex w-[100%] gap-4">
+                  <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
+           
+                    <TableContainer sx={{ overflowX: "auto" }}>
+                      <Table aria-label="collapsible table">
+                        <TableHead>
+                          <TableRow
+                            style={{ fontWeight: "500", color: "#000" }}
+                          >
+                            <StyledTableCell align="center">
+                              Subjects
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Max. Marks
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Marks Obatined
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Grade
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                             %
+                            </StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody
+                          style={{
+                            height: "auto",
+                            position: "relative",
+                          }}
+                        >
+                          <>
+                            {[
+                              "ENGLISH",
+                              "HINDI",
+                              "MATHEMATICS",
+                              "SCIENCE",
+                              "SOCIAL SCIENCE",
+                              "Total",
+                            ]?.map((row, index) => (
+                              <Row
+                                key={index}
+                                row={row}
+                                index={index}
+                                router={router}
+                              />
+                            ))}
+                          </>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-[20px] ">
+              <span className="font-black text-[18px] ">
+               Board Details
+              </span>
+              <div className=" border  p-6 rounded-2xl mt-3">
+                <div className=" lg:flex w-[100%] gap-4">
+                  <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
+                  <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_city"
+                        as={TextField}
+                        select
+                        label="Board"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.present_city}
+                        helperText={<ErrorMessage name="present_city" />}
+                      >
+                        {
+                          Config.Boards.map((option) => (
+                            <MenuItem key={option?.value} value={option?.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+
+                    <TableContainer sx={{ overflowX: "auto" }}>
+                      <Table aria-label="collapsible table">
+                        <TableHead>
+                          <TableRow
+                            style={{ fontWeight: "500", color: "#000" }}
+                          >
+                            <StyledTableCell align="center">
+                              Subjects
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Max. Marks
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Marks Obatined
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Grade
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                             %
+                            </StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody
+                          style={{
+                            height: "auto",
+                            position: "relative",
+                          }}
+                        >
+                          <>
+                            {[
+                              "ENGLISH",
+                              "HINDI",
+                              "MATHEMATICS",
+                              "SCIENCE",
+                              "SOCIAL SCIENCE",
+                              "Economic/Computer/Other",
+                              "Second Language(Hindi)",
+                              "Total",
+                            ]?.map((row, index) => (
+                              <Row
+                                key={index}
+                                row={row}
+                                index={index}
+                                router={router}
+                              />
+                            ))}
+                          </>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-[20px] ">
+              <span className="font-black text-[18px] ">Stream Details</span>
+              <div className=" border  p-6 rounded-2xl mt-3">
+                <div className=" w-[100%] ">
+                 
+                  <div className="flex  flex-wrap gap-4">
+                    
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      {
+                        <Field
+                          name="present_state"
+                          as={TextField}
+                          select
+                          label="Stream"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={(event) => {
+                            const selectedState = event.target.value;
+                            setFieldValue("present_state", selectedState);
+                            setPresentState(selectedState);
+                          }}
+                          error={false}
+                          value={values.present_state}
+                          helperText={<ErrorMessage name="present_state" />}
+                        >
+                          {allState?.length > 0 &&
+                            allState.map((option) => (
+                              <MenuItem
+                                key={option.name}
+                                onChange={(e) =>
+                                  setPresentState(e?.target?.value)
+                                }
+                                value={option.name}
+                              >
+                                {option.name}
+                              </MenuItem>
+                            ))}
+                        </Field>
+                      }
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_city"
+                        as={TextField}
+                        select
+                        label="Common Subject"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.present_city}
+                        helperText={<ErrorMessage name="present_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_city"
+                        as={TextField}
+                        select
+                        label="Group 1"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.present_city}
+                        helperText={<ErrorMessage name="present_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_city"
+                        as={TextField}
+                        select
+                        label="Group 2"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.present_city}
+                        helperText={<ErrorMessage name="present_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_city"
+                        as={TextField}
+                        select
+                        label="Group 3"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.present_city}
+                        helperText={<ErrorMessage name="present_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_city"
+                        as={TextField}
+                        select
+                        label="Group 4"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.present_city}
+                        helperText={<ErrorMessage name="present_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_city"
+                        as={TextField}
+                        select
+                        label="Group 5"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.present_city}
+                        helperText={<ErrorMessage name="present_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-[20px] ">
               <span className="font-black text-[18px] ">Documents Upload</span>
               <div className=" border  p-6 rounded-2xl mt-3">
                 <TableContainer sx={{ overflowX: "auto" }}>
@@ -1824,6 +2316,9 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                           "STUDENT REPORT CARD",
                           "FATHER ID PRROF",
                           "MOTHER ID PROOF",
+                          'HEALTH RECORD',
+                          'TERM AND REPORT',
+                          'ADMISSION FORM'
                         ]?.map((row, index) => (
                           <Row1
                             key={index}
@@ -1841,6 +2336,118 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
             <div className="mt-[20px] ">
               <span className="font-black text-[18px] ">
                 Details Of Sibling Studying in The Institution
+              </span>
+              <div className=" border  p-6 rounded-2xl mt-3">
+                <div className="flex items-center justify-center gap-4">
+                  <Typography>Any Sibling in this School?</Typography>
+                  <FormControl>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <FormControlLabel
+                        value="female"
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value="male"
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+                <div className=" w-[100%] ">
+                  <div className="flex  flex-wrap gap-4">
+                    <div className="lg:w-[32.5%] w-[100%] mb-5">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Admission No"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%] mb-5">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Name"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Class & Section"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex  flex-wrap gap-4">
+                    <div className="lg:w-[32.5%] w-[100%] mb-5">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Admission No"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%] mb-5">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Name"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Class & Section"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-[20px] ">
+              <span className="font-black text-[18px] ">
+                Details Of Sibling Studying in Other Institution
               </span>
               <div className=" border  p-6 rounded-2xl mt-3">
                 <div className="flex items-center justify-center gap-4">
