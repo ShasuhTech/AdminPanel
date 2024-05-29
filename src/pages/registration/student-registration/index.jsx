@@ -181,51 +181,61 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
     }
     // setSubmitting(false);
   };
+
   const initialValues = {
     search: studenData?.search || "",
-    sibling_adm_no: studenData?.sibling_admission_number || "",
     admission_no: studenData?.admission_number || "",
-    fee_no: studenData?.fee_number || "",
-    parent_id: studenData || "",
     first_name: studenData?.name?.first_name || "",
     middle_name: studenData?.name?.middle_name || "",
     last_name: studenData?.name?.last_name || "",
     class: studenData?.class || "",
     section: studenData?.section || "",
-    stream: studenData?.stream || "",
-    fee_group: studenData?.fee_group || "",
-    fee_apply_form: studenData?.fee_apply_form || "",
-    dob: studenData?.date_of_birth || new Date(),
-    doj: studenData?.joining_date || new Date(),
-    doa: studenData?.admission_date || new Date(),
-    admission: studenData?.admission || "",
-    roll_no: studenData?.roll_number || "",
     gender: studenData?.gender || "",
-    // father_name: studenData? studenData ||'',
-    // mother_name: studenData? studenData ||'',
-    emergency_no: studenData?.emergency_number || "",
-    // admitted_class: studenData? studenData ||'',
-    house: studenData?.house || "",
-    social_category: studenData?.social_category || "",
-    religion: studenData?.religion || "",
-    caste: studenData?.caste || "",
-    mother_tongue: studenData?.mother_tongue || "",
-    concession_type: studenData?.concession_type || "",
-    nationality: studenData?.nationality || "",
     blood_group: studenData?.blood_group || "",
-    boarding_category: studenData?.boarding_category || "",
-    board_reg_no: studenData?.board_reg_no || "",
-    board: studenData?.board || "",
-    board_roll_no: studenData?.board_roll_no || "",
-    email_id: studenData?.email_id || "",
-    school_bus: studenData?.school_bus || "",
-    adhar_card_no: studenData?.adhar_card_no || "",
-    route_stop_name: studenData?.route_stop_name || "",
-    sms_no: studenData || "",
-    remark: studenData?.remark || "",
-    fee_remark: studenData || "",
-    payment_mode: studenData?.payment_mode || "",
-    student_type: studenData?.student_type || "",
+    emergency_no: studenData?.emergency_number || "",
+    mother_tongue: studenData?.mother_tongue || "",
+    religion: studenData?.religion || "",
+    dob: studenData?.date_of_birth || new Date(),
+    social_category: studenData?.social_category || "",
+    locality: studenData?.locality || "",
+    father_name: "",
+    father_qualifications: "",
+    father_occupation: "",
+    father_email: "",
+    father_org_name: "",
+    father_org_address: "",
+    father_nationality: "",
+    father_country: "",
+    father_state: "",
+    father_city: "",
+    father_pincode: "",
+    father_annual_income: "",
+    father_telephone: "",
+    father_mobile: "",
+
+    mother_name: "",
+    mother_qualifications: "",
+    mother_occupation: "",
+    mother_email: "",
+    mother_org_name: "",
+    mother_org_address: "",
+    mother_nationality: "",
+    mother_country: "",
+    mother_state: "",
+    mother_city: "",
+    mother_pincode: "",
+    mother_annual_income: "",
+    mother_mobile: "",
+    mother_telephone: "",
+
+    guardian_name: "",
+    guardian_relation: "",
+    guardian_mobile_no: "",
+    guardian_email: "",
+    guardian_address: "",
+
+    same_present_add: studenData?.same_present_add || "",
+    emergency_no: studenData?.emergency_number || "",
     present_address: studenData?.address?.present_address?.address || "",
     present_city: studenData?.address?.present_address?.city || "",
     present_state: studenData?.address?.present_address?.state || "",
@@ -242,6 +252,185 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
       studenData?.address?.permanent_address?.country || "india",
     permanent_telephone:
       studenData?.address?.permanent_address?.telephone || "",
+
+    // Other Details
+    any_physical_disability: "",
+    any_treatment_undertaken: "",
+    any_allergies: "",
+    interest_hobbies: "",
+    sports_game: "",
+    co_curriclar_activities: "",
+    any_other_relevent_information: "",
+
+    // Previous School Details
+    school_name: "",
+    school_reconised_by: "",
+    school_city_name: "",
+    medium_of_instruction: "",
+    year_of_passing: "",
+
+    subject_english_max_marks: "",
+    subject_english_marks_obtained: "",
+    subject_english_grade: "",
+    subject_english_percentage: "",
+
+    subject_hindi_max_marks: "",
+    subject_hindi_marks_obtained: "",
+    subject_hindi_grade: "",
+    subject_hindi_percentage: "",
+
+    subject_mathematics_max_marks: "",
+    subject_mathematics_marks_obtained: "",
+    subject_mathematics_grade: "",
+    subject_mathematics_percentage: "",
+
+    subject_science_max_marks: "",
+    subject_science_marks_obtained: "",
+    subject_science_grade: "",
+    subject_science_percentage: "",
+
+    subject_social_sceince_max_marks: "",
+    subject_social_sceince_marks_obtained: "",
+    subject_social_sceince_grade: "",
+    subject_social_sceince_percentage: "",
+
+    subject_third_language_max_marks: "",
+    subject_third_language_marks_obtained: "",
+    subject_third_language_grade: "",
+    subject_third_language_percentage: "",
+
+    pre_subject_english_max_marks: "",
+    pre_subject_english_marks_obtained: "",
+    pre_subject_english_grade: "",
+    pre_subject_english_percentage: "",
+
+    pre_subject_hindi_max_marks: "",
+    pre_subject_hindi_marks_obtained: "",
+    pre_subject_hindi_grade: "",
+    pre_subject_hindi_percentage: "",
+
+    pre_subject_mathematics_max_marks: "",
+    pre_subject_mathematics_marks_obtained: "",
+    pre_subject_mathematics_grade: "",
+    pre_subject_mathematics_percentage: "",
+
+    pre_subject_science_max_marks: "",
+    pre_subject_science_marks_obtained: "",
+    pre_subject_science_grade: "",
+    pre_subject_science_percentage: "",
+
+    pre_subject_social_sceince_max_marks: "",
+    pre_subject_social_sceince_marks_obtained: "",
+    pre_subject_social_sceince_grade: "",
+    pre_subject_social_sceince_percentage: "",
+
+    pre_subject_total_max_marks: "",
+    pre_subject_total_marks_obtained: "",
+    pre_subject_total_grade: "",
+    pre_subject_total_percentage: "",
+
+    pre_Board_subject_english_max_marks: "",
+    pre_Board_subject_english_marks_obtained: "",
+    pre_Board_subject_english_grade: "",
+    pre_Board_subject_english_percentage: "",
+
+    pre_Board_subject_hindi_max_marks: "",
+    pre_Board_subject_hindi_marks_obtained: "",
+    pre_Board_subject_hindi_grade: "",
+    pre_Board_subject_hindi_percentage: "",
+
+    pre_Board_subject_mathematics_max_marks: "",
+    pre_Board_subject_mathematics_marks_obtained: "",
+    pre_Board_subject_mathematics_grade: "",
+    pre_Board_subject_mathematics_percentage: "",
+
+    pre_Board_subject_science_max_marks: "",
+    pre_Board_subject_science_marks_obtained: "",
+    pre_Board_subject_science_grade: "",
+    pre_Board_subject_science_percentage: "",
+
+    pre_Board_subject_social_sceince_max_marks: "",
+    pre_Board_subject_social_sceince_marks_obtained: "",
+    pre_Board_subject_social_sceince_grade: "",
+    pre_Board_subject_social_sceince_percentage: "",
+
+    pre_Board_subject_total_max_marks: "",
+    pre_Board_subject_total_marks_obtained: "",
+    pre_Board_subject_total_grade: "",
+    pre_Board_subject_total_percentage: "",
+
+    board_details: "",
+    Board_subject_english_max_marks: "",
+    Board_subject_english_marks_obtained: "",
+    Board_subject_english_grade: "",
+    Board_subject_english_percentage: "",
+
+    Board_subject_hindi_max_marks: "",
+    Board_subject_hindi_marks_obtained: "",
+    Board_subject_hindi_grade: "",
+    Board_subject_hindi_percentage: "",
+
+    Board_subject_mathematics_max_marks: "",
+    Board_subject_mathematics_marks_obtained: "",
+    Board_subject_mathematics_grade: "",
+    Board_subject_mathematics_percentage: "",
+
+    Board_subject_science_max_marks: "",
+    Board_subject_science_marks_obtained: "",
+    Board_subject_science_grade: "",
+    Board_subject_science_percentage: "",
+
+    Board_subject_social_sceince_max_marks: "",
+    Board_subject_social_sceince_marks_obtained: "",
+    Board_subject_social_sceince_grade: "",
+    Board_subject_social_sceince_percentage: "",
+
+    Board_subject_economic_max_marks: "",
+    Board_subject_economic_marks_obtained: "",
+    Board_subject_economic_grade: "",
+    Board_subject_economic_percentage: "",
+
+    Board_subject_second_language_max_marks: "",
+    Board_subject_second_language_marks_obtained: "",
+    Board_subject_second_language_grade: "",
+    Board_subject_second_language_percentage: "",
+
+    Board_subject_total_max_marks: "",
+    Board_subject_total_marks_obtained: "",
+    Board_subject_total_grade: "",
+    Board_subject_total_percentage: "",
+
+    // Stream Details
+    stream_details: "",
+    stream_common_subject: "",
+    stream_group1: "",
+    stream_group2: "",
+    stream_group3: "",
+    stream_group4: "",
+    stream_group5: "",
+
+    any_sibling_school:'',
+    sibling_same_inst_admission_no1:'',
+    sibling_same_inst_name1:'',
+    sibling_same_inst_class_section1:'',
+    sibling_same_inst_admission_no2:'',
+    sibling_same_inst_name2:'',
+    sibling_same_inst_class_section2:'',
+
+    any_other_sibling_school:'',
+    sibling_other_inst_admission_no1:'',
+    sibling_other_inst_name1:'',
+    sibling_other_inst_class_section1:'',
+    sibling_other_inst_admission_no2:'',
+    sibling_other_inst_name2:'',
+    sibling_other_inst_class_section2:'',
+
+   
+
+
+
+
+    
   };
 
   const validationSchema = Yup.object().shape({
@@ -1650,11 +1839,8 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
               </div>
             </div>
             <div className="mt-[20px] ">
-              <span className="font-black text-[18px] ">
-                Other Details
-              </span>
+              <span className="font-black text-[18px] ">Other Details</span>
               <div className=" border  p-6 rounded-2xl mt-3">
-                
                 <div className=" w-[100%] ">
                   <div className="flex  flex-wrap gap-4">
                     <div className="lg:w-[32.5%] w-[100%] ">
@@ -1687,7 +1873,7 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                       <Field
                         name="present_address"
                         as={TextField}
-                        label='Any Allergies'
+                        label="Any Allergies"
                         variant="outlined"
                         fullWidth
                         onBlur={handleBlur}
@@ -1910,7 +2096,6 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
               <div className=" border  p-6 rounded-2xl mt-3">
                 <div className=" lg:flex w-[100%] gap-4">
                   <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
-           
                     <TableContainer sx={{ overflowX: "auto" }}>
                       <Table aria-label="collapsible table">
                         <TableHead>
@@ -1929,9 +2114,7 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                             <StyledTableCell align="center">
                               Grade
                             </StyledTableCell>
-                            <StyledTableCell align="center">
-                             %
-                            </StyledTableCell>
+                            <StyledTableCell align="center">%</StyledTableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody
@@ -1965,13 +2148,10 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
               </div>
             </div>
             <div className="mt-[20px] ">
-              <span className="font-black text-[18px] ">
-               Pre Board Details
-              </span>
+              <span className="font-black text-[18px] ">Pre Board Details</span>
               <div className=" border  p-6 rounded-2xl mt-3">
                 <div className=" lg:flex w-[100%] gap-4">
                   <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
-           
                     <TableContainer sx={{ overflowX: "auto" }}>
                       <Table aria-label="collapsible table">
                         <TableHead>
@@ -1990,9 +2170,7 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                             <StyledTableCell align="center">
                               Grade
                             </StyledTableCell>
-                            <StyledTableCell align="center">
-                             %
-                            </StyledTableCell>
+                            <StyledTableCell align="center">%</StyledTableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody
@@ -2026,13 +2204,11 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
               </div>
             </div>
             <div className="mt-[20px] ">
-              <span className="font-black text-[18px] ">
-               Board Details
-              </span>
+              <span className="font-black text-[18px] ">Board Details</span>
               <div className=" border  p-6 rounded-2xl mt-3">
                 <div className=" lg:flex w-[100%] gap-4">
                   <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
-                  <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.5%]  w-[100%]">
                       <Field
                         name="present_city"
                         as={TextField}
@@ -2046,12 +2222,11 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                         value={values.present_city}
                         helperText={<ErrorMessage name="present_city" />}
                       >
-                        {
-                          Config.Boards.map((option) => (
-                            <MenuItem key={option?.value} value={option?.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
+                        {Config.Boards.map((option) => (
+                          <MenuItem key={option?.value} value={option?.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
                       </Field>
                     </div>
 
@@ -2073,9 +2248,7 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                             <StyledTableCell align="center">
                               Grade
                             </StyledTableCell>
-                            <StyledTableCell align="center">
-                             %
-                            </StyledTableCell>
+                            <StyledTableCell align="center">%</StyledTableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody
@@ -2114,9 +2287,7 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
               <span className="font-black text-[18px] ">Stream Details</span>
               <div className=" border  p-6 rounded-2xl mt-3">
                 <div className=" w-[100%] ">
-                 
                   <div className="flex  flex-wrap gap-4">
-                    
                     <div className="lg:w-[32.5%]  w-[100%]">
                       {
                         <Field
@@ -2283,8 +2454,6 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                           ))}
                       </Field>
                     </div>
-
-                   
                   </div>
                 </div>
               </div>
@@ -2316,9 +2485,9 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                           "STUDENT REPORT CARD",
                           "FATHER ID PRROF",
                           "MOTHER ID PROOF",
-                          'HEALTH RECORD',
-                          'TERM AND REPORT',
-                          'ADMISSION FORM'
+                          "HEALTH RECORD",
+                          "TERM AND REPORT",
+                          "ADMISSION FORM",
                         ]?.map((row, index) => (
                           <Row1
                             key={index}
@@ -2562,7 +2731,7 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                 Form submission failed. Please try again.
               </Typography>
             )}
-            <div className="flex justify-end mr-12 mb-5 ">
+            <div className="flex justify-end mr-12 my-5 ">
               <CustomButton
                 type="submit"
                 variant="contained"
@@ -2575,25 +2744,6 @@ const StudentRegistration = ({ setSlectedTab, studenData }) => {
                 {isSubmitting ? "Submitting..." : "Submit"}
               </CustomButton>
             </div>
-            {/* <div className="bg-black gap-5  py-5 w-[80%] flex items-center justify-center fixed z-[999] bottom-0">
-            <CustomButton>New</CustomButton>
-            <CustomButton>Edit</CustomButton>
-            <CustomButton
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-              className="bg-red-200 py-1 px-5"
-              sx={{ py: 1, px: 5, fontWeight: "bold", fontSize: "16px" }}
-            >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </CustomButton>
-
-            <CustomButton>Details</CustomButton>
-            <CustomButton>Tc</CustomButton>
-            <CustomButton>Dropouts</CustomButton>
-            <CustomButton>Audit Logs</CustomButton>
-          </div> */}
           </Form>
         )}
       </Formik>

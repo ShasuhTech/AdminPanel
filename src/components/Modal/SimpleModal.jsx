@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Slide from '@mui/material/Slide';
+import { Close } from "mdi-material-ui";
 
 const style = {
   position: "absolute",
@@ -41,6 +42,7 @@ export default function SimpleModal({
       <Box
         sx={{ ...style, width: !isMobile ? width : "100%", height: "auto%" }}
       >
+        <Close onClick={handleClose}  className="text-xl absolute right-5 top-5 cursor-pointer" />
         {children}
       </Box>
     </Modal>
