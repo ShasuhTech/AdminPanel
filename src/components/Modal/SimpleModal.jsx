@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Slide from '@mui/material/Slide';
+import Slide from "@mui/material/Slide";
 import { Close } from "mdi-material-ui";
 
 const style = {
@@ -27,6 +27,7 @@ export default function SimpleModal({
   data,
   children,
   width,
+  height,
 }) {
   const isMobile = window.innerWidth <= 400;
 
@@ -40,9 +41,16 @@ export default function SimpleModal({
       TransitionComponent={Transition}
     >
       <Box
-        sx={{ ...style, width: !isMobile ? width : "100%", height: "auto%" }}
+        sx={{
+          ...style,
+          width: !isMobile ? width : "100%",
+          height: height ? height : "auto%",
+        }}
       >
-        <Close onClick={handleClose}  className="text-xl absolute right-5 top-5 cursor-pointer" />
+        <Close
+          onClick={handleClose}
+          className="text-xl absolute right-5 top-5 cursor-pointer"
+        />
         {children}
       </Box>
     </Modal>

@@ -43,9 +43,8 @@ import moment from "moment";
 import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
 import Config from "@/utilities/Config";
 // import FollowUpModal from "./FollowUpModal";
-import EnquiryMaster from "../enquiry-master";
 
-const FollowUp = () => {
+const RegistrationList = () => {
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
 
@@ -103,7 +102,6 @@ const FollowUp = () => {
           spacing={2}
           sx={{ py: 2, px: 2, alignItems: "center", justifyContent: "center" }}
         >
-          <Button onClick={handleOpen}>FollowUp Enquiry</Button>
           <Grid item justifyContent={"center"} xs={12} sm={6} md={6}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
@@ -204,17 +202,17 @@ const FollowUp = () => {
             // page={pagination?.currentPage ? pagination?.currentPage - 1 : 0}
             // onPageChange={handleChangePage}
           />
-    
         </Paper>
       </div>{" "}
-      <EnquiryMaster open={followupModal} handleClose={handleclose} />
+      {/* <FollowUpModal open={followupModal} handleClose={handleclose} /> */}
     </div>
   );
 };
 
-export default FollowUp;
+export default RegistrationList;
 const Row = (props) => {
-  const { row, salonDetails, setSalonDetails, index, router,handleOpen } = props;
+  const { row, salonDetails, setSalonDetails, index, router, handleOpen } =
+    props;
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -266,31 +264,26 @@ const Row = (props) => {
           <Typography textTransform={'capitalize'}>{row?.student_status}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "250px", gap: 2 }}>
-          {row?.student_status === 'Follow-Up' && (
-            <Button
-            onClick={handleOpen}
-              sx={{ marginRight: "10px" }}
-              variant="outlined"
-              color="secondary"
-            >
-              Follow Up
-            </Button>
-          )}
           <Button
             onClick={() =>
-              router.push({ pathname: "/registration/student-registration", query: { id: row?._id } })
+              router.push({
+                pathname: "/registration/student-registration",
+                query: { id: row?._id },
+              })
             }
             sx={{ marginRight: "10px" }}
             variant="outlined"
             color="success"
           >
-            Registration
+            Admission
           </Button>
           <Button
             onClick={() =>
-              router.push({ pathname: "/registration/student-enquiry", query: { id: row?._id } })
+              router.push({
+                pathname: "/registration/student-registration",
+                query: { id: row?._id },
+              })
             }
-          
             variant="outlined"
           >
             Details

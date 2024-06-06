@@ -106,6 +106,20 @@ const StreamList = [
     label: "Maths",
   },
 ];
+const ModeOfFollowUp = [
+  {
+    value: "Telephone",
+    label: "Telephone",
+  },
+  {
+    value: "WhatsApp",
+    label: "WhatsApp",
+  },
+  {
+    value: "Offline",
+    label: "Offline",
+  },
+];
 const FeeGroup = [
   {
     value: "1",
@@ -286,6 +300,29 @@ const MotherTongues = [
   {
     value: "5",
     label: "Marathi",
+  },
+  // Add more mother tongues as needed
+];
+const CountryDta = [
+  {
+    value: "1",
+    label: "India",
+  },
+  {
+    value: "2",
+    label: "Pakistan",
+  },
+  {
+    value: "3",
+    label: "China",
+  },
+  {
+    value: "4",
+    label: "Dubai",
+  },
+  {
+    value: "5",
+    label: "UAE",
   },
   // Add more mother tongues as needed
 ];
@@ -493,13 +530,120 @@ const SchoolBusOptions = [
 const qualifications = [
   {
     value: "1",
-    label: "Available",
+    label: "Graduation",
   },
   {
     value: "2",
-    label: "Not Available",
+    label: "Post Graduation",
+  },
+  {
+    value: "3",
+    label: "Doctorate",
+  },
+  {
+    value: "4",
+    label: "Diploma",
+  },
+  {
+    value: "5",
+    label: "Certificate",
+  },
+  {
+    value: "6",
+    label: "High School",
+  },
+  {
+    value: "7",
+    label: "Middle School",
+  },
+  {
+    value: "8",
+    label: "Primary School",
   },
 ];
+const occupations = [
+  {
+    value: "1",
+    label: "Engineer",
+  },
+  {
+    value: "2",
+    label: "Doctor",
+  },
+  {
+    value: "3",
+    label: "Teacher",
+  },
+  {
+    value: "4",
+    label: "Artist",
+  },
+  {
+    value: "5",
+    label: "Scientist",
+  },
+  {
+    value: "6",
+    label: "Lawyer",
+  },
+  {
+    value: "7",
+    label: "Accountant",
+  },
+  {
+    value: "8",
+    label: "Nurse",
+  },
+  {
+    value: "9",
+    label: "Pharmacist",
+  },
+  {
+    value: "10",
+    label: "Architect",
+  },
+  {
+    value: "11",
+    label: "Software Developer",
+  },
+  {
+    value: "12",
+    label: "Business Analyst",
+  },
+  {
+    value: "13",
+    label: "Journalist",
+  },
+  {
+    value: "14",
+    label: "Pilot",
+  },
+  {
+    value: "15",
+    label: "Chef",
+  },
+  {
+    value: "16",
+    label: "Electrician",
+  },
+  {
+    value: "17",
+    label: "Plumber",
+  },
+  {
+    value: "18",
+    label: "Mechanic",
+  },
+  {
+    value: "19",
+    label: "Manager",
+  },
+  {
+    value: "20",
+    label: "Entrepreneur",
+  },
+];
+
 const joiningYear = [
   {
     value: "1",
@@ -518,6 +662,37 @@ const joiningYear = [
     label: "2021",
   },
 ];
+
+const followupStatus = [
+  {
+    value: "3",
+    label: "All",
+  },
+  {
+    value: "1",
+    label: "Follow Up",
+  },
+  {
+    value: "2",
+    label: "Registration",
+  },
+];
+
+const genders = [
+  {
+    value: "1",
+    label: "Male",
+  },
+  {
+    value: "2",
+    label: "Female",
+  },
+  {
+    value: "3",
+    label: "Other",
+  },
+];
+
 export default {
   ClassList,
   SectionList,
@@ -540,4 +715,9 @@ export default {
   SchoolBusOptions,
   qualifications,
   joiningYear,
+  followupStatus,
+  occupations,
+  genders,
+  CountryDta,
+  ModeOfFollowUp
 };

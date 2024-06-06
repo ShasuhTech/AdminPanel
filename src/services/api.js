@@ -38,11 +38,31 @@ export const AddStudent = async (payload) => {
   const response = await axiosInstance.post("/student", payload);
   return response?.data;
 };
+export const UpdateStudent = async (payload) => {
+  const response = await axiosInstance.put("/register-stundent", payload);
+  return response?.data;
+};
 export const GetStudentLsit = async (payload) => {
   const response = await axiosInstance.get("/student");
   return response?.data;
 };
 export const GetStudentListById = async (payload) => {
   const response = await axiosInstance.get(`/student/${payload}`);
+  return response?.data;
+};
+export const AddFollowup = async (payload) => {
+  const response = await axiosInstance.post("/follow-up", payload);
+  return response?.data;
+};
+export const GetFollowupList = async (payload) => {
+  const response = await axiosInstance.post("/follow-ups",payload);
+  return response?.data;
+};
+export const GetStudentById = async (payload) => {
+  const response = await axiosInstance.get(`/follow-up/${payload}`);
+  return response?.data;
+};
+export const DeleteStudentById = async (payload) => {
+  const response = await axiosInstance.delete(`/follow-up/${payload}`);
   return response?.data;
 };

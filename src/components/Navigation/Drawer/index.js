@@ -373,7 +373,7 @@ const DrawerPath = ({
                 title={"Field Updation"}
               />
             </DrawerList>
-            <DrawerList path={""} text={"registration"} Icon={SchoolIcon} open={open}>
+            <DrawerList path={""} text={"Registration"} Icon={SchoolIcon} open={open}>
             <DrawerList
                 path={"/registration/student-enquiry"}
                 text={"Student Enquiry"}
