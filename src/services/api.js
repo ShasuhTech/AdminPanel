@@ -18,8 +18,6 @@ export const loginUser = async (payload) => {
 //   return response?.data;
 // };
 
-
-
 export const StateData = async (payload) => {
   const response = await axiosInstance.post("/states", payload);
   return response?.data;
@@ -43,7 +41,10 @@ export const UpdateStudent = async (payload) => {
   return response?.data;
 };
 export const GetStudentLsit = async (payload) => {
-  const response = await axiosInstance.get("/student");
+  console.log(payload,'---payload')
+  const response = await axiosInstance.get("/student", {
+    params: payload,
+  });
   return response?.data;
 };
 export const GetStudentListById = async (payload) => {
@@ -55,7 +56,7 @@ export const AddFollowup = async (payload) => {
   return response?.data;
 };
 export const GetFollowupList = async (payload) => {
-  const response = await axiosInstance.post("/follow-ups",payload);
+  const response = await axiosInstance.post("/follow-ups", payload);
   return response?.data;
 };
 export const GetStudentById = async (payload) => {

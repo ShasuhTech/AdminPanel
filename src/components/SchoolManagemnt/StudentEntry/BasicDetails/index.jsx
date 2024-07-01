@@ -22,6 +22,7 @@ import Config from "@/utilities/Config";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { CountrySelect } from "@/components/StateAndCity";
 
 const BasicDetails = ({ setSlectedTab, studenData }) => {
   const router = useRouter();
@@ -154,6 +155,8 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
           ? values.present_locality
           : values.permanent_locality,
       });
+      payload.student_status = "Admission";
+      payload.enquiry_id = studenData?.enquiry_id;
 
     console.log(payload, "----payload");
     try {
@@ -455,6 +458,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       variant="outlined"
                       // required
                       fullWidth
+                      
                       value={values.admission_no}
                       onBlur={handleBlur}
                       onChange={handleChange}
@@ -1118,277 +1122,235 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
               </div>
             </div>
           </div>
+          {/* Persent Address */}
+          {
+            <div className="mt-[20px] ">
+              <span className="font-black text-[18px] ">Persent Address</span>
+              <div className=" border  p-6 rounded-2xl mt-3">
+                <div className=" w-[100%] ">
+                  <div className="w-[100%] mb-5">
+                    <Field
+                      name="present_address"
+                      as={TextField}
+                      label="Persent Address"
+                      variant="outlined"
+                      fullWidth
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={false}
+                      helperText={<ErrorMessage name="present_address" />}
+                    />
+                  </div>
+                  <div className="flex  flex-wrap gap-4">
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <CountrySelect
+                        name="present_country"
+                        label="Country"
+                        value={values.present_country}
+                      />
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      {
+                        <Field
+                          name="present_state"
+                          as={TextField}
+                          select
+                          label="State"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={(event) => {
+                            const selectedState = event.target.value;
+                            setFieldValue("present_state", selectedState);
+                            setPresentState(selectedState);
+                          }}
+                          error={false}
+                          value={values.present_state}
+                          helperText={<ErrorMessage name="present_state" />}
+                        >
+                          {allState?.length > 0 &&
+                            allState.map((option) => (
+                              <MenuItem
+                                key={option.name}
+                                onChange={(e) =>
+                                  setPresentState(e?.target?.value)
+                                }
+                                value={option.name}
+                              >
+                                {option.name}
+                              </MenuItem>
+                            ))}
+                        </Field>
+                      }
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_city"
+                        as={TextField}
+                        select
+                        label="City"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={values.present_city}
+                        helperText={<ErrorMessage name="present_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
 
-          <div className="mt-[20px] ">
-            <span className="font-black text-[18px] ">Persent Address</span>
-            <div className=" border  p-6 rounded-2xl mt-3">
-              <div className=" w-[100%] ">
-                <div className="w-[100%] mb-5">
-                  <Field
-                    name="present_address"
-                    as={TextField}
-                    label="Persent Address"
-                    variant="outlined"
-                    fullWidth
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={false}
-                    helperText={<ErrorMessage name="present_address" />}
-                  />
-                </div>
-                <div className="flex  flex-wrap gap-4">
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    {
-                      <Autocomplete
-                        options={[]}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Country"
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_pincode"
+                        as={TextField}
+                        label="Pincode"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_pincode" />}
+                      />
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="present_locality"
+                        as={TextField}
+                        label="Locality"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_locality" />}
+                      />
+                    </div>
+                    {/* <div className="lg:w-[32.5%]  w-[100%]">
+                          <Field
+                            name="present_telephone"
+                            as={TextField}
+                            label="Telephone"
                             variant="outlined"
                             fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
                             error={false}
-                            helperText={<ErrorMessage name="present_country" />}
+                            helperText={
+                              <ErrorMessage name="present_telephone" />
+                            }
                           />
-                        )}
-                        value={
-                          allState?.find(
-                            (option) => option?.name === values?.present_country
-                          ) || null
-                        }
-                        onChange={(event, value) => {
-                          setFieldValue(
-                            "present_country",
-                            value ? value.name : ""
-                          ); // Update Formik's state with the selected state's name
-                        }}
-                        onBlur={handleBlur}
-                      />
-                    }
+                        </div> */}
                   </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    {
+                </div>
+              </div>
+            </div>
+          }
+          {/* Permanent Address */}
+          {
+            <div className="mt-[20px] mb-[60px]">
+              <div className="flex items-center gap-3">
+                <span className="font-black text-[18px] ">
+                  Permanent Address
+                </span>
+                <div className="flex items-center">
+                  <Checkbox
+                    value={confirmAddress}
+                    onChange={() => setConfrimAddress(!confirmAddress)}
+                  />
+                  <Typography variant="h6" fontWeight={"bold"}>
+                    Same as Present Address
+                  </Typography>
+                </div>
+              </div>
+              <div className=" border  p-6 rounded-2xl mt-3">
+                <div className=" w-[100%] ">
+                  <div className="w-[100%] mb-5">
+                    <Field
+                      name="permanent_address"
+                      as={TextField}
+                      label="Persent Address"
+                      variant="outlined"
+                      fullWidth
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={
+                        !confirmAddress
+                          ? values?.permanent_address
+                          : values.present_address
+                      }
+                      error={false}
+                      helperText={<ErrorMessage name="permanent_address" />}
+                    />
+                  </div>
+                  <div className="flex  flex-wrap gap-4">
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <CountrySelect
+                        name="permanent_country"
+                        label="Country"
+                        value={values.permanent_country}
+                      />
+                    </div>
+
+                    <div className="lg:w-[32.5%]  w-[100%]">
                       <Field
-                        name="present_state"
+                        name="permanent_state"
                         as={TextField}
                         select
                         label="State"
                         variant="outlined"
                         fullWidth
                         onBlur={handleBlur}
-                        onChange={(event) => {
-                          const selectedState = event.target.value;
-                          setFieldValue("present_state", selectedState);
-                          setPresentState(selectedState);
-                        }}
+                        onChange={handleChange}
                         error={false}
-                        value={values.present_state}
-                        helperText={<ErrorMessage name="present_state" />}
+                        value={
+                          confirmAddress
+                            ? values.present_state
+                            : values.permanent_state
+                        }
+                        helperText={<ErrorMessage name="permanent_state" />}
                       >
                         {allState?.length > 0 &&
                           allState.map((option) => (
-                            <MenuItem
-                              key={option.name}
-                              onChange={(e) =>
-                                setPresentState(e?.target?.value)
-                              }
-                              value={option.name}
-                            >
+                            <MenuItem key={option.name} value={option.name}>
                               {option.name}
                             </MenuItem>
                           ))}
                       </Field>
-                    }
-                  </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="present_city"
-                      as={TextField}
-                      select
-                      label="City"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={false}
-                      value={values.present_city}
-                      helperText={<ErrorMessage name="present_city" />}
-                    >
-                      {allcity?.length > 0 &&
-                        allcity.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                    </Field>
-                  </div>
-
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="present_pincode"
-                      as={TextField}
-                      label="Pincode"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={false}
-                      helperText={<ErrorMessage name="present_pincode" />}
-                    />
-                  </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="present_locality"
-                      as={TextField}
-                      label="Locality"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={false}
-                      helperText={<ErrorMessage name="present_locality" />}
-                    />
-                  </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="present_telephone"
-                      as={TextField}
-                      label="Telephone"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={false}
-                      helperText={<ErrorMessage name="present_telephone" />}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-[20px] mb-[60px]">
-            <div className="flex items-center gap-3">
-              <span className="font-black text-[18px] ">Permanent Address</span>
-              <div className="flex items-center">
-                <Checkbox
-                  value={confirmAddress}
-                  onChange={() => setConfrimAddress(!confirmAddress)}
-                />
-                <Typography variant="h6" fontWeight={"bold"}>
-                  Same as Present Address
-                </Typography>
-              </div>
-            </div>
-            <div className=" border  p-6 rounded-2xl mt-3">
-              <div className=" w-[100%] ">
-                <div className="w-[100%] mb-5">
-                  <Field
-                    name="permanent_address"
-                    as={TextField}
-                    label="Persent Address"
-                    variant="outlined"
-                    fullWidth
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={
-                      !confirmAddress
-                        ? values?.permanent_address
-                        : values.present_address
-                    }
-                    error={false}
-                    helperText={<ErrorMessage name="permanent_address" />}
-                  />
-                </div>
-                <div className="flex  flex-wrap gap-4">
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    {
-                      <Autocomplete
-                        options={[]}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Country"
-                            variant="outlined"
-                            fullWidth
-                            error={false}
-                            helperText={
-                              <ErrorMessage name="permanent_country" />
-                            }
-                          />
-                        )}
-                        value={
-                          allState?.find((option) =>
-                            option?.name === !confirmAddress
-                              ? values?.permanent_country
-                              : values?.current_country
-                          ) || null
-                        }
-                        onChange={(event, value) => {
-                          setFieldValue(
-                            "permanent_country",
-                            value ? value.name : ""
-                          ); // Update Formik's state with the selected state's name
-                        }}
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="permanent_city"
+                        as={TextField}
+                        select
+                        label="City"
+                        variant="outlined"
+                        fullWidth
                         onBlur={handleBlur}
-                      />
-                    }
-                  </div>
-
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="permanent_state"
-                      as={TextField}
-                      select
-                      label="State"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={false}
-                      value={
-                        confirmAddress
-                          ? values.present_state
-                          : values.permanent_state
-                      }
-                      helperText={<ErrorMessage name="permanent_state" />}
-                    >
-                      {allState?.length > 0 &&
-                        allState.map((option) => (
-                          <MenuItem key={option.name} value={option.name}>
-                            {option.name}
-                          </MenuItem>
-                        ))}
-                    </Field>
-                  </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="permanent_city"
-                      as={TextField}
-                      select
-                      label="City"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={false}
-                      value={
-                        confirmAddress
-                          ? values.present_city
-                          : values.permanent_city
-                      }
-                      helperText={<ErrorMessage name="permanent_city" />}
-                    >
-                      {allcity?.length > 0 &&
-                        allcity.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                    </Field>
-                  </div>
-                  {/* <div className="lg:w-[32.5%]  w-[100%]">
+                        onChange={handleChange}
+                        error={false}
+                        value={
+                          confirmAddress
+                            ? values.present_city
+                            : values.permanent_city
+                        }
+                        helperText={<ErrorMessage name="permanent_city" />}
+                      >
+                        {allcity?.length > 0 &&
+                          allcity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Field>
+                    </div>
+                    {/* <div className="lg:w-[32.5%]  w-[100%]">
                     <Field
                       name="permanent_country"
                       as={TextField}
@@ -1406,64 +1368,425 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       helperText={<ErrorMessage name="permanent_country" />}
                     />
                   </div> */}
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="permanent_pincode"
-                      as={TextField}
-                      label="Pincode"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={
-                        !confirmAddress
-                          ? values?.permanent_pincode
-                          : values.present_pincode
-                      }
-                      error={false}
-                      helperText={<ErrorMessage name="permanent_pincode" />}
-                    />
-                  </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="permanent_locality"
-                      as={TextField}
-                      label="Locality"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={false}
-                      value={
-                        !confirmAddress
-                          ? values?.permanent_locality
-                          : values.present_locality
-                      }
-                      helperText={<ErrorMessage name="permanent_locality" />}
-                    />
-                  </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
-                    <Field
-                      name="permanent_telephone"
-                      as={TextField}
-                      label="Telephone"
-                      variant="outlined"
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={
-                        !confirmAddress
-                          ? values?.permanent_telephone
-                          : values.present_telephone
-                      }
-                      error={false}
-                      helperText={<ErrorMessage name="permanent_telephone" />}
-                    />
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="permanent_pincode"
+                        as={TextField}
+                        label="Pincode"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={
+                          !confirmAddress
+                            ? values?.permanent_pincode
+                            : values.present_pincode
+                        }
+                        error={false}
+                        helperText={<ErrorMessage name="permanent_pincode" />}
+                      />
+                    </div>
+                    <div className="lg:w-[32.5%]  w-[100%]">
+                      <Field
+                        name="permanent_locality"
+                        as={TextField}
+                        label="Locality"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        value={
+                          !confirmAddress
+                            ? values?.permanent_locality
+                            : values.present_locality
+                        }
+                        helperText={<ErrorMessage name="permanent_locality" />}
+                      />
+                    </div>
+                    {/* <div className="lg:w-[32.5%]  w-[100%]">
+                          <Field
+                            name="permanent_telephone"
+                            as={TextField}
+                            label="Telephone"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={
+                              !confirmAddress
+                                ? values?.permanent_telephone
+                                : values.present_telephone
+                            }
+                            error={false}
+                            helperText={
+                              <ErrorMessage name="permanent_telephone" />
+                            }
+                          />
+                        </div> */}
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          }
+          {false && (
+            <>
+              <div className="mt-[20px] ">
+                <span className="font-black text-[18px] ">Persent Address</span>
+                <div className=" border  p-6 rounded-2xl mt-3">
+                  <div className=" w-[100%] ">
+                    <div className="w-[100%] mb-5">
+                      <Field
+                        name="present_address"
+                        as={TextField}
+                        label="Persent Address"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        error={false}
+                        helperText={<ErrorMessage name="present_address" />}
+                      />
+                    </div>
+                    <div className="flex  flex-wrap gap-4">
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        {
+                          <Autocomplete
+                            options={[]}
+                            getOptionLabel={(option) => option.name}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Country"
+                                variant="outlined"
+                                fullWidth
+                                error={false}
+                                helperText={
+                                  <ErrorMessage name="present_country" />
+                                }
+                              />
+                            )}
+                            value={
+                              allState?.find(
+                                (option) =>
+                                  option?.name === values?.present_country
+                              ) || null
+                            }
+                            onChange={(event, value) => {
+                              setFieldValue(
+                                "present_country",
+                                value ? value.name : ""
+                              ); // Update Formik's state with the selected state's name
+                            }}
+                            onBlur={handleBlur}
+                          />
+                        }
+                      </div>
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        {
+                          <Field
+                            name="present_state"
+                            as={TextField}
+                            select
+                            label="State"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={(event) => {
+                              const selectedState = event.target.value;
+                              setFieldValue("present_state", selectedState);
+                              setPresentState(selectedState);
+                            }}
+                            error={false}
+                            value={values.present_state}
+                            helperText={<ErrorMessage name="present_state" />}
+                          >
+                            {allState?.length > 0 &&
+                              allState.map((option) => (
+                                <MenuItem
+                                  key={option.name}
+                                  onChange={(e) =>
+                                    setPresentState(e?.target?.value)
+                                  }
+                                  value={option.name}
+                                >
+                                  {option.name}
+                                </MenuItem>
+                              ))}
+                          </Field>
+                        }
+                      </div>
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="present_city"
+                          as={TextField}
+                          select
+                          label="City"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          error={false}
+                          value={values.present_city}
+                          helperText={<ErrorMessage name="present_city" />}
+                        >
+                          {allcity?.length > 0 &&
+                            allcity.map((option) => (
+                              <MenuItem key={option} value={option}>
+                                {option}
+                              </MenuItem>
+                            ))}
+                        </Field>
+                      </div>
+
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="present_pincode"
+                          as={TextField}
+                          label="Pincode"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          error={false}
+                          helperText={<ErrorMessage name="present_pincode" />}
+                        />
+                      </div>
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="present_locality"
+                          as={TextField}
+                          label="Locality"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          error={false}
+                          helperText={<ErrorMessage name="present_locality" />}
+                        />
+                      </div>
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="present_telephone"
+                          as={TextField}
+                          label="Telephone"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          error={false}
+                          helperText={<ErrorMessage name="present_telephone" />}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-[20px] mb-[60px]">
+                <div className="flex items-center gap-3">
+                  <span className="font-black text-[18px] ">
+                    Permanent Address
+                  </span>
+                  <div className="flex items-center">
+                    <Checkbox
+                      value={confirmAddress}
+                      onChange={() => setConfrimAddress(!confirmAddress)}
+                    />
+                    <Typography variant="h6" fontWeight={"bold"}>
+                      Same as Present Address
+                    </Typography>
+                  </div>
+                </div>
+                <div className=" border  p-6 rounded-2xl mt-3">
+                  <div className=" w-[100%] ">
+                    <div className="w-[100%] mb-5">
+                      <Field
+                        name="permanent_address"
+                        as={TextField}
+                        label="Persent Address"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={
+                          !confirmAddress
+                            ? values?.permanent_address
+                            : values.present_address
+                        }
+                        error={false}
+                        helperText={<ErrorMessage name="permanent_address" />}
+                      />
+                    </div>
+                    <div className="flex  flex-wrap gap-4">
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        {
+                          <Autocomplete
+                            options={[]}
+                            getOptionLabel={(option) => option.name}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Country"
+                                variant="outlined"
+                                fullWidth
+                                error={false}
+                                helperText={
+                                  <ErrorMessage name="permanent_country" />
+                                }
+                              />
+                            )}
+                            value={
+                              allState?.find((option) =>
+                                option?.name === !confirmAddress
+                                  ? values?.permanent_country
+                                  : values?.current_country
+                              ) || null
+                            }
+                            onChange={(event, value) => {
+                              setFieldValue(
+                                "permanent_country",
+                                value ? value.name : ""
+                              ); // Update Formik's state with the selected state's name
+                            }}
+                            onBlur={handleBlur}
+                          />
+                        }
+                      </div>
+
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="permanent_state"
+                          as={TextField}
+                          select
+                          label="State"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          error={false}
+                          value={
+                            confirmAddress
+                              ? values.present_state
+                              : values.permanent_state
+                          }
+                          helperText={<ErrorMessage name="permanent_state" />}
+                        >
+                          {allState?.length > 0 &&
+                            allState.map((option) => (
+                              <MenuItem key={option.name} value={option.name}>
+                                {option.name}
+                              </MenuItem>
+                            ))}
+                        </Field>
+                      </div>
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="permanent_city"
+                          as={TextField}
+                          select
+                          label="City"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          error={false}
+                          value={
+                            confirmAddress
+                              ? values.present_city
+                              : values.permanent_city
+                          }
+                          helperText={<ErrorMessage name="permanent_city" />}
+                        >
+                          {allcity?.length > 0 &&
+                            allcity.map((option) => (
+                              <MenuItem key={option} value={option}>
+                                {option}
+                              </MenuItem>
+                            ))}
+                        </Field>
+                      </div>
+                      {/* <div className="lg:w-[32.5%]  w-[100%]">
+                    <Field
+                      name="permanent_country"
+                      as={TextField}
+                      label="Country"
+                      variant="outlined"
+                      fullWidth
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={false}
+                      value={
+                        !confirmAddress
+                          ? values?.permanent_country
+                          : values.present_country
+                      }
+                      helperText={<ErrorMessage name="permanent_country" />}
+                    />
+                  </div> */}
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="permanent_pincode"
+                          as={TextField}
+                          label="Pincode"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={
+                            !confirmAddress
+                              ? values?.permanent_pincode
+                              : values.present_pincode
+                          }
+                          error={false}
+                          helperText={<ErrorMessage name="permanent_pincode" />}
+                        />
+                      </div>
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="permanent_locality"
+                          as={TextField}
+                          label="Locality"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          error={false}
+                          value={
+                            !confirmAddress
+                              ? values?.permanent_locality
+                              : values.present_locality
+                          }
+                          helperText={
+                            <ErrorMessage name="permanent_locality" />
+                          }
+                        />
+                      </div>
+                      <div className="lg:w-[32.5%]  w-[100%]">
+                        <Field
+                          name="permanent_telephone"
+                          as={TextField}
+                          label="Telephone"
+                          variant="outlined"
+                          fullWidth
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={
+                            !confirmAddress
+                              ? values?.permanent_telephone
+                              : values.present_telephone
+                          }
+                          error={false}
+                          helperText={
+                            <ErrorMessage name="permanent_telephone" />
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
 
           {status && status.success === false && (
             <Typography className={classes.error} variant="body1">
@@ -1475,7 +1798,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
               type="submit"
               variant="contained"
               color="primary"
-              onClick={handleSubmit}
+              // onClick={handleSubmit}
               // disabled={isSubmitting}
               className="bg-blue-500 py-1 px-5"
               sx={{ py: 1, px: 5, fontWeight: "bold", fontSize: "16px" }}

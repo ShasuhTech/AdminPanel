@@ -106,30 +106,53 @@ import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
 import Config from "@/utilities/Config";
 import EnquiryMaster from "./enquiry-master";
 import FollowUpModal from "./followup/FollowUpModal";
+import {
+  SectionSelection,
+  StatusSelection,
+  ClassSelection,
+} from "@/components/ClassSelection";
 // import FollowUpModal from "./FollowUpModal";
 // import EnquiryMaster from "../enquiry-master";
 
 const FollowUp = () => {
   const [searchText, setSearchText] = useState("");
-  const [SelectedRow, setSelectedRow] = useState()
+  const [SelectedRow, setSelectedRow] = useState();
   const router = useRouter();
-
+  const [selectClass, setSelectClass] = useState();
+  const [selectSection, setSelectSection] = useState();
+  const [selectStatus, setSelectStatus] = useState();
   const {
     data: studentData,
     status: studentStatus,
     isLoading: studentLoading,
     refetch: studentRefetch,
   } = useQuery("studentData", async () => {
-    const res = await GetStudentLsit();
-    console.log(res, "---sdf");
+    const payload = {};
+    (payload.page = 1),
+      (payload.limit = 100),
+      (payload.q = searchText),
+      (payload.classNumber = selectClass),
+      (payload.section = selectSection),
+      (payload.status = selectStatus);
+
+    const res = await GetStudentLsit(payload);
     return res?.data;
   });
+
+  // useEffect(() => {
+  //   studentRefetch();
+  // }, []);
+
+  const handleFilterClick=()=>{
+    studentRefetch();
+  }
+
   const [followupModal, setfollowupModal] = useState(false);
   const handleclose = () => {
     setfollowupModal(false);
   };
   const handleOpen = (data) => {
-    setSelectedRow(data)
+    setSelectedRow(data);
     setfollowupModal(true);
   };
   const [followupEnquiryModal, setfollowupEnquiruModal] = useState(false);
@@ -154,35 +177,7 @@ const FollowUp = () => {
       setEnquiryIdStore(id);
     }, 0);
   };
-  const [selectClass, setSelectClass] = useState();
-  const [selectSection, setSelectSection] = useState();
-  const [selectRollNo, setSelectRollNo] = useState();
-  const [priorities, setPriorities] = useState([]);
 
-  // Function to handle changes in selection
-  const handlePriorityChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPriorities(typeof value === "string" ? value.split(",") : value);
-  };
-
-  // useEffect to perform an action whenever priorities change
-  useEffect(() => {
-    if (priorities.length > 0) {
-      console.log(`Priorities changed to: ${priorities.join(", ")}`);
-      // You can replace the console.log with any other logic you need to execute
-    }
-  }, [priorities]);
-
-  const priorityData = [
-    "First Name",
-    "last Name",
-    "Gender",
-    "Admission No.",
-    "Stream",
-    "Boarding Category",
-  ];
   return (
     <div className="">
       <div sx={{ marginTop: "5rem" }} style={{ backgroundColor: "#fff" }}>
@@ -207,32 +202,42 @@ const FollowUp = () => {
               // onFilterClick={handleFilterClick}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={6} md={6}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Selected Status
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectClass}
-                label="Selected Status"
-                onChange={(e) => setSelectClass(e.target.value)}
-              >
-                {Config.followupStatus.map((item, ind) => (
-                  <MenuItem key={ind} value={item.label}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={3}>
+            <StatusSelection
+              selectStatus={selectStatus}
+              setSelectStatus={setSelectStatus}
+            />
           </Grid>
-          <Grid item xs={12} sm={6} md={3} lg={3}>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2}>
+            <ClassSelection
+              selectClass={selectClass}
+              setSelectClass={setSelectClass}
+              classList={Config.ClassList}
+            />
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2}>
+            <SectionSelection
+              selectClass={selectSection}
+              setSelectClass={setSelectSection}
+            />
+          </Grid>
+          <button
+            onClick={handleFilterClick}
+            className="filter-btncuston"
+          >
+            <FilterAltIcon />
+          </button>
+          <Grid item xs={12} sm={6} md={3} lg={2}>
             <Button variant="outlined" onClick={handleOpenEnquiry}>
               FollowUp Enquiry
             </Button>
           </Grid>
         </Grid>
+        <Grid container>
+          <Grid item xs={12} sm={6} md={8} lg={8}></Grid>
+          <Grid item xs={12} sm={6} md={4} lg={4}></Grid>
+        </Grid>
+
         <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
           <TableContainer sx={{ overflowX: "auto" }}>
             <Table aria-label="collapsible table">
@@ -316,7 +321,11 @@ const FollowUp = () => {
           />
         </Paper>
       </div>{" "}
-      <FollowUpModal open={followupModal} handleClose={handleclose} data={SelectedRow} />
+      <FollowUpModal
+        open={followupModal}
+        handleClose={handleclose}
+        data={SelectedRow}
+      />
       <EnquiryMaster
         open={followupEnquiryModal}
         handleClose={handlecloseEnquiry}
@@ -393,7 +402,7 @@ const Row = (props) => {
         <StyledTableCell align="left" style={{ minWidth: "250px", gap: 2 }}>
           {row?.student_status === "Follow-Up" && (
             <Button
-              onClick={()=>handleOpen(row)}
+              onClick={() => handleOpen(row)}
               sx={{ marginRight: "10px" }}
               variant="outlined"
               color="secondary"

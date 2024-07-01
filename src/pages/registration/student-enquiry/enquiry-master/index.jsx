@@ -32,6 +32,7 @@ import CitySelectPermanent from "@/components/StateAndCity/City/PermanentCity";
 import CitySelectFather from "@/components/StateAndCity/City/FatherCity";
 import CitySelectMother from "@/components/StateAndCity/City/MotherCity";
 import SimpleModal from "@/components/Modal/SimpleModal";
+import dayjs from "dayjs";
 
 const EnquiryMaster = ({ handleClose, open, data }) => {
   const router = useRouter();
@@ -104,12 +105,16 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
       last_name: values?.last_name,
     };
     payload.gender = values?.gender;
-    payload.date_of_birth = moment(values?.dob).format("YYYY-MM-DD");
+    payload.date_of_birth = (values?.dob);
     payload.present_class = values?.present_class;
     payload.joining_year = values?.joining_year;
     payload.selected_status = values?.selected_status;
-    payload.present_school = values?.present_school;
-    payload.reason = values?.reason;
+    payload.previous_school_details = {
+      school_name: values?.present_school,
+      leaving_reason: values?.reason,
+    };
+    // payload.present_school = values?.present_school;
+    // payload.reason = values?.reason;
     payload.nationality = values?.nationality;
     payload.social_category = values?.social_category;
     payload.email = values?.email;
@@ -216,7 +221,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
     middle_name: "",
     last_name: "",
     gender: "",
-    dob: new Date(),
+    dob: dayjs(new Date()),
     class: "",
     present_class: "",
     joining_year: "",
@@ -287,10 +292,12 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
             (studenData && studenData.name?.last_name) ||
             defaultValues.last_name,
           gender: (studenData && studenData.gender) || defaultValues.gender,
-          dob: (studenData && studenData.date_of_birth) || defaultValues.dob,
+          dob:
+            (studenData && dayjs(studenData.date_of_birth)) ||
+            defaultValues.dob,
           class: (studenData && studenData.class) || defaultValues.class,
           present_class:
-            (studenData && studenData.present_class) ||
+            (studenData && studenData?.present_class) ||
             defaultValues.present_class,
           joining_year:
             (studenData && studenData.joining_year) ||
@@ -301,7 +308,10 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
           selected_status:
             (studenData && studenData.selected_status) ||
             defaultValues.selected_status,
-          reason: (studenData && studenData.reason) || defaultValues.reason,
+          reason:
+            (studenData &&
+              studenData.previous_school_details?.leaving_reason) ||
+            defaultValues.reason,
           nationality:
             (studenData && studenData.nationality) || defaultValues.nationality,
           social_category:
@@ -506,7 +516,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
     //   .transform((_, val) => (val === "" ? null : val)),
     // mother_mobile: optionalString,
   });
-
+  console.log(initialValues, "---");
   return (
     <SimpleModal open={open} handleClose={handleClose} width={"80%"}>
       <Typography variant="h5">Follow Up</Typography>
@@ -653,7 +663,9 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                       <div className="lg:w-[32.5%]  w-[100%]">
                         <DatePicker
                           label="Date Of Birth"
-                          value={null}
+                          value={
+                            values.dob ? dayjs(values.dob) : dayjs(new Date())
+                          }
                           fullWidth
                           className="w-[100%]"
                           onChange={(newValue) => {
@@ -975,7 +987,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               }
                             />
                           </div>
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          {/* <div className="lg:w-[32.5%]  w-[100%]">
                             <Field
                               name="present_telephone"
                               as={TextField}
@@ -997,7 +1009,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                                 <ErrorMessage name="present_telephone" />
                               }
                             />
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -1119,7 +1131,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               }
                             />
                           </div>
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          {/* <div className="lg:w-[32.5%]  w-[100%]">
                             <Field
                               name="permanent_telephone"
                               as={TextField}
@@ -1144,7 +1156,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                                 <ErrorMessage name="permanent_telephone" />
                               }
                             />
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -1293,7 +1305,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                         <div className="lg:w-[32.5%]  w-[100%]">
                           <StateSelect
                             name="father_state"
-                            label="Father's State"
+                            label="State"
                             value={values.father_state}
                             onChange={(event) => {
                               const selectedState = event.target.value;
@@ -1305,7 +1317,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                         <div className="lg:w-[32.5%]  w-[100%]">
                           <CitySelectFather
                             name="father_city"
-                            label="Father's City"
+                            label="City"
                             value={values.father_city}
                             state={fatherState}
                           />
@@ -1504,7 +1516,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                         <div className="lg:w-[32.5%]  w-[100%]">
                           <StateSelect
                             name="mother_state"
-                            label="Mother's State"
+                            label="State"
                             value={values.mother_state}
                             onChange={(event) => {
                               const selectedState = event.target.value;
@@ -1516,7 +1528,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                         <div className="lg:w-[32.5%]  w-[100%]">
                           <CitySelectMother
                             name="mother_city"
-                            label="Mother's City"
+                            label="City"
                             value={values.mother_city}
                             state={motherState}
                           />
@@ -1587,7 +1599,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={handleSubmit}
+                  // onClick={handleSubmit}
                   disabled={isSubmitting}
                   className="bg-blue-500 py-1 px-5 "
                   sx={{ py: 1, px: 5, fontWeight: "bold", fontSize: "16px" }}

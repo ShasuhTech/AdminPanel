@@ -34,6 +34,9 @@ import { useRouter } from "next/router";
 import Config from "@/utilities/Config";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 const TextFieldComponent = ({
   field,
@@ -84,28 +87,30 @@ const TextFieldComponent = ({
 // };
 const DatePickerField = ({ field, form, ...props }) => {
   const currentError = form.errors[field.name];
-  
+
   return (
-    <FormControl required fullWidth margin="normal">
-      <DatePicker
-        {...field}
-        {...props}
-        inputFormat="MM/dd/yyyy"
-        value={field.value ? moment(field.value) : null}
-        onChange={(newValue) => {
-          form.setFieldValue(field.name, newValue ? moment(newValue).toDate() : null);
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            error={Boolean(currentError)}
-            helperText={currentError}
-            variant="outlined"
-          />
-        )}
-      />
-    </FormControl>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <FormControl required fullWidth margin="normal">
+        <DatePicker
+          {...field}
+          {...props}
+          inputFormat="MM/dd/yyyy"
+          value={field.value ? dayjs(field.value):null}
+          onChange={(newValue) => {
+            form.setFieldValue(field.name, newValue ? dayjs(newValue) : null);
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              fullWidth
+              error={Boolean(currentError)}
+              helperText={currentError}
+              variant="outlined"
+            />
+          )}
+        />
+      </FormControl>
+    </LocalizationProvider>
   );
 };
 
@@ -130,8 +135,8 @@ const FollowUpModal = ({ open, handleClose, data }) => {
     firstName: data?.name?.first_name || "",
     lastName: data?.name?.last_name || "",
     middleName: data?.name?.middle_name || "",
-    followUpdate: null,
-    nextfollowUpdate: null,
+    followUpdate: dayjs(new Date()),
+    nextfollowUpdate: dayjs(new Date()),
     modeOfFollowup: "",
     followUp: "",
     remarks: "",
@@ -229,11 +234,11 @@ const FollowUpModal = ({ open, handleClose, data }) => {
   const handleSubmit = async (values, actions) => {
     const payload = {
       student_id: data?._id,
-      next_follow_up_date: moment(values.nextfollowUpdate).format("DD-MM-YYYY"),
+      next_follow_up_date: dayjs(values.nextfollowUpdate),
       follow_ups: values.followUp,
       remarks: values.remarks,
       follow_up_mode: values.modeOfFollowup,
-      follow_up_date: moment(values.followUpdate).format("DD-MM-YYYY"),
+      follow_up_date: dayjs(values.followUpdate),
       enquiry_id: data.enquiry_id,
     };
 
@@ -279,14 +284,15 @@ const FollowUpModal = ({ open, handleClose, data }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
         enableReinitialize
+        
       >
         {({ values, setValues }) => {
           useEffect(() => {
             if (SlectedRow) {
               setValues({
                 ...values,
-                followUpdate: SlectedRow.follow_up_date || null,
-                nextfollowUpdate: SlectedRow.next_follow_up_date || null,
+                followUpdate: dayjs(SlectedRow.follow_up_date)||dayjs(new Date()),
+                nextfollowUpdate: dayjs(SlectedRow.next_follow_up_date)||dayjs(new Date()),
                 modeOfFollowup: SlectedRow.follow_up_mode || "",
                 followUp: SlectedRow.follow_ups || "",
                 remarks: SlectedRow.remarks || "",
@@ -417,10 +423,14 @@ const Row = ({ row, index, handleDltBtn, handleEditBtn }) => (
         <Typography>{index + 1}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center" style={{ minWidth: "100px" }}>
-        <Typography>{moment(row.follow_up_date).format("DD-MM-YYYY")}</Typography>
+        <Typography>
+          {moment(row.follow_up_date).format("DD-MM-YYYY")}
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" style={{ minWidth: "100px" }}>
-        <Typography>{moment(row.next_follow_up_date).format("DD-MM-YYYY")}</Typography>
+        <Typography>
+          {moment(row.next_follow_up_date).format("DD-MM-YYYY")}
+        </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" style={{ minWidth: "50px" }}>
         <Typography>{row.follow_up_mode}</Typography>

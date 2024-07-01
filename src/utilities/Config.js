@@ -162,11 +162,11 @@ const AdmissionType = [
 const IndianReligions = [
   {
     value: "1",
-    label: "Hinduism",
+    label: "Islam",
   },
   {
     value: "2",
-    label: "Islam",
+    label: "Hinduism",
   },
   {
     value: "3",
@@ -676,6 +676,10 @@ const followupStatus = [
     value: "2",
     label: "Registration",
   },
+  {
+    value: "3",
+    label: "Admission",
+  },
 ];
 
 const genders = [
@@ -691,6 +695,17 @@ const genders = [
     value: "3",
     label: "Other",
   },
+];
+const TrueFalse = [
+  {
+    value: 'True',
+    label: "Yes",
+  },
+  {
+    value: 'False',
+    label: "No",
+  },
+
 ];
 
 export default {
@@ -719,5 +734,6 @@ export default {
   occupations,
   genders,
   CountryDta,
-  ModeOfFollowUp
+  ModeOfFollowUp,
+  TrueFalse
 };

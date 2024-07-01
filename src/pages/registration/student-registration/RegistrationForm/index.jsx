@@ -42,6 +42,7 @@ import { CountrySelect, StateSelect } from "@/components/StateAndCity";
 import CitySelectFather from "@/components/StateAndCity/City/FatherCity";
 import CitySelectMother from "@/components/StateAndCity/City/MotherCity";
 import SimpleModal from "@/components/Modal/SimpleModal";
+import dayjs from "dayjs";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const StudentRegistration = ({
@@ -52,8 +53,8 @@ const StudentRegistration = ({
   resetInitialValues,
   setresetInitialValues,
 }) => {
-  const router = useRouter();
   const [studenData, setStudentData] = useState({});
+  const router = useRouter();
   const { id } = router.query;
 
   const studentDetails = async () => {
@@ -86,16 +87,7 @@ const StudentRegistration = ({
     const res = await StateData(payload);
     return res?.data;
   });
-  // const {
-  //   data: allCountry,
-  //   status: countryStatus,
-  //   isLoading: countryIsloadimng,
-  //   refetch: coutryFetch,
-  // } = useQuery("countryData", async () => {
-  //   const payload = {};
-  //   const res = await countryData(payload);
-  //   return res?.data;
-  // });
+
   const {
     data: allcity,
     status: cityStatus,
@@ -117,24 +109,11 @@ const StudentRegistration = ({
     // }
   }, [presentState, studenData?.address?.present_address?.state]);
 
-  const genders = [
-    {
-      value: "1",
-      label: "Male",
-    },
-    {
-      value: "2",
-      label: "Female",
-    },
-    {
-      value: "3",
-      label: "Other",
-    },
-  ];
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, event) => {
     console.log(values, "-dsfsdfdsfsfsd");
     const payload = {};
+
     payload.admission_number = values?.admission_no;
     payload.fee_number = values?.fee_no;
     payload.sibling_admission_number = values?.sibling_adm_no;
@@ -150,7 +129,8 @@ const StudentRegistration = ({
     payload.blood_group = values?.blood_group;
     payload.emergency_number = values?.emergency_no;
     payload.mother_tongue = values?.mother_tongue;
-    payload.date_of_birth = moment(values?.dob).format("YYYY-MM-DD");
+    payload.religion = values.religion;
+    payload.date_of_birth = dayjs(values?.dob);
     payload.social_category = values?.social_category;
     (payload.locality = values.locality),
       (payload.father_detail = {
@@ -214,7 +194,7 @@ const StudentRegistration = ({
 
     payload.guardian_details = {
       guardian_name: values.guardian_name,
-      religion: values.guardian_relation,
+      relation: values.guardian_relation,
       mobile_number: values.guardian_mobile_no,
       email: values.guardian_email,
       address: values.guardian_address,
@@ -226,15 +206,15 @@ const StudentRegistration = ({
       medium_of_instruction: values.medium_of_instruction,
       year_of_passing: values.year_of_passing,
       tc_number: values.tc_number,
-      leaving_reason: values.leaving_reason,
+      leaving_reason: values.previous_leaving,
       Syllabus: values.Syllabus,
       class: values.pre_class,
       tc_birth: values.tc_birth,
       address: values.Pre_address,
-      state: values.Pre_state,
-      city: values.pre_city,
-      country: values.pre_country,
-      pin_code: values.pre_pin_code,
+      state: values.previous_state,
+      city: values.previous_city,
+      country: values.previous_country,
+      pin_code: values.previous_pincode,
     };
     payload.other_details = {
       any_physical_disablity: values.any_physical_disability,
@@ -247,9 +227,15 @@ const StudentRegistration = ({
     };
     payload.sibling_detail = {
       admission_number: values.sibling_same_inst_admission_no1,
-      class: values.sibling_same_inst_class_section1,
-      section: values.sibling_same_inst_class_section1,
+      class: values.sibling_same_inst_class1,
+      section: values.sibling_same_inst_section1,
       name: values.sibling_same_inst_name1,
+    };
+    payload.sibling_detail_in_other_institution = {
+      admission_number: values.sibling_other_inst_admission_no1,
+      class: values.sibling_other_inst_class1,
+      section: values.sibling_other_inst_section1,
+      name: values.sibling_other_inst_name1,
     };
     payload.student_status = "Register";
     payload.enquiry_id = studenData?.enquiry_id;
@@ -259,7 +245,8 @@ const StudentRegistration = ({
       const resp = await UpdateStudent(payload);
       if (resp?.success === true) {
         toast.success("Student Details Add successfully");
-        setSlectedTab(2);
+        // setSlectedTab(2);
+        handleClose();
       }
       console.log(resp?.success, "-sdcdsf");
       // Handle form submission
@@ -268,7 +255,6 @@ const StudentRegistration = ({
     } catch (error) {
       // setStatus({ success: false });
     }
-    // setSubmitting(false);
   };
   const initialValues =
     id && !resetInitialValues
@@ -286,7 +272,7 @@ const StudentRegistration = ({
           emergency_no: studenData.emergency_number || "",
           mother_tongue: studenData.mother_tongue || "",
           religion: studenData.religion || "",
-          dob: studenData.date_of_birth || new Date(),
+          dob: studenData.date_of_birth || dayjs(new Date()),
           social_category: studenData.social_category || "",
           locality: studenData.locality || "",
           father_name: studenData.parent?.fathers_name || "",
@@ -349,11 +335,11 @@ const StudentRegistration = ({
           permanent_telephone:
             studenData.address?.permanent_address?.telephone || "",
           any_physical_disability:
-            studenData.other_details?.any_physical_disablity || false,
+            studenData.other_details?.any_physical_disablity || "",
           any_treatment_undertaken:
             studenData.other_details?.any_treatment_undertaken_or_required ||
-            false,
-          any_allergies: studenData.other_details?.any_allergies || false,
+            "",
+          any_allergies: studenData.other_details?.any_allergies || "",
           interest_hobbies:
             studenData.other_details?.interest_and_hobbies || [],
           sports_game: studenData.other_details?.sports || [],
@@ -361,14 +347,23 @@ const StudentRegistration = ({
             studenData.other_details?.co_curricular_activities || [],
           any_other_relevent_information:
             studenData.other_details?.any_other_relevant_information || "",
-          school_name: "",
-          school_reconised_by: "",
-          school_city_name: "",
-          medium_of_instruction: "",
-          year_of_passing: "",
-          tc_number: "",
-          leaving_reason: "",
-          Syllabus: "",
+          school_name: studenData?.previous_school_details?.school_name || "",
+          school_reconised_by:
+            studenData?.previous_school_details?.recognised_by || "",
+          // school_city_name: "",
+          previous_country:
+            studenData?.previous_school_details?.country || "India",
+          previous_state: studenData?.previous_school_details?.state || "",
+          previous_city: studenData?.previous_school_details?.city || "",
+          previous_pincode: studenData?.previous_school_details?.pin_code || "",
+          medium_of_instruction:
+            studenData?.previous_school_details?.medium_of_instruction || "",
+          year_of_passing:
+            studenData?.previous_school_details?.year_of_passing || "",
+          tc_number: studenData?.previous_school_details?.tc_number || "",
+          previous_leaving:
+            studenData?.previous_school_details?.leaving_reason || "",
+          Syllabus: studenData?.previous_school_details?.Syllabus || "",
           pre_class: "",
           tc_birth: "",
           Pre_address: "",
@@ -492,19 +487,33 @@ const StudentRegistration = ({
           stream_group5: "",
           // Sibling Details
           any_sibling_school: "",
-          sibling_same_inst_admission_no1: "",
-          sibling_same_inst_name1: "",
-          sibling_same_inst_class_section1: "",
-          sibling_same_inst_admission_no2: "",
-          sibling_same_inst_name2: "",
-          sibling_same_inst_class_section2: "",
-          any_other_sibling_school: "",
-          sibling_other_inst_admission_no1: "",
-          sibling_other_inst_name1: "",
-          sibling_other_inst_class_section1: "",
-          sibling_other_inst_admission_no2: "",
-          sibling_other_inst_name2: "",
-          sibling_other_inst_class_section2: "",
+          sibling_same_inst_admission_no1:
+            studenData?.sibling_detail?.admission_number || "",
+          sibling_same_inst_name1: studenData?.sibling_detail?.name || "",
+          sibling_same_inst_class1: studenData?.sibling_detail?.class || "",
+          sibling_same_inst_section1: studenData?.sibling_detail?.section || "",
+
+          // sibling_same_inst_admission_no2:  studenData?.sibling_detail?.admission_number ||"",
+          // sibling_same_inst_name2:  studenData?.sibling_detail?.admission_number ||"",
+          // sibling_same_inst_class_section2:  studenData?.sibling_detail?.admission_number ||"",
+
+          any_other_sibling_school:
+            studenData?.sibling_detail_in_other_institution?.admission_number ||
+            "",
+          sibling_other_inst_admission_no1:
+            studenData?.sibling_detail_in_other_institution?.admission_number ||
+            "",
+          sibling_other_inst_name1:
+            studenData?.sibling_detail_in_other_institution?.admission_number ||
+            "",
+          sibling_other_inst_class1:
+            studenData?.sibling_detail_in_other_institution?.class || "",
+          sibling_other_inst_section1:
+            studenData?.sibling_detail_in_other_institution?.section || "",
+
+          // sibling_other_inst_admission_no2:  studenData?.sibling_detail_in_other_institution?.admission_number ||"",
+          // sibling_other_inst_name2: studenData?.sibling_detail_in_other_institution?.admission_number || "",
+          // sibling_other_inst_class_section2:  studenData?.sibling_detail_in_other_institution?.admission_number ||"",
         }
       : {
           search: "",
@@ -520,7 +529,7 @@ const StudentRegistration = ({
           emergency_no: "",
           mother_tongue: "",
           religion: "",
-          dob: new Date(),
+          dob: dayjs(new Date()),
           social_category: "",
           locality: "",
           father_name: "",
@@ -573,20 +582,24 @@ const StudentRegistration = ({
           permanent_locality: "",
           permanent_country: "india",
           permanent_telephone: "",
-          any_physical_disability: '',
-          any_treatment_undertaken: '',
-          any_allergies: '',
+          any_physical_disability: "",
+          any_treatment_undertaken: "",
+          any_allergies: "",
           interest_hobbies: [],
           sports_game: [],
           co_curriclar_activities: [],
           any_other_relevent_information: "",
           school_name: "",
           school_reconised_by: "",
-          school_city_name: "",
+          // school_city_name: "",
+          previous_country: "India",
+          previous_state: "",
+          previous_city: "",
+          previous_pincode: "",
           medium_of_instruction: "",
           year_of_passing: "",
           tc_number: "",
-          leaving_reason: "",
+          previous_leaving: "",
           Syllabus: "",
           pre_class: "",
           tc_birth: "",
@@ -712,277 +725,23 @@ const StudentRegistration = ({
           any_sibling_school: "",
           sibling_same_inst_admission_no1: "",
           sibling_same_inst_name1: "",
-          sibling_same_inst_class_section1: "",
+          sibling_same_inst_class1: "",
+          sibling_same_inst_section1: "",
           sibling_same_inst_admission_no2: "",
           sibling_same_inst_name2: "",
-          sibling_same_inst_class_section2: "",
+          sibling_same_inst_class2: "",
+          sibling_same_inst_section2: "",
           any_other_sibling_school: "",
           sibling_other_inst_admission_no1: "",
           sibling_other_inst_name1: "",
-          sibling_other_inst_class_section1: "",
+          sibling_other_inst_section1: "",
+          sibling_other_inst_class1: "",
           sibling_other_inst_admission_no2: "",
           sibling_other_inst_name2: "",
-          sibling_other_inst_class_section2: "",
+          sibling_other_inst_class2: "",
+          sibling_other_inst_section2: "",
         };
-  // const initialValues = {
-  //   search: studenData?.search || "",
-  //   admission_no: studenData?.admission_number || "",
-  //   first_name: studenData?.name?.first_name || "",
-  //   middle_name: studenData?.name?.middle_name || "",
-  //   last_name: studenData?.name?.last_name || "",
-  //   class: studenData?.class || "",
-  //   section: studenData?.section || "",
-  //   stream: studenData?.stream || "",
-  //   gender: studenData?.gender || "",
-  //   blood_group: studenData?.blood_group || "",
-  //   emergency_no: studenData?.emergency_number || "",
-  //   mother_tongue: studenData?.mother_tongue || "",
-  //   religion: studenData?.religion || "",
-  //   dob: studenData?.date_of_birth || new Date(),
-  //   social_category: studenData?.social_category || "",
-  //   locality: studenData?.locality || "",
-  //   father_name: studenData?.parent?.father_name || "",
-  //   father_qualifications: studenData?.parent?.father_qualifications || "",
-  //   father_occupation: studenData?.parent?.father_occupation || "",
-  //   father_designation: studenData?.parent?.father_designation || "",
-  //   father_email: studenData?.parent?.father_email || "",
-  //   father_org_name: studenData?.parent?.father_org_name || "",
-  //   father_org_address: studenData?.parent?.father_org_address || "",
-  //   father_nationality: studenData?.parent?.father_address?.nationality || "",
-  //   father_country: studenData?.parent?.father_address?.country || "India",
-  //   father_state: studenData?.parent?.father_address?.state || "",
-  //   father_city: studenData?.parent?.father_address?.city || "",
-  //   father_pincode: studenData?.parent?.father_address?.pin_code || "",
-  //   father_annual_income: studenData?.parent?.father_annual_income || "",
-  //   father_telephone: studenData?.parent?.father_telephone || "",
-  //   father_mobile: studenData?.parent?.father_mobile || "",
 
-  //   mother_name: studenData?.parent?.mother_name || "",
-  //   mother_qualifications: studenData?.parent?.mother_qualifications || "",
-  //   mother_occupation: studenData?.parent?.mother_occupation || "",
-  //   mother_email: studenData?.parent?.mother_email || "",
-  //   mother_org_name: studenData?.parent?.mother_org_name || "",
-  //   mother_org_address: studenData?.parent?.mother_org_address || "",
-  //   mother_nationality: studenData?.parent?.mother_address?.nationality || "",
-  //   mother_country: studenData?.parent?.mother_address?.country || "India",
-  //   mother_state: studenData?.parent?.mother_address?.state || "",
-  //   mother_city: studenData?.parent?.mother_address?.city || "",
-  //   mother_pincode: studenData?.parent?.mother_address?.pin_code || "",
-  //   mother_annual_income: studenData?.parent?.mother_annual_income || "",
-  //   mother_mobile: studenData?.parent?.mother_mobile || "",
-  //   mother_telephone: studenData?.parent?.mother_telephone || "",
-
-  //   guardian_name: studenData?.guardian_details?.guardian_name || "",
-  //   guardian_relation: studenData?.guardian_details?.religion || "",
-  //   guardian_mobile_no: studenData?.guardian_details?.mobile_number || "",
-  //   guardian_email: studenData?.guardian_details?.email || "",
-  //   guardian_address: studenData?.guardian_details?.address || "",
-
-  //   same_present_add: studenData?.same_present_add || "",
-  //   emergency_no: studenData?.emergency_number || "",
-  //   present_address: studenData?.address?.present_address?.address || "",
-  //   present_city: studenData?.address?.present_address?.city || "",
-  //   present_state: studenData?.address?.present_address?.state || "",
-  //   present_pincode: studenData?.address?.present_address?.pin_code || "",
-  //   present_locality: studenData?.address?.present_address?.locality || "",
-  //   present_country: studenData?.address?.present_address?.country || "india",
-  //   present_telephone: studenData?.address?.present_address?.telephone || "",
-  //   permanent_address: studenData?.address?.permanent_address?.address || "",
-  //   permanent_city: studenData?.address?.permanent_address?.city || "",
-  //   permanent_state: studenData?.address?.permanent_address?.state || "",
-  //   permanent_pincode: studenData?.address?.permanent_address?.pin_code || "",
-  //   permanent_locality: studenData?.address?.permanent_address?.locality || "",
-  //   permanent_country:
-  //     studenData?.address?.permanent_address?.country || "india",
-  //   permanent_telephone:
-  //     studenData?.address?.permanent_address?.telephone || "",
-
-  //   // Other Details
-  //   any_physical_disability:
-  //     studenData?.other_details?.any_physical_disablity || false,
-  //   any_treatment_undertaken:
-  //     studenData?.other_details?.any_treatment_undertaken_or_required || false,
-  //   any_allergies: studenData?.other_details?.any_allergies || false,
-  //   interest_hobbies: studenData?.other_details?.interest_and_hobbies || [],
-  //   sports_game: studenData?.other_details?.sports || [],
-  //   co_curriclar_activities:
-  //     studenData?.other_details?.co_curricular_activities || [],
-  //   any_other_relevent_information:
-  //     studenData?.other_details?.any_other_relevant_information || "",
-
-  //   // Previous School Details
-  //   school_name: "",
-  //   school_reconised_by: "",
-  //   school_city_name: "",
-  //   medium_of_instruction: "",
-  //   year_of_passing: "",
-  //   tc_number: "",
-  //   leaving_reason: "",
-  //   Syllabus: "",
-  //   pre_class: "",
-  //   tc_birth: "",
-  //   Pre_address: "",
-  //   Pre_state: "",
-  //   pre_city: "",
-  //   pre_country: "",
-  //   pre_pin_code: "",
-
-  //   subject_english_max_marks: "",
-  //   subject_english_marks_obtained: "",
-  //   subject_english_grade: "",
-  //   subject_english_percentage: "",
-
-  //   subject_hindi_max_marks: "",
-  //   subject_hindi_marks_obtained: "",
-  //   subject_hindi_grade: "",
-  //   subject_hindi_percentage: "",
-
-  //   subject_mathematics_max_marks: "",
-  //   subject_mathematics_marks_obtained: "",
-  //   subject_mathematics_grade: "",
-  //   subject_mathematics_percentage: "",
-
-  //   subject_science_max_marks: "",
-  //   subject_science_marks_obtained: "",
-  //   subject_science_grade: "",
-  //   subject_science_percentage: "",
-
-  //   subject_social_sceince_max_marks: "",
-  //   subject_social_sceince_marks_obtained: "",
-  //   subject_social_sceince_grade: "",
-  //   subject_social_sceince_percentage: "",
-
-  //   subject_third_language_max_marks: "",
-  //   subject_third_language_marks_obtained: "",
-  //   subject_third_language_grade: "",
-  //   subject_third_language_percentage: "",
-
-  //   pre_subject_english_max_marks: "",
-  //   pre_subject_english_marks_obtained: "",
-  //   pre_subject_english_grade: "",
-  //   pre_subject_english_percentage: "",
-
-  //   pre_subject_hindi_max_marks: "",
-  //   pre_subject_hindi_marks_obtained: "",
-  //   pre_subject_hindi_grade: "",
-  //   pre_subject_hindi_percentage: "",
-
-  //   pre_subject_mathematics_max_marks: "",
-  //   pre_subject_mathematics_marks_obtained: "",
-  //   pre_subject_mathematics_grade: "",
-  //   pre_subject_mathematics_percentage: "",
-
-  //   pre_subject_science_max_marks: "",
-  //   pre_subject_science_marks_obtained: "",
-  //   pre_subject_science_grade: "",
-  //   pre_subject_science_percentage: "",
-
-  //   pre_subject_social_sceince_max_marks: "",
-  //   pre_subject_social_sceince_marks_obtained: "",
-  //   pre_subject_social_sceince_grade: "",
-  //   pre_subject_social_sceince_percentage: "",
-
-  //   pre_subject_total_max_marks: "",
-  //   pre_subject_total_marks_obtained: "",
-  //   pre_subject_total_grade: "",
-  //   pre_subject_total_percentage: "",
-
-  //   pre_Board_subject_english_max_marks: "",
-  //   pre_Board_subject_english_marks_obtained: "",
-  //   pre_Board_subject_english_grade: "",
-  //   pre_Board_subject_english_percentage: "",
-
-  //   pre_Board_subject_hindi_max_marks: "",
-  //   pre_Board_subject_hindi_marks_obtained: "",
-  //   pre_Board_subject_hindi_grade: "",
-  //   pre_Board_subject_hindi_percentage: "",
-
-  //   pre_Board_subject_mathematics_max_marks: "",
-  //   pre_Board_subject_mathematics_marks_obtained: "",
-  //   pre_Board_subject_mathematics_grade: "",
-  //   pre_Board_subject_mathematics_percentage: "",
-
-  //   pre_Board_subject_science_max_marks: "",
-  //   pre_Board_subject_science_marks_obtained: "",
-  //   pre_Board_subject_science_grade: "",
-  //   pre_Board_subject_science_percentage: "",
-
-  //   pre_Board_subject_social_sceince_max_marks: "",
-  //   pre_Board_subject_social_sceince_marks_obtained: "",
-  //   pre_Board_subject_social_sceince_grade: "",
-  //   pre_Board_subject_social_sceince_percentage: "",
-
-  //   pre_Board_subject_total_max_marks: "",
-  //   pre_Board_subject_total_marks_obtained: "",
-  //   pre_Board_subject_total_grade: "",
-  //   pre_Board_subject_total_percentage: "",
-
-  //   board_details: "",
-  //   Board_subject_english_max_marks: "",
-  //   Board_subject_english_marks_obtained: "",
-  //   Board_subject_english_grade: "",
-  //   Board_subject_english_percentage: "",
-
-  //   Board_subject_hindi_max_marks: "",
-  //   Board_subject_hindi_marks_obtained: "",
-  //   Board_subject_hindi_grade: "",
-  //   Board_subject_hindi_percentage: "",
-
-  //   Board_subject_mathematics_max_marks: "",
-  //   Board_subject_mathematics_marks_obtained: "",
-  //   Board_subject_mathematics_grade: "",
-  //   Board_subject_mathematics_percentage: "",
-
-  //   Board_subject_science_max_marks: "",
-  //   Board_subject_science_marks_obtained: "",
-  //   Board_subject_science_grade: "",
-  //   Board_subject_science_percentage: "",
-
-  //   Board_subject_social_sceince_max_marks: "",
-  //   Board_subject_social_sceince_marks_obtained: "",
-  //   Board_subject_social_sceince_grade: "",
-  //   Board_subject_social_sceince_percentage: "",
-
-  //   Board_subject_economic_max_marks: "",
-  //   Board_subject_economic_marks_obtained: "",
-  //   Board_subject_economic_grade: "",
-  //   Board_subject_economic_percentage: "",
-
-  //   Board_subject_second_language_max_marks: "",
-  //   Board_subject_second_language_marks_obtained: "",
-  //   Board_subject_second_language_grade: "",
-  //   Board_subject_second_language_percentage: "",
-
-  //   Board_subject_total_max_marks: "",
-  //   Board_subject_total_marks_obtained: "",
-  //   Board_subject_total_grade: "",
-  //   Board_subject_total_percentage: "",
-
-  //   // Stream Details
-  //   stream_details: "",
-  //   stream_common_subject: "",
-  //   stream_group1: "",
-  //   stream_group2: "",
-  //   stream_group3: "",
-  //   stream_group4: "",
-  //   stream_group5: "",
-
-  //   any_sibling_school: "",
-  //   sibling_same_inst_admission_no1: "",
-  //   sibling_same_inst_name1: "",
-  //   sibling_same_inst_class_section1: "",
-  //   sibling_same_inst_admission_no2: "",
-  //   sibling_same_inst_name2: "",
-  //   sibling_same_inst_class_section2: "",
-
-  //   any_other_sibling_school: "",
-  //   sibling_other_inst_admission_no1: "",
-  //   sibling_other_inst_name1: "",
-  //   sibling_other_inst_class_section1: "",
-  //   sibling_other_inst_admission_no2: "",
-  //   sibling_other_inst_name2: "",
-  //   sibling_other_inst_class_section2: "",
-  // };
   console.log(initialValues, "initialValues");
   const validationSchema = Yup.object().shape({
     // name: Yup.string().required("Name is required"),
@@ -1244,7 +1003,7 @@ const StudentRegistration = ({
                             value={values.gender}
                             helperText={<ErrorMessage name="gender" />}
                           >
-                            {genders?.map((option) => (
+                            {Config.genders?.map((option) => (
                               <MenuItem key={option.label} value={option.label}>
                                 {option.label}
                               </MenuItem>
@@ -1342,7 +1101,9 @@ const StudentRegistration = ({
                       <div className="lg:w-[32.5%]  w-[100%]">
                         <DatePicker
                           label="Date Of Birth"
-                          value={null}
+                           value={
+                            values.dob ? dayjs(values.dob) : dayjs(new Date())
+                          }
                           fullWidth
                           className="w-[100%]"
                           onChange={(newValue) => {
@@ -1381,27 +1142,20 @@ const StudentRegistration = ({
                           ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      {/* <div className="lg:w-[32.5%]  w-[100%]">
                         <Field
                           name="locality"
                           as={TextField}
-                          select
                           label="Locality"
                           variant="outlined"
                           fullWidth
                           onBlur={handleBlur}
                           onChange={handleChange}
                           error={false}
-                          value={values.locality}
                           helperText={<ErrorMessage name="locality" />}
-                        >
-                          {Config?.SocialCategories?.map((option) => (
-                            <MenuItem key={option.label} value={option.label}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Field>
-                      </div>
+                        />
+                        
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -1506,7 +1260,6 @@ const StudentRegistration = ({
                               <ErrorMessage name="father_designation" />
                             }
                           />
-                         
                         </div>
                         <div className="lg:w-[32.5%] w-[100%]">
                           <Field
@@ -1669,7 +1422,7 @@ const StudentRegistration = ({
                           }
                         />
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      {/* <div className="lg:w-[32.5%] w-[100%]">
                         <Field
                           name="father_telephone"
                           as={TextField}
@@ -1681,7 +1434,7 @@ const StudentRegistration = ({
                           error={false}
                           helperText={<ErrorMessage name="father_telephone" />}
                         />
-                      </div>
+                      </div> */}
                       <div className="lg:w-[32.5%] w-[100%]">
                         <Field
                           name="father_mobile"
@@ -1795,9 +1548,8 @@ const StudentRegistration = ({
                               <ErrorMessage name="mother_designation" />
                             }
                           />
-                         
                         </div>
-                       
+
                         <div className="lg:w-[32.5%] w-[100%]">
                           <Field
                             name="mother_org_name"
@@ -1921,7 +1673,7 @@ const StudentRegistration = ({
                           }
                         />
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      {/* <div className="lg:w-[32.5%] w-[100%]">
                         <Field
                           name="mother_telephone"
                           as={TextField}
@@ -1933,7 +1685,7 @@ const StudentRegistration = ({
                           error={false}
                           helperText={<ErrorMessage name="mother_telephone" />}
                         />
-                      </div>
+                      </div> */}
                       <div className="lg:w-[32.5%] w-[100%]">
                         <Field
                           name="mother_mobile"
@@ -2082,12 +1834,11 @@ const StudentRegistration = ({
                       </div>
                       <div className="flex  flex-wrap gap-4">
                         <div className="lg:w-[32.5%]  w-[100%]">
-                        <CountrySelect
-                              name="present_country"
-                              label="Country"
-                              value={values.present_country}
-                            />
-                         
+                          <CountrySelect
+                            name="present_country"
+                            label="Country"
+                            value={values.present_country}
+                          />
                         </div>
                         <div className="lg:w-[32.5%]  w-[100%]">
                           {
@@ -2233,12 +1984,11 @@ const StudentRegistration = ({
                       </div>
                       <div className="flex  flex-wrap gap-4">
                         <div className="lg:w-[32.5%]  w-[100%]">
-                        <CountrySelect
-                              name="permanent_country"
-                              label="Country"
-                              value={values.permanent_country}
-                            />
-                          
+                          <CountrySelect
+                            name="permanent_country"
+                            label="Country"
+                            value={values.permanent_country}
+                          />
                         </div>
 
                         <div className="lg:w-[32.5%]  w-[100%]">
@@ -2387,55 +2137,68 @@ const StudentRegistration = ({
                           <Field
                             name="any_physical_disability"
                             as={TextField}
+                            select
                             label="Any Physical Disability"
                             variant="outlined"
                             fullWidth
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value={
-                              values.any_physical_disability === true
-                                ? "Yes"
-                                : "No"
-                            }
                             error={false}
+                            value={values.any_physical_disability}
                             helperText={
                               <ErrorMessage name="any_physical_disability" />
                             }
-                          />
+                          >
+                            {Config?.TrueFalse.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
                         </div>
                         <div className="w-[100%] lg:w-[32.5%]">
                           <Field
                             name="any_treatment_undertaken"
                             as={TextField}
+                            select
                             label="Any Treatment Undertak/Required"
                             variant="outlined"
                             fullWidth
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value={
-                              values.any_treatment_undertaken === true
-                                ? "Yes"
-                                : "No"
-                            }
                             error={false}
+                            value={values.any_treatment_undertaken}
                             helperText={
                               <ErrorMessage name="any_treatment_undertaken" />
                             }
-                          />
+                          >
+                            {Config?.TrueFalse.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
                         </div>
                         <div className="w-[100%] lg:w-[32.5%] mb-2 ">
                           <Field
                             name="any_allergies"
                             as={TextField}
+                            select
                             label="Any Allergies"
                             variant="outlined"
                             fullWidth
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value={values.any_allergies === true ? "Yes" : "No"}
                             error={false}
+                            value={values.any_allergies}
                             helperText={<ErrorMessage name="any_allergies" />}
-                          />
+                          >
+                            {Config?.TrueFalse.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
                         </div>
                       </div>
                       <div className="flex  flex-wrap gap-4">
@@ -2547,7 +2310,150 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.5%]  w-[100%]">
+                          <Field
+                            name="Pre_address"
+                            as={TextField}
+                            label="Address"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            helperText={<ErrorMessage name="Pre_address" />}
+                          />
+                        </div>
+                        <div className="lg:w-[32.5%]  w-[100%]">
+                          <CountrySelect
+                            name="previous_country"
+                            label="Country"
+                            value={values.previous_country}
+                          />
+                        </div>
+                        <div className="lg:w-[32.5%]  w-[100%]">
+                          {
+                            <Field
+                              name="previous_state"
+                              as={TextField}
+                              select
+                              label="State"
+                              variant="outlined"
+                              fullWidth
+                              onBlur={handleBlur}
+                              onChange={(event) => {
+                                const selectedState = event.target.value;
+                                setFieldValue("previous_state", selectedState);
+                                setPresentState(selectedState);
+                              }}
+                              error={false}
+                              value={values.previous_state}
+                              helperText={
+                                <ErrorMessage name="previous_state" />
+                              }
+                            >
+                              {allState?.length > 0 &&
+                                allState.map((option) => (
+                                  <MenuItem
+                                    key={option.name}
+                                    onChange={(e) =>
+                                      setPresentState(e?.target?.value)
+                                    }
+                                    value={option.name}
+                                  >
+                                    {option.name}
+                                  </MenuItem>
+                                ))}
+                            </Field>
+                          }
+                        </div>
+                        <div className="lg:w-[32.5%]  w-[100%]">
+                          <Field
+                            name="previous_city"
+                            as={TextField}
+                            select
+                            label="City"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            value={values.previous_city}
+                            helperText={<ErrorMessage name="previous_city" />}
+                          >
+                            {allcity?.length > 0 &&
+                              allcity.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
+                          </Field>
+                        </div>
+
+                        <div className="lg:w-[32.5%]  w-[100%]">
+                          <Field
+                            name="previous_pincode"
+                            as={TextField}
+                            label="Pincode"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            helperText={
+                              <ErrorMessage name="previous_pincode" />
+                            }
+                          />
+                        </div>
+                        <div className="lg:w-[32.5%]  w-[100%]">
+                          <Field
+                            name="previous_leaving"
+                            as={TextField}
+                            label="Leaving Reason"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            helperText={
+                              <ErrorMessage name="previous_leaving" />
+                            }
+                          />
+                        </div>
+                        <div className="lg:w-[32.5%]  w-[100%]">
+                          <Field
+                            name="tc_number"
+                            as={TextField}
+                            label=" TC No"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            helperText={<ErrorMessage name="tc_number" />}
+                          />
+                        </div>
+                        <div className="lg:w-[32.5%]  w-[100%]">
+                          <DatePicker
+                            label="TC Date"
+                            value={null}
+                            fullWidth
+                            className="w-[100%]"
+                            onChange={(newValue) => {
+                              setFieldValue("tc_birth", newValue);
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                variant="outlined"
+                                fullWidth
+                                // required
+                                error={false}
+                                helperText={<ErrorMessage name="tc_birth" />}
+                              />
+                            )}
+                          />
+                        </div>
+                        {/* <div className="lg:lg:w-[32.5%] w-[100%]">
                           <Field
                             name="school_city_name"
                             as={TextField}
@@ -2561,7 +2467,7 @@ const StudentRegistration = ({
                               <ErrorMessage name="school_city_name" />
                             }
                           />
-                        </div>
+                        </div> */}
                         <div className="lg:w-[32.4%]  w-[100%]">
                           <Field
                             name="medium_of_instruction"
@@ -3149,20 +3055,51 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                        <div className="w-[100%] lg:w-[15.5%]  mb-5">
                           <Field
-                            name="sibling_same_inst_class_section1"
+                            name="sibling_same_inst_class1"
                             as={TextField}
-                            label="Class & Section"
+                            select
+                            label="Class"
                             variant="outlined"
                             fullWidth
                             onBlur={handleBlur}
                             onChange={handleChange}
                             error={false}
+                            value={values.sibling_same_inst_class1}
                             helperText={
-                              <ErrorMessage name="sibling_same_inst_class_section1" />
+                              <ErrorMessage name="sibling_same_inst_class1" />
                             }
-                          />
+                          >
+                            {Config.ClassList.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
+                        </div>
+                        <div className="w-[100%] lg:w-[15.5%]  mb-5">
+                          <Field
+                            name="sibling_same_inst_section1"
+                            as={TextField}
+                            select
+                            label="Section"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            value={values.sibling_same_inst_section1}
+                            helperText={
+                              <ErrorMessage name="sibling_same_inst_section1" />
+                            }
+                          >
+                            {Config.SectionList.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
                         </div>
                       </div>
                       <div className="flex  flex-wrap gap-4">
@@ -3196,7 +3133,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                        {/* <div className="w-[100%] lg:w-[32.5%]  mb-5">
                           <Field
                             name="sibling_same_inst_class_section2"
                             as={TextField}
@@ -3210,6 +3147,52 @@ const StudentRegistration = ({
                               <ErrorMessage name="sibling_same_inst_class_section2" />
                             }
                           />
+                        </div> */}
+                        <div className="w-[100%] lg:w-[15.5%]  mb-5">
+                          <Field
+                            name="sibling_same_inst_class2"
+                            as={TextField}
+                            select
+                            label="Class"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            value={values.sibling_same_inst_class2}
+                            helperText={
+                              <ErrorMessage name="sibling_same_inst_class2" />
+                            }
+                          >
+                            {Config.ClassList.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
+                        </div>
+                        <div className="w-[100%] lg:w-[15.5%]  mb-5">
+                          <Field
+                            name="sibling_same_inst_section2"
+                            as={TextField}
+                            select
+                            label="Section"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            value={values.sibling_same_inst_section2}
+                            helperText={
+                              <ErrorMessage name="sibling_same_inst_section2" />
+                            }
+                          >
+                            {Config.SectionList.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
                         </div>
                       </div>
                     </div>
@@ -3276,7 +3259,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                        {/* <div className="w-[100%] lg:w-[32.5%]  mb-5">
                           <Field
                             name="sibling_other_inst_class_section1"
                             as={TextField}
@@ -3290,6 +3273,52 @@ const StudentRegistration = ({
                               <ErrorMessage name="sibling_other_inst_class_section1" />
                             }
                           />
+                        </div> */}
+                        <div className="w-[100%] lg:w-[15.5%]  mb-5">
+                          <Field
+                            name="sibling_other_inst_class1"
+                            as={TextField}
+                            select
+                            label="Class"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            value={values.sibling_other_inst_class1}
+                            helperText={
+                              <ErrorMessage name="sibling_other_inst_class1" />
+                            }
+                          >
+                            {Config.ClassList.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
+                        </div>
+                        <div className="w-[100%] lg:w-[15.5%]  mb-5">
+                          <Field
+                            name="sibling_other_inst_section1"
+                            as={TextField}
+                            select
+                            label="Section"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            value={values.sibling_other_inst_section1}
+                            helperText={
+                              <ErrorMessage name="sibling_other_inst_section1" />
+                            }
+                          >
+                            {Config.SectionList.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
                         </div>
                       </div>
                       <div className="flex  flex-wrap gap-4">
@@ -3323,7 +3352,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                        {/* <div className="w-[100%] lg:w-[32.5%]  mb-5">
                           <Field
                             name="sibling_other_inst_class_section2"
                             as={TextField}
@@ -3337,6 +3366,52 @@ const StudentRegistration = ({
                               <ErrorMessage name="sibling_other_inst_class_section2" />
                             }
                           />
+                        </div> */}
+                        <div className="w-[100%] lg:w-[15.5%]  mb-5">
+                          <Field
+                            name="sibling_other_inst_class_2"
+                            as={TextField}
+                            select
+                            label="Class"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            value={values.sibling_other_inst_class_2}
+                            helperText={
+                              <ErrorMessage name="sibling_other_inst_class_2" />
+                            }
+                          >
+                            {Config.ClassList.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
+                        </div>
+                        <div className="w-[100%] lg:w-[15.5%]  mb-5">
+                          <Field
+                            name="sibling_other_inst_section2"
+                            as={TextField}
+                            select
+                            label="Section"
+                            variant="outlined"
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            error={false}
+                            value={values.sibling_other_inst_section2}
+                            helperText={
+                              <ErrorMessage name="sibling_other_inst_section2" />
+                            }
+                          >
+                            {Config.SectionList.map((option) => (
+                              <MenuItem key={option.label} value={option.label}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Field>
                         </div>
                       </div>
                     </div>
@@ -3353,7 +3428,7 @@ const StudentRegistration = ({
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={handleSubmit}
+                  // onClick={handleSubmit}
                   // disabled={isSubmitting}
                   className="bg-blue-500 py-1 px-5"
                   sx={{ py: 1, px: 5, fontWeight: "bold", fontSize: "16px" }}
