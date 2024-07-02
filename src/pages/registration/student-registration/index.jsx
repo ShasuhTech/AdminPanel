@@ -107,6 +107,11 @@ import moment from "moment";
 import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
 import Config from "@/utilities/Config";
 import StudentRegistration from "./RegistrationForm";
+import {
+  ClassSelection,
+  SectionSelection,
+  StatusSelection,
+} from "@/components/ClassSelection";
 // import EnquiryMaster from "./enquiry-master";
 // import FollowUpModal from "./followup/FollowUpModal";
 // import FollowUpModal from "./FollowUpModal";
@@ -118,13 +123,21 @@ const StudentRegistrationDetails = () => {
   const router = useRouter();
   const [resetInitialValues, setresetInitialValues] = useState(false);
 
+  const [selectStatus, setSelectStatus] = useState();
   const {
     data: studentData,
     status: studentStatus,
     isLoading: studentLoading,
     refetch: studentRefetch,
   } = useQuery("studentData", async () => {
-    const res = await GetStudentLsit();
+    const payload = {};
+    (payload.page = 1),
+      (payload.limit = 100),
+      (payload.q = searchText),
+      (payload.classNumber = selectClass),
+      (payload.section = selectSection),
+      (payload.status = selectStatus);
+    const res = await GetStudentLsit(payload);
     console.log(res, "---sdf");
     return res?.data;
   });
@@ -146,7 +159,7 @@ const StudentRegistrationDetails = () => {
     setfollowupEnquiruModal(true);
     setEnquiryIdStore("");
     setresetInitialValues(true);
-
+    router.replace("/registration/student-registration");
   };
   useEffect(() => {
     if (enquiryIdStore) {
@@ -167,8 +180,8 @@ const StudentRegistrationDetails = () => {
     router.push({
       pathname: "/registration/student-registration",
       query: { id: id },
-    })
-      setresetInitialValues(false);
+    });
+    setresetInitialValues(false);
   };
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
@@ -190,6 +203,20 @@ const StudentRegistrationDetails = () => {
       // You can replace the console.log with any other logic you need to execute
     }
   }, [priorities]);
+
+  const handleFilterClick = () => {
+    studentRefetch();
+  };
+  const handleResetClick = () => {
+    setSearchText("");
+    setSelectedRow();
+    setSelectClass();
+    setSelectSection();
+    setSelectStatus();
+    setTimeout(() => {
+      studentRefetch();
+    }, 500);
+  };
 
   const priorityData = [
     "First Name",
@@ -223,32 +250,60 @@ const StudentRegistrationDetails = () => {
               // onFilterClick={handleFilterClick}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={6} md={6}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Selected Status
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectClass}
-                label="Selected Status"
-                onChange={(e) => setSelectClass(e.target.value)}
-              >
-                {Config.followupStatus.map((item, ind) => (
-                  <MenuItem key={ind} value={item.label}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={2}>
+            <StatusSelection
+              selectStatus={selectStatus}
+              setSelectStatus={setSelectStatus}
+            />
           </Grid>
-          <Grid item xs={12} sm={6} md={3} lg={3}>
-            <Button variant="outlined" onClick={handleOpenEnquiry}>
-              Student Registration
-            </Button>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={3}>
+            <ClassSelection
+              selectClass={selectClass}
+              setSelectClass={setSelectClass}
+              classList={Config.ClassList}
+            />
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2.5}>
+            <SectionSelection
+              selectClass={selectSection}
+              setSelectClass={setSelectSection}
+            />
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
+            <button onClick={handleFilterClick} className="filter-btncuston">
+              <FilterAltIcon />
+            </button>
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={1}>
+            <button onClick={handleResetClick} className="filter-btncuston">
+              {/* <FilterAltIcon /> */}
+              Reset
+            </button>
           </Grid>
         </Grid>
+        <Grid
+          container
+          className="flex justify-end mb-5 mr-3"
+          sx={{ mb: 2, mr: 2 }}
+        >
+          <Grid item xs={9} sm={4} md={2}>
+            <CustomButton width={"210px"} onClick={handleOpenEnquiry}>
+              <AddIcon />
+              Student Registration
+            </CustomButton>
+          </Grid>
+          <Grid item xs={12} sm={4} md={1}>
+            <button className="border-2 rounded-lg px-4 py-2.5 ">
+              Export CSV
+            </button>
+          </Grid>
+          <Grid item xs={12} sm={4} md={1}>
+            <button className="border-2 rounded-lg px-4 py-2.5 ">
+              Export PDF
+            </button>
+          </Grid>
+        </Grid>
+  
         <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
           <TableContainer sx={{ overflowX: "auto" }}>
             <Table aria-label="collapsible table">
@@ -322,15 +377,15 @@ const StudentRegistrationDetails = () => {
               </TableBody>
             </Table>
           </TableContainer>
-
-          <TablePagination
+          <div className="mt-10" />
+          {/* <TablePagination
             component="div"
             rowsPerPageOptions={[]}
             // count={pagination?.total || 0}
             // rowsPerPage={15}
             // page={pagination?.currentPage ? pagination?.currentPage - 1 : 0}
             // onPageChange={handleChangePage}
-          />
+          /> */}
         </Paper>
       </div>{" "}
       {/* <FollowUpModal open={followupModal} handleClose={handleclose} data={SelectedRow} /> */}

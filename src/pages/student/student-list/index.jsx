@@ -45,6 +45,11 @@ import { border } from "@mui/system";
 import TransferCertificate from "@/components/SchoolManagemnt/Modal/TransferCertificate";
 import DropOutModal from "@/components/SchoolManagemnt/Modal/Dropout";
 import AuditLogs from "@/components/SchoolManagemnt/Modal/AuditLog";
+import {
+  ClassSelection,
+  SectionSelection,
+  StatusSelection,
+} from "@/components/ClassSelection";
 
 const StudentList = () => {
   const router = useRouter();
@@ -56,15 +61,22 @@ const StudentList = () => {
   const [transferCertModal, settransferCertModal] = useState(false);
   const [dropOuttModal, setdropOuttModal] = useState(false);
   const [auditLOgModal, setauditLOgModal] = useState(false);
-  const [selectedStudent,setSelectStudent]=useState()
-
+  const [selectedStudent, setSelectStudent] = useState();
+  const [selectStatus, setSelectStatus] = useState();
   const {
     data: studentData,
     status: studentStatus,
     isLoading: studentLoading,
     refetch: studentRefetch,
   } = useQuery("studentData", async () => {
-    const res = await GetStudentLsit();
+    const payload = {};
+    (payload.page = 1),
+      (payload.limit = 100),
+      (payload.q = searchText),
+      (payload.classNumber = selectClass),
+      (payload.section = selectSection),
+      (payload.status = selectStatus);
+    const res = await GetStudentLsit(payload);
     console.log(res, "---sdf");
     return res?.data;
   });
@@ -73,41 +85,60 @@ const StudentList = () => {
   };
   const handleOpen = (data) => {
     setstudentDetailsModal(true);
-    setSelectStudent(data)
+    setSelectStudent(data);
   };
   const handlecloseTc = () => {
     settransferCertModal(false);
   };
   const handleOpenTc = (data) => {
     settransferCertModal(true);
-    setSelectStudent(data)
-
+    setSelectStudent(data);
   };
   const handlecloseDropout = () => {
     setdropOuttModal(false);
   };
   const handleOpenDropout = (data) => {
     setdropOuttModal(true);
-    setSelectStudent(data)
-
+    setSelectStudent(data);
   };
-  const handlecloseAuditLog= () => {
+  const handlecloseAuditLog = () => {
     setauditLOgModal(false);
   };
   const handleOpenAuditLog = (data) => {
     setauditLOgModal(true);
-    setSelectStudent(data)
+    setSelectStudent(data);
+  };
 
+  const handleFilterClick = () => {
+    studentRefetch();
+  };
+  const handleResetClick = () => {
+    setSearchText("");
+    setSelectClass();
+    setSelectSection();
+    setSelectStatus();
+    setTimeout(() => {
+      studentRefetch();
+    }, 500);
   };
 
   return (
     <div className="">
       <div sx={{ marginTop: "5rem" }} className="bg-white">
-        <Grid container spacing={2} sx={{ py: 2, px: 2, alignItems: "center" }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            py: 2,
+            px: 2,
+            alignItems: "center",
+            // justifyContent: "space-between",
+          }}
+        >
           <Grid item xs={12} sm={6} md={3} lg={3}>
             <QuickSearchToolbar
               onChange={(event) => setSearchText(event.target.value)}
-              isTeamMember="Search by Admission No, name, Class, Section"
+              isTeamMember="Search by Enquiry No, name, Class, Section"
               value={searchText}
               fullWidth
               rootSx={{ p: 0, pb: 0, marginLeft: 0 }}
@@ -115,71 +146,41 @@ const StudentList = () => {
               // onFilterClick={handleFilterClick}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Class</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectClass}
-                label="Class"
-                onChange={(e) => setSelectClass(e.target.value)}
-              >
-                {Config.ClassList.map((item, ind) => (
-                  <MenuItem key={ind} value={item.label}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6} md={2}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Section</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectSection}
-                label="Section"
-                onChange={(e) => setSelectSection(e.target.value)}
-              >
-                {Config.SectionList.map((item, ind) => (
-                  <MenuItem key={ind} value={item.label}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          {/* <Grid item xs={12} sm={12} md={2}>
-            <TextField
-              fullWidth
-              value={selectAdmissionNo}
-              onChange={(e) => setSelectAdmissionNo(e.target.value)}
-              id="outlined-basic"
-              label="Admission No"
-              variant="outlined"
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={2}>
+            <StatusSelection
+              selectStatus={selectStatus}
+              setSelectStatus={setSelectStatus}
             />
-          </Grid> */}
-          <Grid item xs={2} sm={1} md={0.5}>
-            <button
-              // onClick={handleFilterClick}
-              className="filter-btncuston"
-            >
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={3}>
+            <ClassSelection
+              selectClass={selectClass}
+              setSelectClass={setSelectClass}
+              classList={Config.ClassList}
+            />
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2.5}>
+            <SectionSelection
+              selectClass={selectSection}
+              setSelectClass={setSelectSection}
+            />
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
+            <button onClick={handleFilterClick} className="filter-btncuston">
               <FilterAltIcon />
             </button>
           </Grid>
-          <Grid item xs={2} sm={1} md={2}>
-            <button
-              // onClick={handleFilterClick}
-              className="filter-btncuston"
-            >
-              <Icon path={mdiCached} size={2} />
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
+            <button onClick={handleResetClick} className="filter-btncuston">
+              Reset
             </button>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={1.5}>
-            
-          </Grid> */}
+        </Grid>
+        <Grid
+          container
+          className="flex justify-end mb-5 mr-3"
+          sx={{ mb: 2, mr: 2 }}
+        >
           <Grid item xs={9} sm={4} md={1.5}>
             <CustomButton
               width={"160px"}
@@ -195,11 +196,14 @@ const StudentList = () => {
             </CustomButton>
           </Grid>
           <Grid item xs={12} sm={4} md={1}>
-            <img
-              src={"/images/Export CSV.svg"}
-              className="w-[103px] h-[40px] cursor-pointer mb-auto mr-5"
-              // onClick={csvHandler}
-            />
+            <button className="border-2 rounded-lg px-4 py-2.5 ">
+              Export CSV
+            </button>
+          </Grid>
+          <Grid item xs={12} sm={4} md={1}>
+            <button className="border-2 rounded-lg px-4 py-2.5 ">
+              Export PDF
+            </button>
           </Grid>
         </Grid>
 
@@ -293,20 +297,37 @@ const StudentList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
+          <div className="mt-10" />
+          {/* <TablePagination
             component="div"
             rowsPerPageOptions={[]}
             // count={pagination?.total || 0}
             // rowsPerPage={15}
             // page={pagination?.currentPage ? pagination?.currentPage - 1 : 0}
             // onPageChange={handleChangePage}
-          />
+          /> */}
         </Paper>
       </div>{" "}
-      <StudentDetails open={studentDetailsModal} handleClose={handleclose} data={selectedStudent} />
-      <TransferCertificate open={transferCertModal} handleClose={handlecloseTc} data={selectedStudent} />
-      <DropOutModal open={dropOuttModal} handleClose={handlecloseDropout} data={selectedStudent} />
-      <AuditLogs open={auditLOgModal} handleClose={handlecloseAuditLog} data={selectedStudent}/>
+      <StudentDetails
+        open={studentDetailsModal}
+        handleClose={handleclose}
+        data={selectedStudent}
+      />
+      <TransferCertificate
+        open={transferCertModal}
+        handleClose={handlecloseTc}
+        data={selectedStudent}
+      />
+      <DropOutModal
+        open={dropOuttModal}
+        handleClose={handlecloseDropout}
+        data={selectedStudent}
+      />
+      <AuditLogs
+        open={auditLOgModal}
+        handleClose={handlecloseAuditLog}
+        data={selectedStudent}
+      />
     </div>
   );
 };
@@ -314,8 +335,17 @@ const StudentList = () => {
 export default StudentList;
 
 const Row = (props) => {
-  const { row, salonDetails, setSalonDetails, index, router, handleOpen,handleOpenTc ,handleOpenDropout,handleOpenAuditLog} =
-    props;
+  const {
+    row,
+    salonDetails,
+    setSalonDetails,
+    index,
+    router,
+    handleOpen,
+    handleOpenTc,
+    handleOpenDropout,
+    handleOpenAuditLog,
+  } = props;
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -492,13 +522,13 @@ const Row = (props) => {
             <MenuItem onClick={handleOpen}>
               <Typography>{"Details"}</Typography>
             </MenuItem>
-            <MenuItem onClick={()=>handleOpenTc(row)}>
+            <MenuItem onClick={() => handleOpenTc(row)}>
               <Typography>{"TC"}</Typography>
             </MenuItem>
-            <MenuItem onClick={()=>handleOpenDropout(row)}>
+            <MenuItem onClick={() => handleOpenDropout(row)}>
               <Typography>{"Drop Out"}</Typography>
             </MenuItem>
-            <MenuItem onClick={()=>handleOpenAuditLog(row)}>
+            <MenuItem onClick={() => handleOpenAuditLog(row)}>
               <Typography>{"Audit Logs"}</Typography>
             </MenuItem>
           </Menu>

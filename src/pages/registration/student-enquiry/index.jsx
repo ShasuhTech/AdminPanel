@@ -146,6 +146,17 @@ const FollowUp = () => {
   const handleFilterClick=()=>{
     studentRefetch();
   }
+  const handleResetClick=()=>{
+    setSearchText('')
+    setSelectedRow()
+    setSelectClass()
+    setSelectSection()
+    setSelectStatus()
+    setTimeout(() => {
+      
+      studentRefetch();
+    }, 500);
+  }
 
   const [followupModal, setfollowupModal] = useState(false);
   const handleclose = () => {
@@ -197,47 +208,78 @@ const FollowUp = () => {
               isTeamMember="Search by Enquiry No, name, Class, Section"
               value={searchText}
               fullWidth
-              rootSx={{ p: 0, pb: 0, marginLeft: 0 }}
+              rootSx={{ p: 0, pb: 0, marginLeft: 0, }}
               variant="outlined"
               // onFilterClick={handleFilterClick}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={6} md={3}>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={2.5}>
             <StatusSelection
               selectStatus={selectStatus}
               setSelectStatus={setSelectStatus}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={6} md={2}>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2.5}>
             <ClassSelection
               selectClass={selectClass}
               setSelectClass={setSelectClass}
               classList={Config.ClassList}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={6} md={2}>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2.5}>
             <SectionSelection
               selectClass={selectSection}
               setSelectClass={setSelectSection}
             />
           </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
           <button
             onClick={handleFilterClick}
             className="filter-btncuston"
           >
             <FilterAltIcon />
           </button>
-          <Grid item xs={12} sm={6} md={3} lg={2}>
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={1}>
+          <button
+            onClick={handleResetClick}
+            className="filter-btncuston"
+          >
+            Reset
+          </button>
+          </Grid>
+         
+        </Grid>
+          {/* <Grid item xs={12} sm={6} md={2} lg={2} className="flex justify-end mb-5" sx={{mb:2,mr:2}}>
             <Button variant="outlined" onClick={handleOpenEnquiry}>
               FollowUp Enquiry
             </Button>
+          </Grid> */}
+           <Grid
+          container
+          className="flex justify-end mb-5 mr-3"
+          sx={{ mb: 2, mr: 2 }}
+        >
+          <Grid item xs={9} sm={4} md={1.9}>
+            <CustomButton
+              width={"200px"}
+              onClick={handleOpenEnquiry}
+            >
+              <AddIcon />
+              FollowUp Enquiry
+            </CustomButton>
+          </Grid>
+          <Grid item xs={12} sm={4} md={1}>
+            <button className="border-2 rounded-lg px-4 py-2.5 ">
+              Export CSV
+            </button>
+          </Grid>
+          <Grid item xs={12} sm={4} md={1}>
+            <button className="border-2 rounded-lg px-4 py-2.5 ">
+              Export PDF
+            </button>
           </Grid>
         </Grid>
-        <Grid container>
-          <Grid item xs={12} sm={6} md={8} lg={8}></Grid>
-          <Grid item xs={12} sm={6} md={4} lg={4}></Grid>
-        </Grid>
-
         <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
           <TableContainer sx={{ overflowX: "auto" }}>
             <Table aria-label="collapsible table">
@@ -310,15 +352,16 @@ const FollowUp = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <div className="mt-10"  />
 
-          <TablePagination
+          {/* <TablePagination
             component="div"
             rowsPerPageOptions={[]}
             // count={pagination?.total || 0}
             // rowsPerPage={15}
             // page={pagination?.currentPage ? pagination?.currentPage - 1 : 0}
             // onPageChange={handleChangePage}
-          />
+          /> */}
         </Paper>
       </div>{" "}
       <FollowUpModal

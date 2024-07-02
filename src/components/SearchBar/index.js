@@ -24,7 +24,9 @@ const QuickSearchToolbar = (props) => {
           flexWrap: 'wrap',
           alignItems: 'flex-start',
           justifyContent: 'space-between',
-          marginLeft: props.isNotDataGrid ? 4 : 2
+          marginLeft: props.isNotDataGrid ? 4 : 2,
+          borderRadius:'20px'
+
         }
       }
     >
@@ -38,6 +40,7 @@ const QuickSearchToolbar = (props) => {
           variant={props?.variant || 'standard'}
           value={props.value}
           onChange={props.onChange}
+          className='bg-white shadow-xl'
           fullWidth
           placeholder={props?.isTeamMember ? props?.isTeamMember : 'Search by id, name'}
           InputProps={{
