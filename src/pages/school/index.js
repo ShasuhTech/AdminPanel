@@ -25,11 +25,11 @@ import CustomButton from "@/components/CommonButton/CustomButton";
 import FormControl from "@mui/material/FormControl";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import AddIcon from "@mui/icons-material/Add";
-import AddServiceModal  from "./AddSchool";
+import AddServiceModal from "./AddSchool";
 import { useQuery } from "react-query";
 import { GetSchoolList } from "@/services/School";
 
-const SalonService = () => {
+const SchoolService = () => {
   const [searchText, setSearchText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
@@ -168,7 +168,12 @@ const SalonService = () => {
             </Grid>
 
             <Grid className="gap-2 lg:flex  items-center text-center">
-              <CustomButton onClick={() => {setIsModalOpen(true);setSelectedItem()}}>
+              <CustomButton
+                onClick={() => {
+                  setIsModalOpen(true);
+                  setSelectedItem();
+                }}
+              >
                 <AddIcon />
                 Add School
               </CustomButton>
@@ -186,25 +191,19 @@ const SalonService = () => {
             <Table aria-label="collapsible table">
               <TableHead>
                 <TableRow style={{ fontWeight: "500", color: "#000" }}>
-                  {/* <StyledTableCell align="center">Id</StyledTableCell> */}
-                  <StyledTableCell align="center">School Name</StyledTableCell>
-                  <StyledTableCell align="center">
-                    School Address
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
+                  <StyledTableCell align="center">Id</StyledTableCell>
+                  <StyledTableCell align="left">School Name</StyledTableCell>
+                  <StyledTableCell align="left">School Address</StyledTableCell>
+                  {/* <StyledTableCell align="center">
                     School Aff Code
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    School Website
-                  </StyledTableCell>
-                  <StyledTableCell align="center">Designation</StyledTableCell>
-                  <StyledTableCell align="center">
+                  </StyledTableCell> */}
+                  <StyledTableCell align="left">School Website</StyledTableCell>
+                  {/* <StyledTableCell align="center">Designation</StyledTableCell> */}
+                  <StyledTableCell align="left">
                     Contact Person Name
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Enrollment Id
-                  </StyledTableCell>
-                  <StyledTableCell align="center">Phone No</StyledTableCell>
+                  <StyledTableCell align="left">Email</StyledTableCell>
+                  <StyledTableCell align="left">Phone No</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -277,7 +276,7 @@ const SalonService = () => {
   );
 };
 
-export default SalonService;
+export default SchoolService;
 
 const Row = (props) => {
   const { row, salonDetails, setSalonDetails, editHandler } = props;
@@ -296,17 +295,23 @@ const Row = (props) => {
           },
         }}
       >
-        {/* <StyledTableCell align="center" style={{ minWidth: "150px" }}>
+        <StyledTableCell align="center" style={{ minWidth: "50px" }}>
           <Typography>{row?.id || 1}</Typography>
-        </StyledTableCell> */}
-        <StyledTableCell align="center" style={{ minWidth: "250px" }}>
+        </StyledTableCell>
+        <StyledTableCell align="left" style={{ minWidth: "200px" }}>
           <Typography>{row?.school_name}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "250px" }}>
-          <Typography>{row?.address?.address}</Typography>
+        <StyledTableCell align="left" style={{ minWidth: "200px" }}>
+          <Typography>
+            {row?.address?.address +
+              "," +
+              row?.address?.street +
+              "," +
+              row?.address?.city}
+          </Typography>
         </StyledTableCell>
-        <StyledTableCell
-          align="center"
+        {/* <StyledTableCell
+          align="left"
           style={{
             minWidth: "150px",
             maxWidth: "200px",
@@ -314,20 +319,29 @@ const Row = (props) => {
           }}
         >
           <Typography>{row?.affiliation_code}</Typography>
+        </StyledTableCell> */}
+        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
+          <Typography>
+            <a
+              href={row?.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-blue-500"
+            >
+              {row?.website}
+            </a>
+          </Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Typography>{row?.website}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
+        {/* <StyledTableCell align="left" style={{ minWidth: "200px" }}>
           <Typography>{row?.designation}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
+        </StyledTableCell> */}
+        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
           <Typography>{row?.contact_person_name}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Typography>{row?.enrollment_id}</Typography>
+        <StyledTableCell align="left" style={{ minWidth: "100px" }}>
+          <Typography>{row?.email}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "150px" }}>
+        <StyledTableCell align="left" style={{ minWidth: "100px" }}>
           <Typography>{row?.phone}</Typography>
         </StyledTableCell>
         <StyledTableCell

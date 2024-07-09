@@ -326,13 +326,13 @@ const DrawerPath = ({
                 open={open}
                 title={"School >> School List"}
               />
-              <DrawerList
+              {/* <DrawerList
                 path={"/school/school-overview"}
                 text={"School Overview"}
                 Icon={ServiceList}
                 open={open}
                 title={"School >> School Overview"}
-              />
+              /> */}
             </DrawerList>
             <DrawerList
               path={""}
@@ -361,27 +361,27 @@ const DrawerPath = ({
                 open={open}
                 title={"Student >> Fee Group Assign"}
               />
-              <DrawerList
+              {/* <DrawerList
                 path={"/student/transfer-certificate"}
                 text={"Transfer Certificate"}
                 Icon={ServiceList}
                 open={open}
                 title={"Student >> Transfer Certificate"}
-              />
-              <DrawerList
+              /> */}
+              {/* <DrawerList
                 path={"/student/dropout-details"}
                 text={"Dropout Details"}
                 Icon={ServiceList}
                 open={open}
                 title={"Student >> Dropout Details"}
-              />
-              <DrawerList
+              /> */}
+              {/* <DrawerList
                 path={"/student/promotion"}
                 text={"Promotion"}
                 Icon={ServiceList}
                 open={open}
                 title={"Promotion"}
-              />
+              /> */}
               <DrawerList
                 path={"/student/student-updation"}
                 text={"Field Updation"}
@@ -417,56 +417,56 @@ const DrawerPath = ({
                 open={open}
                 title={"registration >> Registration Start Details"}
               />
-              <DrawerList
+              {/* <DrawerList
                 path={"/registration/followup-mood"}
                 text={"Followup Mode"}
                 Icon={ServiceList}
                 open={open}
                 title={"registration >> Followup Mode"}
-              />
-              <DrawerList
+              /> */}
+              {/* <DrawerList
                 path={"/registration/selection-process"}
                 text={"Selection Process"}
                 Icon={ServiceList}
                 open={open}
                 title={"registration >> Selection Process"}
-              />
+              /> */}
 
-              <DrawerList
+              {/* <DrawerList
                 path={"/registration/student-transfer"}
                 text={"Student Transfer"}
                 Icon={ServiceList}
                 open={open}
                 title={"registration >>Student Transfer"}
-              />
-              <DrawerList
+              /> */}
+              {/* <DrawerList
                 path={"/registration/subject-assigner"}
                 text={"Subject Assigner"}
                 Icon={ServiceList}
                 open={open}
                 title={"registration >>Subject Assigner"}
-              />
-              <DrawerList
+              /> */}
+              {/* <DrawerList
                 path={"/registration/subject-master"}
                 text={"Subject Master"}
                 Icon={ServiceList}
                 open={open}
                 title={"registration >>Subject Master"}
-              />
-              <DrawerList
+              /> */}
+              {/* <DrawerList
                 path={"/registration/time-slot-master"}
                 text={"Time Slot Master"}
                 Icon={ServiceList}
                 open={open}
                 title={"registration >>Time Slot Master"}
-              />
-              <DrawerList
+              /> */}
+              {/* <DrawerList
                 path={"/registration/age-criteria"}
                 text={"Age Criteria"}
                 Icon={ServiceList}
                 open={open}
                 title={"registration >>Age Criteria"}
-              />
+              /> */}
             </DrawerList>
 
             <DrawerList
@@ -504,7 +504,7 @@ const DrawerPath = ({
                 open={open}
                 title={"Attendance >> Holiday Assigner"}
               />
-              <DrawerList
+              {/* <DrawerList
                 path={"/attendance/attendance-report"}
                 text={"Attendance Report"}
                 Icon={ServiceList}
@@ -517,7 +517,7 @@ const DrawerPath = ({
                 Icon={ServiceList}
                 open={open}
                 title={"Attendance >>Leave Approval"}
-              />
+              /> */}
             </DrawerList>
           </List>
           <Divider />
