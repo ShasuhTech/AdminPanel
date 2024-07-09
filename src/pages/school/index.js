@@ -14,6 +14,7 @@ import {
   TablePagination,
   MenuItem,
   Select,
+  Button,
 } from "@mui/material";
 import { addServices, adminCategory, serviceList } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
@@ -24,13 +25,14 @@ import CustomButton from "@/components/CommonButton/CustomButton";
 import FormControl from "@mui/material/FormControl";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import AddIcon from "@mui/icons-material/Add";
-import { AddServiceModal } from "./AddSchool";
+import AddServiceModal  from "./AddSchool";
 import { useQuery } from "react-query";
 import { GetSchoolList } from "@/services/School";
 
 const SalonService = () => {
- const [searchText, setSearchText] = useState('')
- const [isModalOpen, setIsModalOpen] = useState(false)
+  const [searchText, setSearchText] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
   const {
     data: schoolData,
     status: schoolStatus,
@@ -42,6 +44,15 @@ const SalonService = () => {
     console.log(res, "---sdf");
     return res?.data;
   });
+
+  const editHandler = (item) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    schoolRefetch();
+  }, [isModalOpen]);
 
   // const getUserData = async (page) => {
   //   setLoading(true);
@@ -82,8 +93,6 @@ const SalonService = () => {
   //     console.error("Error fetching salon data:", err);
   //   }
   // };
-
- 
 
   return (
     <div className="">
@@ -150,15 +159,16 @@ const SalonService = () => {
                 </FormControl>
               )}
 
-              <button 
-              // onClick={handleFilterClick}
-               className="filter-btncuston">
+              <button
+                // onClick={handleFilterClick}
+                className="filter-btncuston"
+              >
                 <FilterAltIcon />
               </button>
             </Grid>
 
             <Grid className="gap-2 lg:flex  items-center text-center">
-              <CustomButton onClick={()=>setIsModalOpen(true)} >
+              <CustomButton onClick={() => {setIsModalOpen(true);setSelectedItem()}}>
                 <AddIcon />
                 Add School
               </CustomButton>
@@ -171,16 +181,6 @@ const SalonService = () => {
             </Grid>
           </Grid>
         </div>
-        <AddServiceModal
-          open={isModalOpen}
-          onClose={()=>setIsModalOpen(false)}
-          // onSubmit={handleAddService}
-          // data={data}
-          // errorMsg={errorMsg}
-          // setSelectedValue={setSelectedValue}
-          // selectedValue={selectedValue}
-        />
-
         <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
           <TableContainer sx={{ overflowX: "auto" }}>
             <Table aria-label="collapsible table">
@@ -205,7 +205,7 @@ const SalonService = () => {
                     Enrollment Id
                   </StyledTableCell>
                   <StyledTableCell align="center">Phone No</StyledTableCell>
-                  <StyledTableCell align="center">Status</StyledTableCell>
+                  <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody
@@ -231,10 +231,10 @@ const SalonService = () => {
                       </div>
                     </TableCell>
                   </TableRow>
-                ) : schoolData?.length>0 ? (
+                ) : schoolData?.length > 0 ? (
                   <>
                     {schoolData?.map((row, index) => (
-                      <Row key={index} row={row} />
+                      <Row key={index} row={row} editHandler={editHandler} />
                     ))}
                   </>
                 ) : (
@@ -267,6 +267,11 @@ const SalonService = () => {
             // onPageChange={handleChangePage}
           /> */}
         </Paper>
+        <AddServiceModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          selectedItem={selectedItem}
+        />
       </div>{" "}
     </div>
   );
@@ -275,7 +280,7 @@ const SalonService = () => {
 export default SalonService;
 
 const Row = (props) => {
-  const { row, salonDetails, setSalonDetails } = props;
+  const { row, salonDetails, setSalonDetails, editHandler } = props;
   const [open, setOpen] = useState(false);
 
   return (
@@ -295,12 +300,10 @@ const Row = (props) => {
           <Typography>{row?.id || 1}</Typography>
         </StyledTableCell> */}
         <StyledTableCell align="center" style={{ minWidth: "250px" }}>
-          <Typography>{row?.name}</Typography>
+          <Typography>{row?.school_name}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "250px" }}>
-          <Typography>
-            {row?.categoryText}
-          </Typography>
+          <Typography>{row?.address?.address}</Typography>
         </StyledTableCell>
         <StyledTableCell
           align="center"
@@ -313,22 +316,35 @@ const Row = (props) => {
           <Typography>{row?.affiliation_code}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Typography>{row?.website }</Typography>
+          <Typography>{row?.website}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Typography>{row?.designation }</Typography>
+          <Typography>{row?.designation}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
           <Typography>{row?.contact_person_name}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Typography>{row?.maxTime }</Typography>
+          <Typography>{row?.enrollment_id}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "150px" }}>
           <Typography>{row?.phone}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>{row?.statusText}</Typography>
+        <StyledTableCell
+          align="center"
+          style={{
+            minWidth: "150px",
+            display: "flex",
+            gap: 3,
+            alignItems: "center",
+          }}
+        >
+          <CustomButton width={80} onClick={() => editHandler(row)}>
+            Edit
+          </CustomButton>
+          <Button variant="outlined" color="error">
+            Delete
+          </Button>
         </StyledTableCell>
       </TableRow>
     </React.Fragment>

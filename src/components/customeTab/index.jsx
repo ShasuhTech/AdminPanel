@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Grid } from '@mui/material';
 
-const CustomTabs = ({ tabs, selectedTab, onSelectTab }) => {
+const CustomTabs = ({ tabs, selectedTab, onSelectTab,XS }) => {
   return (
     <Grid container spacing={2}>
       {tabs.map((tab) => (
-        <Grid item xs={6} key={tab.id}>
+        <Grid item xs={XS||6} key={tab.id}>
           <Button
             fullWidth
             onClick={() => onSelectTab(tab.id)}

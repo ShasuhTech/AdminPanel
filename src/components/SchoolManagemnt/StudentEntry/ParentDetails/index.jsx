@@ -278,7 +278,7 @@ const ParentDetails = ({ studenData }) => {
           {/* Father Details */}
           {
             <div className="mt-[40px] ">
-              <span className="font-black text-[18px] ">Father's Details</span>
+              <span className="font-black text-[18px] ">{`Father's Details`}</span>
               <div className=" border  p-6 rounded-2xl mt-3">
                 <div className="lg:flex w-[100%] gap-4">
                   <div className=" lg:w-[20%] w-[100%]  flex justify-center items-center ">
@@ -555,7 +555,7 @@ const ParentDetails = ({ studenData }) => {
           {/* Mother Details */}
           {
             <div className="mt-[20px] ">
-              <span className="font-black text-[18px] ">Mother's Details</span>
+              <span className="font-black text-[18px] ">{`Mother's Details`}</span>
               <div className=" border  p-6 rounded-2xl mt-3">
                 <div className="lg:flex w-[100%] gap-4">
                   <div className=" lg:w-[20%] w-[100%]  flex justify-center items-center ">

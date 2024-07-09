@@ -129,7 +129,7 @@ const DrawerList = ({
 
   return (
     <>
-      <ListItem disablePadding sx={{ display: "block" }} className="group">
+      <ListItem disablePadding sx={{ display: "block" }}  className="transition-all duration-300 ease-in-out">
         <ListItemButton
           button
           onClick={handleItemClick}
@@ -188,7 +188,7 @@ const DrawerList = ({
           )}
         </ListItemButton>
       </ListItem>
-      <Collapse in={sublistOpen} timeout={500}>
+      <Collapse in={sublistOpen} timeout={500} className="transition-all duration-300 ease-in-out">
         {
           <List
             style={{
@@ -199,7 +199,7 @@ const DrawerList = ({
             component="div"
             className={`
             px-3 items-center justify-center text-center mr-6
-            transition-all duration-300
+            transition-all duration-300 ease-in-out
             ${
               sublistOpen
                 ? "opacity-100 scale-100"
@@ -214,6 +214,7 @@ const DrawerList = ({
     </>
   );
 };
+
 
 const DrawerPath = ({
   open,
@@ -272,7 +273,12 @@ const DrawerPath = ({
                 title={"School >> School List"}
               />
             </DrawerList>
-            <DrawerList path={""} text={"Student"} Icon={SchoolIcon} open={open}>
+            <DrawerList
+              path={""}
+              text={"Student"}
+              Icon={SchoolIcon}
+              open={open}
+            >
               <DrawerList
                 path={"/school"}
                 text={"Student Entry"}
@@ -328,8 +334,12 @@ const DrawerPath = ({
                 title={"School >> School Overview"}
               />
             </DrawerList>
-            <DrawerList path={""} text={"Student"} Icon={SchoolIcon} open={open}>
-              
+            <DrawerList
+              path={""}
+              text={"Student"}
+              Icon={SchoolIcon}
+              open={open}
+            >
               <DrawerList
                 path={"/student/student-list"}
                 text={"Student List"}
@@ -343,6 +353,13 @@ const DrawerPath = ({
                 Icon={ServiceList}
                 open={open}
                 title={"Student >> Roll No Assign"}
+              />
+              <DrawerList
+                path={"/student/feegroup-assign"}
+                text={"Fee Group Assign"}
+                Icon={ServiceList}
+                open={open}
+                title={"Student >> Fee Group Assign"}
               />
               <DrawerList
                 path={"/student/transfer-certificate"}
@@ -373,8 +390,13 @@ const DrawerPath = ({
                 title={"Field Updation"}
               />
             </DrawerList>
-            <DrawerList path={""} text={"Registration"} Icon={SchoolIcon} open={open}>
             <DrawerList
+              path={""}
+              text={"Registration"}
+              Icon={SchoolIcon}
+              open={open}
+            >
+              <DrawerList
                 path={"/registration/student-enquiry"}
                 text={"Student Enquiry"}
                 Icon={ServiceList}
@@ -409,8 +431,7 @@ const DrawerPath = ({
                 open={open}
                 title={"registration >> Selection Process"}
               />
-             
-          
+
               <DrawerList
                 path={"/registration/student-transfer"}
                 text={"Student Transfer"}
@@ -447,7 +468,57 @@ const DrawerPath = ({
                 title={"registration >>Age Criteria"}
               />
             </DrawerList>
-           
+
+            <DrawerList
+              path={""}
+              text={"Attendance"}
+              Icon={SchoolIcon}
+              open={open}
+            >
+              <DrawerList
+                path={"/attendance/attendance-entry"}
+                text={"Attendance Entry"}
+                Icon={ServiceList}
+                open={open}
+                title={"Attendance >> Attendance Entry"}
+              />
+              <DrawerList
+                path={"/attendance/attendance-management"}
+                text={"Attendance Management"}
+                Icon={ServiceList}
+                open={open}
+                title={"Attendance >> Attendance Management"}
+              />
+
+              {/* <DrawerList
+                path={"/attendance/bulk-attendance-entry"}
+                text={"Bulk Attendance Entry"}
+                Icon={ServiceList}
+                open={open}
+                title={"Attendance >> Bulk Attendance Entry"}
+              /> */}
+              <DrawerList
+                path={"/attendance/holiday-assigner"}
+                text={"Holiday Assigner"}
+                Icon={ServiceList}
+                open={open}
+                title={"Attendance >> Holiday Assigner"}
+              />
+              <DrawerList
+                path={"/attendance/attendance-report"}
+                text={"Attendance Report"}
+                Icon={ServiceList}
+                open={open}
+                title={"Attendance >> Attendance Report"}
+              />
+              <DrawerList
+                path={"/attendance/leave-approval"}
+                text={"Leave Approval"}
+                Icon={ServiceList}
+                open={open}
+                title={"Attendance >>Leave Approval"}
+              />
+            </DrawerList>
           </List>
           <Divider />
         </Drawer>

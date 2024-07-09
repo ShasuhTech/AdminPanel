@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Paper,
@@ -11,73 +11,98 @@ import {
   TableBody,
   Table,
   CircularProgress,
-  TablePagination,
   MenuItem,
   Select,
   InputLabel,
   TextField,
   Button,
+  Checkbox,
+  Tooltip,
 } from "@mui/material";
 import { GetStudentLsit } from "@/services/api";
-
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import FormControl from "@mui/material/FormControl";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
-import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
+import { useMutation, useQuery } from "react-query";
 import Config from "@/utilities/Config";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { addAttendance, addMarkAttendance } from "@/services/Attendance";
+import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 const ClassWiseAttendance = () => {
-  const [searchText, setSearchText] = useState("");
   const router = useRouter();
-
-  const {
-    data: studentData,
-    status: studentStatus,
-    isLoading: studentLoading,
-    refetch: studentRefetch,
-  } = useQuery("studentData", async () => {
-    const res = await GetStudentLsit();
-    console.log(res, "---sdf");
-    return res?.data;
-  });
-  const [studentDetailsModal, setstudentDetailsModal] = useState(false);
-  const handleclose = () => {
-    setstudentDetailsModal(false);
-  };
-  const handleOpen = () => {
-    setstudentDetailsModal(true);
-  };
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
-  const [selectRollNo, setSelectRollNo] = useState();
-  const [priorities, setPriorities] = useState([]);
+  const [allMarkDone, setAllMarkDone] = useState(false);
+  const [allSmsDone, setAllSmsDone] = useState(false);
+  const [markedAttendance, setMarkedAttendance] = useState([]);
+  const [markedSms, setMarkedSms] = useState([]);
+  const [selectDate, setSelectDate] = useState(dayjs(new Date()));
 
-  // Function to handle changes in selection
-  const handlePriorityChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPriorities(typeof value === "string" ? value.split(",") : value);
+  const handleAllMarkDoneChange = (e) => {
+    const checked = e.target.checked;
+    setAllMarkDone(checked);
+    setMarkedAttendance(
+      checked ? studentData.map((student) => student._id) : []
+    );
   };
 
-  // useEffect to perform an action whenever priorities change
-  useEffect(() => {
-    if (priorities.length > 0) {
-      console.log(`Priorities changed to: ${priorities.join(", ")}`);
-      // You can replace the console.log with any other logic you need to execute
-    }
-  }, [priorities]);
+  const handleAllSmsDoneChange = (e) => {
+    const checked = e.target.checked;
+    setAllSmsDone(checked);
+    setMarkedSms(checked ? studentData.map((student) => student._id) : []);
+  };
 
-  const priorityData = [
-    "First Name",
-    "last Name",
-    "Gender",
-    "Admission No.",
-    "Stream",
-    "Boarding Category",
-  ];
+  const handleAttendanceChange = (id, checked) => {
+    if (checked) {
+      setMarkedAttendance((prev) => [...prev, id]);
+    } else {
+      setMarkedAttendance((prev) => prev.filter((item) => item !== id));
+      setAllMarkDone(false);
+    }
+  };
+
+  const handleSmsChange = (id, checked) => {
+    if (checked) {
+      setMarkedSms((prev) => [...prev, id]);
+    } else {
+      setMarkedSms((prev) => prev.filter((item) => item !== id));
+      setAllSmsDone(false);
+    }
+  };
+
+  const { mutate, data:studentData, error, isLoading:studentLoading } = useMutation(addAttendance);
+
+  const filterHandler = () => {
+    if (selectClass && selectSection && selectDate) {
+      const payload = {
+        class: selectClass,
+        section: selectSection,
+        date: selectDate,
+      };
+      mutate(payload);
+    }else{
+      toast.error("Please select all the fields");
+    }
+  };
+
+  const { mutate:mutateMark, data:markData, errormarkError, isLoading:markLoading } = useMutation(addMarkAttendance);
+
+  const handleSubmit = () => {
+    if(markedAttendance&&selectDate){
+      const payload = {
+        studentIds: markedAttendance,
+        markedSms: markedSms,
+        date: selectDate
+      };
+      mutateMark(payload);
+      filterHandler()
+    }else{
+      toast.error("Please select all the fields");
+    }
+  };
+
   return (
     <div className="">
       <div sx={{ marginTop: "5rem" }} style={{ backgroundColor: "#fff" }}>
@@ -85,20 +110,18 @@ const ClassWiseAttendance = () => {
           <Grid item xs={12} sm={6} md={3}>
             <DatePicker
               label="Date"
-              value={null}
+              value={selectDate}
               fullWidth
               className="w-[100%]"
               onChange={(newValue) => {
-                setSelectClass(newValue);
+                setSelectDate(newValue);
               }}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   variant="outlined"
                   fullWidth
-                  // required
                   error={false}
-                  // helperText={<ErrorMessage name="dob" />}
                 />
               )}
             />
@@ -139,42 +162,43 @@ const ClassWiseAttendance = () => {
               </Select>
             </FormControl>
           </Grid>
-
-          <Grid item xs={12} sm={12} md={1}>
-            <Button variant="contained" size="large">
-              Submit
+          <Grid item xs={12} sm={12} md={3}>
+            <Button variant="contained" size="large" onClick={filterHandler} disabled={studentLoading}>
+            {studentLoading ? 'Loading...' : 'Student List'}
             </Button>
+            {error && <div className="text-red-500">Error fetching data</div>}
           </Grid>
-          <Grid item xs={12} sm={12} md={.8}>
-            <Button variant="contained" size="large">
-              SMS
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={12} md={0.5}>
-            <Button variant="contained" size="large">
-              Edit
-            </Button>
-          </Grid>
-          
         </Grid>
         <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
           <TableContainer sx={{ overflowX: "auto" }}>
             <Table aria-label="collapsible table">
               <TableHead>
                 <TableRow style={{ fontWeight: "500", color: "#000" }}>
-                  <StyledTableCell align="center">Id</StyledTableCell>
+                  <StyledTableCell align="center">Roll No</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
                   <StyledTableCell align="center">Admission No</StyledTableCell>
-                  <StyledTableCell align="center">Roll No</StyledTableCell>
-                  <StyledTableCell align="center">Gender</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Attendance{" "}
+                    <Tooltip title="Select All">
+                      <Checkbox
+                        checked={allMarkDone}
+                        onChange={handleAllMarkDoneChange}
+                      />
+                    </Tooltip>
+                  </StyledTableCell>
+                  {/* <StyledTableCell align="center">Remark</StyledTableCell> */}
+                  <StyledTableCell align="center">
+                    Send SMS{" "}
+                    <Tooltip title="Select All">
+                      <Checkbox
+                        checked={allSmsDone}
+                        onChange={handleAllSmsDoneChange}
+                      />
+                    </Tooltip>
+                  </StyledTableCell>
                 </TableRow>
               </TableHead>
-              <TableBody
-                style={{
-                  height: "auto",
-                  position: "relative",
-                }}
-              >
+              <TableBody style={{ height: "auto", position: "relative" }}>
                 {studentLoading ? (
                   <TableRow>
                     <TableCell colSpan={12}>
@@ -200,6 +224,10 @@ const ClassWiseAttendance = () => {
                         row={row}
                         index={index}
                         router={router}
+                        handleAttendanceChange={handleAttendanceChange}
+                        handleSmsChange={handleSmsChange}
+                        markedAttendance={markedAttendance}
+                        markedSms={markedSms}
                       />
                     ))}
                   </>
@@ -224,23 +252,13 @@ const ClassWiseAttendance = () => {
               </TableBody>
             </Table>
           </TableContainer>
-
-          <TablePagination
-            component="div"
-            rowsPerPageOptions={[]}
-            // count={pagination?.total || 0}
-            // rowsPerPage={15}
-            // page={pagination?.currentPage ? pagination?.currentPage - 1 : 0}
-            // onPageChange={handleChangePage}
-          />
-          {/* <Grid sx={{ display: "flex", justifyContent: "end", p: 3 }}>
-            <Button variant="contained" size="large">
+          <Grid className="flex items-center justify-end p-8">
+            <Button variant="contained" size="large" onClick={handleSubmit}>
               Submit
             </Button>
-          </Grid> */}
+          </Grid>
         </Paper>
-      </div>{" "}
-      <StudentDetails open={studentDetailsModal} handleClose={handleclose} />
+      </div>
     </div>
   );
 };
@@ -248,24 +266,25 @@ const ClassWiseAttendance = () => {
 export default ClassWiseAttendance;
 
 const Row = (props) => {
-  const { row, salonDetails, setSalonDetails, index, router } = props;
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const {
+    row,
+    index,
+    router,
+    handleAttendanceChange,
+    handleSmsChange,
+    markedAttendance,
+    markedSms,
+  } = props;
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const isAttendanceChecked = markedAttendance.includes(row._id);
+  const isSmsChecked = markedSms.includes(row._id);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <React.Fragment>
       <TableRow
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -290,11 +309,21 @@ const Row = (props) => {
         <StyledTableCell align="center" style={{ minWidth: "250px" }}>
           <Typography>{row?.admission_number}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Typography>{row?.roll_number}</Typography>
+        <StyledTableCell key={row._id} align="center" style={{ minWidth: "200px" }}>
+          {!row?.attendance_marked?<Checkbox
+            checked={markedAttendance.includes(row._id)}
+            onChange={(e) => handleAttendanceChange(row._id, e.target.checked)}
+          />:<Typography>Present</Typography>}
         </StyledTableCell>
+
+        {/* <StyledTableCell align="center" style={{ minWidth: "200px" }}>
+          <Typography>{"Remark"}</Typography>
+        </StyledTableCell> */}
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Typography>{row?.gender}</Typography>
+          <Checkbox
+            checked={isSmsChecked}
+            onChange={(e) => handleSmsChange(row._id, e.target.checked)}
+          />
         </StyledTableCell>
       </TableRow>
     </React.Fragment>

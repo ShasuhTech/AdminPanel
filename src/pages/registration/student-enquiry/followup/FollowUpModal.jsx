@@ -270,6 +270,19 @@ const FollowUpModal = ({ open, handleClose, data }) => {
     setSlectedRow(item);
   };
 
+  // useEffect(() => {
+  //   if (SlectedRow) {
+  //     setValues({
+  //       ...values,
+  //       followUpdate: dayjs(SlectedRow.follow_up_date)||dayjs(new Date()),
+  //       nextfollowUpdate: dayjs(SlectedRow.next_follow_up_date)||dayjs(new Date()),
+  //       modeOfFollowup: SlectedRow.follow_up_mode || "",
+  //       followUp: SlectedRow.follow_ups || "",
+  //       remarks: SlectedRow.remarks || "",
+  //     });
+  //   }
+  // }, [SlectedRow, setValues]);
+
   return (
     <SimpleModal
       open={open}
@@ -287,18 +300,7 @@ const FollowUpModal = ({ open, handleClose, data }) => {
         
       >
         {({ values, setValues }) => {
-          useEffect(() => {
-            if (SlectedRow) {
-              setValues({
-                ...values,
-                followUpdate: dayjs(SlectedRow.follow_up_date)||dayjs(new Date()),
-                nextfollowUpdate: dayjs(SlectedRow.next_follow_up_date)||dayjs(new Date()),
-                modeOfFollowup: SlectedRow.follow_up_mode || "",
-                followUp: SlectedRow.follow_ups || "",
-                remarks: SlectedRow.remarks || "",
-              });
-            }
-          }, [SlectedRow, setValues]);
+         
 
           return (
             <Form>

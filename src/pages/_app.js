@@ -2,7 +2,10 @@ import { Provider } from "react-redux";
 import store from "../redux/store";
 import "../styles/globals.css"; // corrected path for globals.css
 import { QueryClient, QueryClientProvider } from "react-query";
-import { CssBaseline, createTheme } from "@mui/material";
+// import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
 import { useState, useEffect } from "react";
 import Layout from "@/components/Navigation/Layout";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -19,7 +22,11 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }) {
   const [token, setToken] = useState(null); //Store token due to hydration error
   const [loading, setLoading] = useState(true);
-
+  const theme = createTheme({
+    palette: {
+      mode: 'light', // Change to 'dark' if you want a dark theme
+    },
+  });
   useEffect(() => {
     const token = getCookie(Cookies.TOKEN);
     // eraseCookie(Cookies.TOKEN)  // If  you want to remove the cookie on load (optional
@@ -28,6 +35,7 @@ export default function App({ Component, pageProps }) {
   }, [token]); // Fetch token only on the client side
 
   return (
+    <ThemeProvider theme={theme}>
     <QueryClientProvider client={queryClient}>
       <CssBaseline />
 
@@ -49,5 +57,6 @@ export default function App({ Component, pageProps }) {
         </LocalizationProvider>
       </Provider>
     </QueryClientProvider>
+    </ThemeProvider>
   );
 }

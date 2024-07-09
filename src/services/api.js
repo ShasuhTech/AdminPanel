@@ -67,3 +67,11 @@ export const DeleteStudentById = async (payload) => {
   const response = await axiosInstance.delete(`/follow-up/${payload}`);
   return response?.data;
 };
+export const postAssignRollNo = async (payload) => {
+  const response = await axiosInstance.post("/assign-roll-number", payload);
+  return response?.data;
+};
+export const postAssignFeeGroup = async (payload) => {
+  const response = await axiosInstance.post("/assig-fee-group", payload);
+  return response?.data;
+};

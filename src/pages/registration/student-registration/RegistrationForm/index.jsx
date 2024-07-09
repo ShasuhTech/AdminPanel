@@ -1164,7 +1164,7 @@ const StudentRegistration = ({
               {
                 <div className="mt-[40px] ">
                   <span className="font-black text-[18px] ">
-                    Father's Details
+                   {` Father's Details`}
                   </span>
                   <div className=" border  p-6 rounded-2xl mt-3">
                     <div className="lg:flex w-[100%] gap-4">
@@ -1456,7 +1456,7 @@ const StudentRegistration = ({
               {
                 <div className="mt-[20px] ">
                   <span className="font-black text-[18px] ">
-                    Mother's Details
+                    {`Mother's Details`}
                   </span>
                   <div className=" border  p-6 rounded-2xl mt-3">
                     <div className="lg:flex w-[100%] gap-4">
