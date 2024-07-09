@@ -27,6 +27,7 @@ import UserDropdown from "../UserDropDown";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import DashboardCustomizeOutlined from "@mui/icons-material";
 import { Link } from "mdi-material-ui";
+import { useState } from "react";
 
 const drawerWidth = 250;
 const drawerWidth1 = 63;
@@ -55,7 +56,7 @@ export default function Layout({ children }) {
 
   const [open, setOpen] = React.useState(false); // Initially set to false
   const router = useRouter();
-  const [viewportWidth, setViewportWidth] = React.useState(window.innerWidth);
+  const [viewportWidth, setViewportWidth] =useState(window.innerWidth);
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");

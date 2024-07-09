@@ -36,7 +36,7 @@ import { loginUser } from "@/services/api";
 import { getCookie, setCookie } from "@/utilities/cookies";
 import { Cookies } from "@/config/cookies";
 import { useEffect } from "react";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
   email: yup
@@ -79,38 +79,35 @@ const LoginPage = () => {
     };
     try {
       setLoading(true);
-      const responseData = await loginUser(payload); 
+      const responseData = await loginUser(payload);
       if (responseData?.data?.code === 200) {
         router.push("/");
         setCookie(Cookies.TOKEN, responseData?.data?.data?.token, 366);
         localStorage.setItem("token", responseData?.data?.data?.token);
-        localStorage.setItem('Data', JSON.stringify(responseData?.data?.data));
+        localStorage.setItem("Data", JSON.stringify(responseData?.data?.data));
         window.location.reload();
       }
-      toast.success('Login successfull')
+      toast.success("Login successfull");
       setLoading(false);
     } catch (error) {
       setLoading(false);
-     
+
       // toast.error(error.response.data.errors.email[0]);
       if (error?.response?.status === 422) {
-        console.log('login eror hai kya')
-        
-        const responseData = error?.response?.data
-        if (responseData) {
-          console.log(responseData?.errors?.email[0])
-          toast.error(responseData?.errors?.email[0]);
-        } 
-      } else if(error?.response?.status === 401){
-        const responseData = error?.response?.data
-        if (responseData) {
-          console.log(responseData.message)
-          toast.error(responseData.message);
-        } 
-      }
+        console.log("login eror hai kya");
 
-     
-      
+        const responseData = error?.response?.data;
+        if (responseData) {
+          console.log(responseData?.errors?.email[0]);
+          toast.error(responseData?.errors?.email[0]);
+        }
+      } else if (error?.response?.status === 401) {
+        const responseData = error?.response?.data;
+        if (responseData) {
+          console.log(responseData.message);
+          toast.error(responseData.message);
+        }
+      }
     }
   };
 
@@ -132,9 +129,9 @@ const LoginPage = () => {
         backgroundImage: `url(images/loginBackground.svg)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        marginTop:'0px',
+        marginTop: "0px",
         // backgroundColor:'#F4F5FA'
-        padding:'10px'
+        padding: "10px",
       }}
     >
       <Grid
@@ -147,7 +144,16 @@ const LoginPage = () => {
         alignItems="center"
         className=" bg-white rounded-lg shadow-2xl px-5 py-12 mb-12 border"
       >
-        <Grid item xs={12} sx={{ display: "flex", justifyContent: "center",marginTop:'10px',marginBottom:'10px' }}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            marginBottom: "10px",
+          }}
+        >
           <Image src={logoImage} alt="Logo" width={200} height={200} />
         </Grid>
 
@@ -161,9 +167,9 @@ const LoginPage = () => {
             Login
           </Typography> */}
         </Grid>
-        <Box sx={{ mb: 2}}>
+        <Box sx={{ mb: 2 }}>
           <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: 1 }}>
-          Welcome to Style Lounge Admin! 👋🏻
+            Welcome to Style Lounge Admin! 👋🏻
           </Typography>
           {/* <Typography variant="body1">
             Please sign-in to your account and start the adventure
@@ -190,7 +196,9 @@ const LoginPage = () => {
                 />
               )}
             />
-             <Typography className="text-red-500 w-[100%]">{errors?.email?.message}</Typography>
+            <Typography className="text-red-500 w-[100%]">
+              {errors?.email?.message}
+            </Typography>
           </FormControl>
 
           <FormControl
@@ -230,8 +238,9 @@ const LoginPage = () => {
               {errors?.password?.message}{" "}
               {loginError && "Email or password is invalid"}
             </FormHelperText> */}
-            <Typography className="text-red-500 w-[100%]">{errors?.password?.message}</Typography>
-
+            <Typography className="text-red-500 w-[100%]">
+              {errors?.password?.message}
+            </Typography>
           </FormControl>
           <button
             className="bg-[#1976d2] w-[100%] p-3 mt-12 text-center active:bg-[#49a3fd] rounded-md text-white disabled:bg-slate-500 disabled:text-black disabled:cursor-not-allowed flex justify-center items-center gap-2"
@@ -264,4 +273,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-

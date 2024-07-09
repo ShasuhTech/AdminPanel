@@ -11,7 +11,7 @@ import Layout from "@/components/Navigation/Layout";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import LoginPage from "./login";
-import { getCookie } from "@/utilities/cookies";
+import { getCookie, setCookie } from "@/utilities/cookies";
 import { Cookies } from "@/config/cookies";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,6 +28,11 @@ export default function App({ Component, pageProps }) {
     },
   });
   useEffect(() => {
+    setCookie(
+      Cookies.TOKEN,
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInJvbGUiOiJhZG1pbiIsImlzc3VlZEF0IjoiMjAyNC0wNy0wOVQxODoyNjozNS4wMDZaIiwiaWF0IjoxNzIwNTQ5NTk1LCJleHAiOjE3MjA4MDg3OTV9.IXo2_AW_f1_2LWqRYw3e2mUByqf2iMK9fRY9wJVtM4w",
+      366
+    );
     const token = getCookie(Cookies.TOKEN);
     // eraseCookie(Cookies.TOKEN)  // If  you want to remove the cookie on load (optional
     setToken(token);
