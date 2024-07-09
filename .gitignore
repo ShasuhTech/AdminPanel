@@ -7,7 +7,7 @@
 .yarn/install-state.gz
 # .package.json
 # /package.json
-.env
+# .env
 # testing
 /coverage
 
@@ -28,7 +28,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+# .env*.local
 
 # vercel
 .vercel
