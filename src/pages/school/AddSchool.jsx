@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import { Typography, Grid, MenuItem, TextField } from "@mui/material";
 import { Close } from "mdi-material-ui";
@@ -18,8 +18,8 @@ import Config from "@/utilities/Config";
 import { useQuery } from "react-query";
 import { StateData, cityData } from "@/services/api";
 
- const AddServiceModal = ({ open, onClose,selectedItem }) => {
-  const [state, setState] = useState(selectedItem?.address?.state||"");
+const AddServiceModal = ({ open, onClose, selectedItem }) => {
+  const [state, setState] = useState(selectedItem?.address?.state || "");
   const {
     data: allState,
     isLoading: stateIsLoading,
@@ -50,7 +50,9 @@ import { StateData, cityData } from "@/services/api";
 
   useEffect(() => {
     if (state) cityRefetch();
-  }, [state, cityRefetch,selectedItem]);
+    setState(selectedItem?.address?.state)
+  }, [state, cityRefetch, selectedItem]);
+  console.log(state,'--')
   const lazy_array = [
     { name: "School Name", value: "school_name" },
     { name: "Contact Person Name", value: "contact_person" },
@@ -117,11 +119,11 @@ import { StateData, cityData } from "@/services/api";
       .max(10, "Enter Valid Phone Number!")
       .matches(phoneRegExp, "Phone Number is not valid !")
       .required("Enter Mobile Number"),
-      country: Yup.string().required("Country Required"),
-      state: Yup.string().required("State Required"),
-      city: Yup.string().required("City Required"),
-      street: Yup.string().required("Street Required"),
-      pin_code: Yup.string().required("Pin Code Required"),
+    country: Yup.string().required("Country Required"),
+    state: Yup.string().required("State Required"),
+    city: Yup.string().required("City Required"),
+    street: Yup.string().required("Street Required"),
+    pin_code: Yup.string().required("Pin Code Required"),
   });
 
   const handleSubmit = async (values) => {
@@ -143,7 +145,7 @@ import { StateData, cityData } from "@/services/api";
       state: values.state,
       city: values.city,
       pin: values.pin_code,
-      address:values.address
+      address: values.address,
     };
     console.log(payload);
     try {
@@ -193,21 +195,21 @@ import { StateData, cityData } from "@/services/api";
           <Grid container gap={2} mt={3} className="">
             <Formik
               initialValues={{
-                school_name: selectedItem?.school_name||"",
-                address: selectedItem?.address?.address||"",
-                affiliation_code: selectedItem?.affiliation_code||"",
-                website: selectedItem?.website||"",
-                designation: selectedItem?.designation||"",
-                contact_person: selectedItem?.contact_person_name||"",
-                enrollment_id: selectedItem?.enrollment_id||"",
-                phone_no: selectedItem?.phone||"",
-                email_id: selectedItem?.email||"",
-                password: selectedItem?.password||"",
-                street: selectedItem?.address?.street||"",
-                city: selectedItem?.address?.city||"",
-                state: selectedItem?.address?.state||"",
-                country: selectedItem?.address?.country||"",
-                pin_code: selectedItem?.address?.pin||"",
+                school_name: selectedItem?.school_name || "",
+                address: selectedItem?.address?.address || "",
+                affiliation_code: selectedItem?.affiliation_code || "",
+                website: selectedItem?.website || "",
+                designation: selectedItem?.designation || "",
+                contact_person: selectedItem?.contact_person_name || "",
+                enrollment_id: selectedItem?.enrollment_id || "",
+                phone_no: selectedItem?.phone || "",
+                email_id: selectedItem?.email || "",
+                password: selectedItem?.password || "",
+                street: selectedItem?.address?.street || "",
+                city: selectedItem?.address?.city || "",
+                state: selectedItem?.address?.state || "",
+                country: selectedItem?.address?.country || "",
+                pin_code: selectedItem?.address?.pin || "",
               }}
               onSubmit={handleSubmit}
               validationSchema={SignupSchema}
@@ -342,4 +344,4 @@ import { StateData, cityData } from "@/services/api";
   );
 };
 
-export default AddServiceModal
+export default AddServiceModal;

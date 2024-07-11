@@ -47,14 +47,12 @@ const Home = () => {
     setSelectedValue(event.target.value);
   };
 
-  const {
-    data: responseData,
-  } = useQuery({
+  const { data: responseData } = useQuery({
     queryKey: ["topSalonOrderDetails"],
     queryFn: async () => {
       const resp = await getTopSalonOrderDetails({
         startDate: new Date().toDateString(),
-        endDate: new Date().toDateString()
+        endDate: new Date().toDateString(),
       });
       return resp.data;
     },
@@ -81,12 +79,24 @@ const Home = () => {
 
   console.log(doughnutData, "doughnutData");
 
+  const [greeting, setGreeting] = useState("");
+
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+      setGreeting("Good Morning, Admin");
+    } else if (currentHour < 18) {
+      setGreeting("Good Afternoon, Admin");
+    } else {
+      setGreeting("Good Night, Admin");
+    }
+  }, []);
   return (
     <Box>
       <Seo />
       {/* new cards */}
       <Grid className="font-bold w-[177px] h-[20px] text-[16px] mb-2">
-        Good Morning, Admin
+        {greeting}
       </Grid>
       <Grid>Here&apos;s what&apos;s happening with your Dashboard today.</Grid>
       <Grid className="lg:w-[100%] md-[50%] w-[100%] lg:h-[100px] xl:h-[150px]">
@@ -127,7 +137,7 @@ const Home = () => {
                       <Grid className="flex-col justify-between h-[69px]">
                         <span className="text-[22px] text-[#495057] font-bold">
                           {/* <CurrencyRupeeIcon style={{height:'22px', width:'15px'}}/> */}
-                          {(item?.todayTotal)/100}
+                          {item?.todayTotal / 100}
                         </span>
 
                         <div className="flex justify-between">
@@ -192,7 +202,7 @@ const Home = () => {
                       <Grid className="flex-col justify-between h-[69px]">
                         <span className="text-[22px] text-[#495057] font-bold">
                           {/* <CurrencyRupeeIcon style={{height:'22px', width:'15px'}}/> */}
-                          {(item?.currentMonthTotal)/100}
+                          {item?.currentMonthTotal / 100}
                         </span>
 
                         <div className="flex justify-between">
@@ -259,7 +269,7 @@ const Home = () => {
                       <Grid className="flex-col justify-between h-[69px]">
                         <span className="text-[22px] text-[#495057] font-bold">
                           {/* <CurrencyRupeeIcon style={{height:'22px', width:'15px'}}/> */}
-                          {(item?.currentYearTotal)/100}
+                          {item?.currentYearTotal / 100}
                         </span>
 
                         <div className="flex justify-between">
@@ -319,10 +329,11 @@ const Home = () => {
             </Grid>
           </Grid>
 
-          <Grid style={{marginTop : '100px'}}>
-          {responseData?.revenueData && <Barxchart salonRevenue={responseData.revenueData}/>}
+          <Grid style={{ marginTop: "100px" }}>
+            {responseData?.revenueData && (
+              <Barxchart salonRevenue={responseData.revenueData} />
+            )}
           </Grid>
-          
         </Grid>
         <Grid className="lg:w-[40%] lg:mt-0 mt-5 overflow-hidden bg-white rounded-lg">
           <Grid className="flex justify-between  text-center items-center p-5">
@@ -436,7 +447,7 @@ const Home = () => {
                       <CurrencyRupeeIcon
                         style={{ width: "15px", height: "15px" }}
                       />{" "}
-                      {(item?.value)/100}
+                      {item?.value / 100}
                     </Typography>
                     <Typography
                       variant="h6"
