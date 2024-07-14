@@ -15,6 +15,7 @@ import {
   MenuItem,
   Select,
   Button,
+  InputLabel,
 } from "@mui/material";
 import { addServices, adminCategory, serviceList } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
@@ -28,6 +29,7 @@ import AddIcon from "@mui/icons-material/Add";
 import AddServiceModal from "./AddSchool";
 import { useQuery } from "react-query";
 import { GetSchoolList } from "@/services/School";
+import { Label } from "mdi-material-ui";
 
 const SchoolService = () => {
   const [searchText, setSearchText] = useState("");
@@ -111,59 +113,42 @@ const SchoolService = () => {
           className="shadow-lg"
         >
           <Grid className="lg:flex px-2 justify-between  w-[100%]">
-            <Grid className="lg:flex gap-3 text-center items-center">
-              <QuickSearchToolbar
-                onChange={(event) => setSearchText(event.target.value)}
-                isTeamMember="Search by Customer name"
-                value={searchText}
-                rootSx={{ p: 0, pb: 0, marginLeft: 0, width: "300px" }}
-                variant="outlined"
-                // onFilterClick={handleFilterClick}
-              />
-              <FormControl sx={{ m: 1, width: "150px" }} size="small">
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  // value={gender}
-                  // onChange={handleGenderChange}
-                >
-                  <MenuItem value={10}>Select School</MenuItem>
-                  <MenuItem value={20}>Active</MenuItem>
-                  <MenuItem value={30}>InActive</MenuItem>
-                  <MenuItem value={30}>Pending</MenuItem>
-                </Select>
-              </FormControl>
+            <Grid className="lg:flex  text-center items-center">
+              <div>
+                <QuickSearchToolbar
+                  onChange={(event) => setSearchText(event.target.value)}
+                  isTeamMember="Search by Customer name"
+                  value={searchText}
+                  rootSx={{ p: 0, pb: 0, marginLeft: 0, width: "300px" }}
+                  variant="outlined"
+                  // onFilterClick={handleFilterClick}
+                />
+              </div>
+              <div>
+                <FormControl sx={{ width: "200px", mr: 2 }} size="large">
+                  <InputLabel id="demo-simple-select-label">
+                    Select Type
+                  </InputLabel>
 
-              {false && (
-                <FormControl
-                  sx={{ m: 1, width: "150px" }}
-                  size="small"
-                  disabled={gender === 10}
-                >
-                  {/* <InputLabel id="demo-select-small-label">Category</InputLabel> */}
                   <Select
                     labelId="demo-select-small-label"
                     id="demo-select-small"
-                    value={category}
-                    // label="Category"
-                    onChange={handleCategoryChange}
+                    label="Select Type"
+                    // value={gender}
+                    // onChange={handleGenderChange}
                   >
-                    <MenuItem value={10}>Select Category</MenuItem>
-                    {data &&
-                      data.map((category) => (
-                        <MenuItem key={category?.value} value={category?.value}>
-                          {category?.key}
-                        </MenuItem>
-                      ))}
+                    <MenuItem value={1}>All</MenuItem>
+                    <MenuItem value={2}>Active</MenuItem>
+                    <MenuItem value={3}>InActive</MenuItem>
+                    <MenuItem value={4}>Pending</MenuItem>
                   </Select>
                 </FormControl>
-              )}
-
+              </div>
               <button
                 // onClick={handleFilterClick}
-                className="filter-btncuston"
+                className="border p-2 rounded-lg"
               >
-                <FilterAltIcon />
+                <FilterAltIcon style={{ fontSize: "35px" }} />
               </button>
             </Grid>
 
@@ -180,7 +165,7 @@ const SchoolService = () => {
 
               <img
                 src={"/images/Export CSV.svg"}
-                className="w-[103px] h-[40px] cursor-pointer mt-3 mb-auto mr-5"
+                className="w-[103px] h-[40px] cursor-pointer mr-5"
                 // onClick={csvHandler}
               />
             </Grid>

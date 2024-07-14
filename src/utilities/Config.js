@@ -180,6 +180,10 @@ const IndianReligions = [
     value: "5",
     label: "Jainism",
   },
+  {
+    value: "6",
+    label: "Other",
+  },
 ];
 const SocialCategories = [
   {
@@ -255,6 +259,11 @@ const AllCastes = [
     label: "Ansari",
     category: "Muslim",
   },
+  {
+    value: "6",
+    label: "Other",
+    category: "Other",
+  },
   // Add more caste objects as needed
 ];
 const MaritalStatus = [
@@ -301,6 +310,10 @@ const MotherTongues = [
     value: "5",
     label: "Marathi",
   },
+  {
+    value: "6",
+    label: "Other",
+  },
   // Add more mother tongues as needed
 ];
 const CountryDta = [
@@ -323,6 +336,10 @@ const CountryDta = [
   {
     value: "5",
     label: "UAE",
+  },
+  {
+    value: "6",
+    label: "Other",
   },
   // Add more mother tongues as needed
 ];
@@ -347,6 +364,10 @@ const SchoolConcessionTypes = [
     value: "5",
     label: "Book Allowance",
   },
+  {
+    value: "6",
+    label: "Other",
+  },
   // Add more concession types for school students as needed
 ];
 const Nationalities = [
@@ -369,6 +390,10 @@ const Nationalities = [
   {
     value: "5",
     label: "French",
+  },
+  {
+    value: "6",
+    label: "Other",
   },
   // Add more nationalities as needed
 ];
@@ -428,6 +453,10 @@ const BoardingCategories = [
     value: "5",
     label: "Monthly Boarder",
   },
+  {
+    value: "6",
+    label: "Other",
+  },
   // Add more boarding categories as needed
 ];
 const Boards = [
@@ -450,6 +479,10 @@ const Boards = [
   {
     value: "5",
     label: "IGCSE (International General Certificate of Secondary Education)",
+  },
+  {
+    value: "6",
+    label: "Other",
   },
   // Add more boards as needed
 ];
@@ -514,6 +547,10 @@ const HouseTypes = [
     value: "6",
     label: "Townhouse",
   },
+  {
+    value: "7",
+    label: "Other",
+  },
   // Add more house types as needed
 ];
 const SchoolBusOptions = [
@@ -559,6 +596,10 @@ const qualifications = [
   {
     value: "8",
     label: "Primary School",
+  },
+  {
+    value: "9",
+    label: "Other",
   },
 ];
 const occupations = [
@@ -642,6 +683,10 @@ const occupations = [
     value: "20",
     label: "Entrepreneur",
   },
+  {
+    value: "21",
+    label: "Other",
+  },
 ];
 
 const joiningYear = [
@@ -707,6 +752,25 @@ const TrueFalse = [
   },
 
 ];
+const AttendanceType = [
+  {
+    value: '1',
+    label: "Present",
+  },
+  {
+    value: '2',
+    label: "Absent",
+  },
+  {
+    value: '3',
+    label: "Halfday",
+  },
+  {
+    value: '4',
+    label: "Short Halfday",
+  },
+
+];
 
 export default {
   ClassList,
@@ -735,5 +799,6 @@ export default {
   genders,
   CountryDta,
   ModeOfFollowUp,
-  TrueFalse
+  TrueFalse,
+  AttendanceType
 };

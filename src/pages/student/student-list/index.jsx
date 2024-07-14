@@ -50,6 +50,9 @@ import {
   SectionSelection,
   StatusSelection,
 } from "@/components/ClassSelection";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import * as XLSX from "xlsx";
 
 const StudentList = () => {
   const router = useRouter();
@@ -120,6 +123,57 @@ const StudentList = () => {
     setTimeout(() => {
       studentRefetch();
     }, 500);
+  };
+
+  const exportPDF = () => {
+    const input = document.getElementById("my-table");
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      let heightLeft = pdfHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+      }
+      pdf.save("table.pdf");
+    });
+  };
+
+  const csvHandler = async ({ page }) => {
+    exportToCSV(studentData, "StudentList.csv");
+    // setLoading(true);
+    // try {
+    //   const payload = {
+    //     q: searchText,
+    //     page,
+    //     // status: filter?.status,
+    //   };
+    //   const res = await serviceList(payload);
+    //   if (res?.code === 200) {
+    //     exportToCSV(res?.data, "service_report.csv");
+    //   }
+    //   // setLoading(false);
+    // } catch (err) {
+    //   // setLoading(false);
+    //   console.error("Error fetching salon data:", err);
+    // }
+  };
+
+  const exportToExcel = () => {
+    const table = document.getElementById("my-table");
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+    XLSX.writeFile(wb, "table.xlsx");
   };
 
   return (
@@ -195,21 +249,32 @@ const StudentList = () => {
               Add Student
             </CustomButton>
           </Grid>
-          <Grid item xs={12} sm={4} md={1}>
+          <Grid onClick={csvHandler} item xs={12} sm={4} md={1}>
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export CSV
             </button>
           </Grid>
           <Grid item xs={12} sm={4} md={1}>
-            <button className="border-2 rounded-lg px-4 py-2.5 ">
+            <button
+              onClick={exportPDF}
+              className="border-2 rounded-lg px-4 py-2.5 "
+            >
               Export PDF
+            </button>
+          </Grid>
+          <Grid item xs={12} sm={4} md={1}>
+            <button
+              onClick={exportToExcel}
+              className="border-2 rounded-lg px-4 py-2.5"
+            >
+              Export Excel
             </button>
           </Grid>
         </Grid>
 
         <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
           <TableContainer sx={{ overflowX: "auto" }}>
-            <Table aria-label="collapsible table">
+            <Table aria-label="collapsible table" id="my-table">
               <TableHead>
                 <TableRow style={{ fontWeight: "500", color: "#000" }}>
                   <StyledTableCell align="center">Id</StyledTableCell>
@@ -217,8 +282,7 @@ const StudentList = () => {
                   <StyledTableCell align="left">Admission No</StyledTableCell>
                   {/* <StyledTableCell align="center">Fee No</StyledTableCell> */}
                   {/* <StyledTableCell align="center">Parent Id</StyledTableCell> */}
-                  <StyledTableCell align="center">Class</StyledTableCell>
-                  <StyledTableCell align="center">Section</StyledTableCell>
+                  <StyledTableCell align="center">Class-Sec</StyledTableCell>
                   <StyledTableCell align="center">Stream</StyledTableCell>
                   <StyledTableCell align="center">Roll No</StyledTableCell>
                   <StyledTableCell align="center">gender</StyledTableCell>
@@ -228,14 +292,14 @@ const StudentList = () => {
                   <StyledTableCell align="center">
                     Date Of Birth
                   </StyledTableCell>
-                  <StyledTableCell align="center">
+                  {/* <StyledTableCell align="center">
                     Admission Date
                   </StyledTableCell>
-                  <StyledTableCell align="center">Joining Date</StyledTableCell>
+                  <StyledTableCell align="center">Joining Date</StyledTableCell> */}
                   {/* <StyledTableCell align="center">
                     admitted_class
                   </StyledTableCell> */}
-                  <StyledTableCell align="center">Status</StyledTableCell>
+                  <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody
@@ -369,6 +433,7 @@ const Row = (props) => {
             cursor: "pointer",
           },
         }}
+        
       >
         <StyledTableCell
           onClick={() => {
@@ -389,7 +454,7 @@ const Row = (props) => {
             });
           }}
           align="left"
-          style={{ minWidth: "250px" }}
+          style={{ minWidth: "200px" }}
         >
           <Typography>
             {(
@@ -451,9 +516,13 @@ const Row = (props) => {
           align="center"
           style={{ minWidth: "100px" }}
         >
-          <Typography>{row?.class}</Typography>
+          <Typography>
+            {row?.class}
+            {row?.section && "-"}
+            {row?.section}
+          </Typography>
         </StyledTableCell>
-        <StyledTableCell
+        {/* <StyledTableCell
           onClick={() => {
             router.push({
               pathname: "/student/student-entry",
@@ -464,7 +533,7 @@ const Row = (props) => {
           style={{ minWidth: "100px" }}
         >
           <Typography>{row?.section}</Typography>
-        </StyledTableCell>
+        </StyledTableCell> */}
         <StyledTableCell align="center" style={{ minWidth: "100px" }}>
           <Typography>{row?.stream}</Typography>
         </StyledTableCell>
@@ -482,7 +551,7 @@ const Row = (props) => {
             {moment(row?.date_of_birth).format("DD-MM-YYYY")}
           </Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "150px" }}>
+        {/* <StyledTableCell align="center" style={{ minWidth: "150px" }}>
           <Typography>
             {moment(row?.joining_date).format("DD-MM-YYYY")}
           </Typography>
@@ -491,7 +560,7 @@ const Row = (props) => {
           <Typography>
             {moment(row?.admission_date).format("DD-MM-YYYY")}
           </Typography>
-        </StyledTableCell>
+        </StyledTableCell> */}
 
         {/* <StyledTableCell align="center" style={{ minWidth: "150px" }}>
           <Typography>{row?.admitted_class}</Typography>

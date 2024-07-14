@@ -1,67 +1,3 @@
-// "use client";
-
-// import React, { useEffect, useState } from "react";
-// import { Card } from "@mui/material";
-
-// import TCDetails from "@/components/SchoolManagemnt/TransferCertificate/Details";
-// import TCHistory from "@/components/SchoolManagemnt/TransferCertificate/History";
-// import CustomTabs from "@/components/customeTab";
-// import StudentWiseAttendance from "@/components/Attendance/StudentWiseAttendance";
-// import ClassWiseAttendance from "@/components/Attendance/ClassWiseAttendance";
-// // import EnquiryMaster from "./enquiry-master";
-// // import FollowUp from "./followup";
-// import { GetStudentListById } from "@/services/api";
-// import { useRouter } from "next/router";
-// import StudentRegistration from "./RegistrationForm";
-// import RegistrationList from "./RegistrationList";
-
-// const StudentRegistrationDetails = () => {
-//   const router = useRouter();
-//   const [selectedTab, setSlectedTab] = useState(1);
-//   const [studentData, setStudentData] = useState([]);
-//   const id = router?.query?.id;
-//   const studentDetails = async () => {
-//     try {
-//       if (!id) {
-//         return;
-//       }
-//       const resp = await GetStudentListById(id);
-//       console.log(resp, "resp");
-
-//       setStudentData(resp?.data[0]);
-//     } catch (error) {}
-//   };
-//   useEffect(() => {
-//     studentDetails();
-//   }, [id, router]);
-//   const tabs = [
-//     { id: 1, label: "Registration" },
-//     { id: 2, label: "Registration List" },
-//   ];
-//   useEffect(() => {
-//     if (router.query?.id) {
-//       setSlectedTab(1);
-//     }
-//   }, [router]);
-
-//   return (
-//     <Card sx={{ p: 2 }}>
-//       <CustomTabs
-//         tabs={tabs}
-//         selectedTab={selectedTab}
-//         onSelectTab={setSlectedTab}
-//       />
-
-//       <>
-//         {selectedTab === 1 && <StudentRegistration setSlectedTab={setSlectedTab} />}
-//         {selectedTab === 2 && <RegistrationList setSlectedTab={setSlectedTab} />}
-//       </>
-//     </Card>
-//   );
-// };
-
-// export default StudentRegistrationDetails;
-
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -76,35 +12,19 @@ import {
   Table,
   CircularProgress,
   TablePagination,
-  MenuItem,
-  Select,
-  Menu,
-  IconButton,
-  InputLabel,
-  TextField,
   Button,
-  Checkbox,
-  ListItemText,
 } from "@mui/material";
 import {
   GetStudentLsit,
-  addServices,
-  adminCategory,
-  serviceList,
+
 } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
-import { toast } from "react-toastify";
-import { exportToCSV } from "@/components/Common";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import CustomButton from "@/components/CommonButton/CustomButton";
-import FormControl from "@mui/material/FormControl";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
-import { Plus } from "mdi-material-ui";
 import { useQuery } from "react-query";
-import moment from "moment";
-import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
 import Config from "@/utilities/Config";
 import StudentRegistration from "./RegistrationForm";
 import {
@@ -112,14 +32,9 @@ import {
   SectionSelection,
   StatusSelection,
 } from "@/components/ClassSelection";
-// import EnquiryMaster from "./enquiry-master";
-// import FollowUpModal from "./followup/FollowUpModal";
-// import FollowUpModal from "./FollowUpModal";
-// import EnquiryMaster from "../enquiry-master";
 
 const StudentRegistrationDetails = () => {
   const [searchText, setSearchText] = useState("");
-  const [SelectedRow, setSelectedRow] = useState();
   const router = useRouter();
   const [resetInitialValues, setresetInitialValues] = useState(false);
 
@@ -141,14 +56,7 @@ const StudentRegistrationDetails = () => {
     console.log(res, "---sdf");
     return res?.data;
   });
-  const [followupModal, setfollowupModal] = useState(false);
-  const handleclose = () => {
-    setfollowupModal(false);
-  };
-  const handleOpen = (data) => {
-    setSelectedRow(data);
-    setfollowupModal(true);
-  };
+
   const [followupEnquiryModal, setfollowupEnquiruModal] = useState(false);
   const [enquiryIdStore, setEnquiryIdStore] = useState("");
   console.log(enquiryIdStore);
@@ -185,31 +93,12 @@ const StudentRegistrationDetails = () => {
   };
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
-  const [selectRollNo, setSelectRollNo] = useState();
-  const [priorities, setPriorities] = useState([]);
-
-  // Function to handle changes in selection
-  const handlePriorityChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPriorities(typeof value === "string" ? value.split(",") : value);
-  };
-
-  // useEffect to perform an action whenever priorities change
-  useEffect(() => {
-    if (priorities.length > 0) {
-      console.log(`Priorities changed to: ${priorities.join(", ")}`);
-      // You can replace the console.log with any other logic you need to execute
-    }
-  }, [priorities]);
 
   const handleFilterClick = () => {
     studentRefetch();
   };
   const handleResetClick = () => {
     setSearchText("");
-    setSelectedRow();
     setSelectClass();
     setSelectSection();
     setSelectStatus();
@@ -218,14 +107,6 @@ const StudentRegistrationDetails = () => {
     }, 500);
   };
 
-  const priorityData = [
-    "First Name",
-    "last Name",
-    "Gender",
-    "Admission No.",
-    "Stream",
-    "Boarding Category",
-  ];
   return (
     <div className="">
       <div sx={{ marginTop: "5rem" }} style={{ backgroundColor: "#fff" }}>
@@ -236,7 +117,6 @@ const StudentRegistrationDetails = () => {
             py: 2,
             px: 2,
             alignItems: "center",
-            // justifyContent: "space-between",
           }}
         >
           <Grid item xs={12} sm={6} md={3} lg={3}>
@@ -349,7 +229,6 @@ const StudentRegistrationDetails = () => {
                         row={row}
                         index={index}
                         router={router}
-                        handleOpen={handleOpen}
                         handleButtonClick={handleButtonClick}
                         setEnquiryIdStore={setEnquiryIdStore}
                         setresetInitialValues={setresetInitialValues}
@@ -388,7 +267,6 @@ const StudentRegistrationDetails = () => {
           /> */}
         </Paper>
       </div>{" "}
-      {/* <FollowUpModal open={followupModal} handleClose={handleclose} data={SelectedRow} /> */}
       <StudentRegistration
         open={followupEnquiryModal}
         handleClose={handlecloseEnquiry}
@@ -404,31 +282,17 @@ export default StudentRegistrationDetails;
 const Row = (props) => {
   const {
     row,
-    salonDetails,
-    setSalonDetails,
     index,
     router,
-    handleOpen,
     handleButtonClick,
-    setEnquiryIdStore,
   } = props;
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <React.Fragment>
       <TableRow
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",

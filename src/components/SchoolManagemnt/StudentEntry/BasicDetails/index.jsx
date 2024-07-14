@@ -16,7 +16,13 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Select } from "antd";
 import CustomButton from "@/components/CommonButton/CustomButton";
-import { AddStudent, StateData, cityData, countryData } from "@/services/api";
+import {
+  AddStudent,
+  StateData,
+  UpdateStudent,
+  cityData,
+  countryData,
+} from "@/services/api";
 import { useQuery } from "react-query";
 import Config from "@/utilities/Config";
 import moment from "moment";
@@ -155,20 +161,32 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
           ? values.present_locality
           : values.permanent_locality,
       });
-      payload.student_status = "Admission";
-      payload.enquiry_id = studenData?.enquiry_id;
+    payload.student_status = "Admission";
+    payload.enquiry_id = studenData?.enquiry_id;
 
     console.log(payload, "----payload");
     try {
-      const resp = await AddStudent(payload);
-      if (resp?.success === true) {
-        toast.success("Student Details Add successfully");
-        setSlectedTab(2);
+      if (!studenData) {
+        const resp = await AddStudent(payload);
+        if (resp?.success === true) {
+          toast.success("Student Details Add successfully");
+          setSlectedTab(2);
+        }
+        console.log(resp?.success, "-sdcdsf");
+        // Handle form submission
+        console.log(values);
+        // setStatus({ success: true });
+      } else {
+        const resp = await UpdateStudent(payload);
+        if (resp?.success === true) {
+          toast.success("Student Details Updated successfully");
+          setSlectedTab(2);
+        }
+        console.log(resp?.success, "-sdcdsf");
+        // Handle form submission
+        console.log(values);
+        // setStatus({ success: true });
       }
-      console.log(resp?.success, "-sdcdsf");
-      // Handle form submission
-      console.log(values);
-      // setStatus({ success: true });
     } catch (error) {
       // setStatus({ success: false });
     }
@@ -458,7 +476,6 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       variant="outlined"
                       // required
                       fullWidth
-                      
                       value={values.admission_no}
                       onBlur={handleBlur}
                       onChange={handleChange}

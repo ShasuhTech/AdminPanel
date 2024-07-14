@@ -55,6 +55,10 @@ export const AddFollowup = async (payload) => {
   const response = await axiosInstance.post("/follow-up", payload);
   return response?.data;
 };
+export const updateFollowup = async (payload) => {
+  const response = await axiosInstance.put("/follow-up", payload);
+  return response?.data;
+};
 export const GetFollowupList = async (payload) => {
   const response = await axiosInstance.post("/follow-ups", payload);
   return response?.data;

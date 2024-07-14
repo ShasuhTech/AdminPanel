@@ -41,7 +41,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
   const [permanentState, setPermanentState] = useState("");
   const [fatherState, setFatherState] = useState("");
   const [motherState, setMotherState] = useState("");
-  const [confirmAddress, setConfrimAddress] = useState(false);
+  const [confirmAddress, setConfirmAddress] = useState(false);
 
   const { id } = router.query;
 
@@ -59,7 +59,10 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
   useEffect(() => {
     studentDetails();
   }, [data]);
-
+  useEffect(() => {
+    setConfirmAddress(studenData?.same_present_address);
+  }, [studenData]);
+  console.log(confirmAddress, "-confirmAddress");
   const {
     data: allState,
     status: stateStatus,
@@ -105,7 +108,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
       last_name: values?.last_name,
     };
     payload.gender = values?.gender;
-    payload.date_of_birth = (values?.dob);
+    payload.date_of_birth = values?.dob;
     payload.present_class = values?.present_class;
     payload.joining_year = values?.joining_year;
     payload.selected_status = values?.selected_status;
@@ -1020,14 +1023,14 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                         Permanent Address
                       </span>
                       <div className="flex items-center">
-                        <Checkbox
-                          value={confirmAddress}
-                          onChange={() => setConfrimAddress(!confirmAddress)}
-                        />
-                        <Typography variant="h6" fontWeight={"bold"}>
-                          Same as Present Address
-                        </Typography>
-                      </div>
+      <Checkbox
+        checked={confirmAddress}
+        onChange={(e) => setConfirmAddress(e.target.checked)}
+      />
+      <Typography variant="h6" fontWeight="bold">
+        Same as Present Address
+      </Typography>
+    </div>
                     </div>
                     <div className=" border  p-6 rounded-2xl mt-3">
                       <div className=" w-[100%] ">
@@ -1164,7 +1167,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
 
                   <div className="mt-[40px] ">
                     <span className="font-black text-[18px] ">
-                     {` Father's Details`}
+                      {` Father's Details`}
                     </span>
 
                     <div className=" border  p-6 rounded-2xl mt-3">
@@ -1376,7 +1379,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
 
                   <div className="mt-[20px] ">
                     <span className="font-black text-[18px] ">
-                    {`  Mother's Details`}
+                      {`  Mother's Details`}
                     </span>
                     <div className=" border  p-6 rounded-2xl mt-3">
                       <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">

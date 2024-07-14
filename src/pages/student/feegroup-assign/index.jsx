@@ -32,10 +32,20 @@ const FeeGroupAssigner = () => {
 
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
-  const [sectionUpdate, setSectionUpdate] = useState();
   const [updatedFeeGroups, setUpdatedFeeGroups] = useState({});
 
+  useEffect(() => {
+    if (studentData) {
+      const initialFeeGroups = {};
+      studentData.forEach(student => {
+        initialFeeGroups[student._id] = student.fee_group || "";
+      });
+      setUpdatedFeeGroups(initialFeeGroups);
+    }
+  }, [studentData]);
+
   const handleFeeGroupChange = (studentId, feeGroup) => {
+    console.log(studentId, feeGroup, 'studentId, feeGroup');
     setUpdatedFeeGroups(prev => ({ ...prev, [studentId]: feeGroup }));
   };
 
@@ -44,7 +54,7 @@ const FeeGroupAssigner = () => {
       id: studentId,
       fee_group: updatedFeeGroups[studentId],
     }));
-    console.log(payload,'-ferfwref')
+    console.log(payload, '-ferfwref');
     try {
       await postAssignFeeGroup(payload);
       studentRefetch();
@@ -146,7 +156,7 @@ const FeeGroupAssigner = () => {
                         row={row}
                         index={index}
                         handleFeeGroupChange={handleFeeGroupChange}
-                        currentFeeGroup={updatedFeeGroups[row.id] || row.fee_group}
+                        currentFeeGroup={updatedFeeGroups[row._id] || ""}
                       />
                     ))}
                   </>

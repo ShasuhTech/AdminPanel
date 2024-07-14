@@ -184,12 +184,7 @@ const AddServiceModal = ({ open, onClose, selectedItem }) => {
             >
               Add School
             </Typography>
-            <Grid
-              onClick={handleClose}
-              className="absolute right-4 cursor-pointer font-bold top-3"
-            >
-              <Close />
-            </Grid>
+            
           </Grid>
 
           <Grid container gap={2} mt={3} className="">

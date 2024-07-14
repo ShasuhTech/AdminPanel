@@ -1,65 +1,3 @@
-// "use client";
-
-// import React, { useEffect, useState } from "react";
-// import { Card } from "@mui/material";
-
-// import TCDetails from "@/components/SchoolManagemnt/TransferCertificate/Details";
-// import TCHistory from "@/components/SchoolManagemnt/TransferCertificate/History";
-// import CustomTabs from "@/components/customeTab";
-// import StudentWiseAttendance from "@/components/Attendance/StudentWiseAttendance";
-// import ClassWiseAttendance from "@/components/Attendance/ClassWiseAttendance";
-// import EnquiryMaster from "./enquiry-master";
-// import FollowUp from "./followup";
-// import { GetStudentListById } from "@/services/api";
-// import { useRouter } from "next/router";
-
-// const StudentEnquiry = () => {
-//   const router = useRouter();
-//   const [selectedTab, setSlectedTab] = useState(1);
-//   const [studentData, setStudentData] = useState([]);
-//   const id = router?.query?.id;
-//   const studentDetails = async () => {
-//     try {
-//       if (!id) {
-//         return;
-//       }
-//       const resp = await GetStudentListById(id);
-//       console.log(resp, "resp");
-
-//       setStudentData(resp?.data[0]);
-//     } catch (error) {}
-//   };
-//   useEffect(() => {
-//     studentDetails();
-//   }, [id, router]);
-//   const tabs = [
-//     { id: 1, label: "ENQUIRY MASTER" },
-//     { id: 2, label: "FOLLOW UP/REGISTRATION" },
-//   ];
-//   useEffect(() => {
-//     if (router.query?.id) {
-//       setSlectedTab(1);
-//     }
-//   }, [router]);
-
-//   return (
-//     <Card sx={{ p: 2 }}>
-//       <CustomTabs
-//         tabs={tabs}
-//         selectedTab={selectedTab}
-//         onSelectTab={setSlectedTab}
-//       />
-
-//       <>
-//         {selectedTab === 1 && <EnquiryMaster setSlectedTab={setSlectedTab} />}
-//         {selectedTab === 2 && <FollowUp setSlectedTab={setSlectedTab} />}
-//       </>
-//     </Card>
-//   );
-// };
-
-// export default StudentEnquiry;
-
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -73,36 +11,16 @@ import {
   TableBody,
   Table,
   CircularProgress,
-  TablePagination,
-  MenuItem,
-  Select,
-  Menu,
-  IconButton,
-  InputLabel,
-  TextField,
   Button,
-  Checkbox,
-  ListItemText,
 } from "@mui/material";
-import {
-  GetStudentLsit,
-  addServices,
-  adminCategory,
-  serviceList,
-} from "@/services/api";
+import { GetStudentLsit } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
-import { toast } from "react-toastify";
-import { exportToCSV } from "@/components/Common";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import CustomButton from "@/components/CommonButton/CustomButton";
-import FormControl from "@mui/material/FormControl";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
-import { Plus } from "mdi-material-ui";
 import { useQuery } from "react-query";
-import moment from "moment";
-import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
 import Config from "@/utilities/Config";
 import EnquiryMaster from "./enquiry-master";
 import FollowUpModal from "./followup/FollowUpModal";
@@ -111,8 +29,6 @@ import {
   StatusSelection,
   ClassSelection,
 } from "@/components/ClassSelection";
-// import FollowUpModal from "./FollowUpModal";
-// import EnquiryMaster from "../enquiry-master";
 
 const FollowUp = () => {
   const [searchText, setSearchText] = useState("");
@@ -139,24 +55,19 @@ const FollowUp = () => {
     return res?.data;
   });
 
-  // useEffect(() => {
-  //   studentRefetch();
-  // }, []);
-
-  const handleFilterClick=()=>{
+  const handleFilterClick = () => {
     studentRefetch();
-  }
-  const handleResetClick=()=>{
-    setSearchText('')
-    setSelectedRow()
-    setSelectClass()
-    setSelectSection()
-    setSelectStatus()
+  };
+  const handleResetClick = () => {
+    setSearchText("");
+    setSelectedRow();
+    setSelectClass();
+    setSelectSection();
+    setSelectStatus();
     setTimeout(() => {
-      
       studentRefetch();
     }, 500);
-  }
+  };
 
   const [followupModal, setfollowupModal] = useState(false);
   const handleclose = () => {
@@ -208,7 +119,7 @@ const FollowUp = () => {
               isTeamMember="Search by Enquiry No, name, Class, Section"
               value={searchText}
               fullWidth
-              rootSx={{ p: 0, pb: 0, marginLeft: 0, }}
+              rootSx={{ p: 0, pb: 0, marginLeft: 0 }}
               variant="outlined"
               // onFilterClick={handleFilterClick}
             />
@@ -233,38 +144,23 @@ const FollowUp = () => {
             />
           </Grid>
           <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
-          <button
-            onClick={handleFilterClick}
-            className="filter-btncuston"
-          >
-            <FilterAltIcon />
-          </button>
+            <button onClick={handleFilterClick} className="filter-btncuston">
+              <FilterAltIcon />
+            </button>
           </Grid>
           <Grid item justifyContent={"center"} xs={12} sm={4} md={1}>
-          <button
-            onClick={handleResetClick}
-            className="filter-btncuston"
-          >
-            Reset
-          </button>
+            <button onClick={handleResetClick} className="filter-btncuston">
+              Reset
+            </button>
           </Grid>
-         
         </Grid>
-          {/* <Grid item xs={12} sm={6} md={2} lg={2} className="flex justify-end mb-5" sx={{mb:2,mr:2}}>
-            <Button variant="outlined" onClick={handleOpenEnquiry}>
-              FollowUp Enquiry
-            </Button>
-          </Grid> */}
-           <Grid
+        <Grid
           container
           className="flex justify-end mb-5 mr-3"
           sx={{ mb: 2, mr: 2 }}
         >
           <Grid item xs={9} sm={4} md={1.9}>
-            <CustomButton
-              width={"200px"}
-              onClick={handleOpenEnquiry}
-            >
+            <CustomButton width={"200px"} onClick={handleOpenEnquiry}>
               <AddIcon />
               FollowUp Enquiry
             </CustomButton>
@@ -288,7 +184,9 @@ const FollowUp = () => {
                   <StyledTableCell align="center">Sl.No</StyledTableCell>
                   <StyledTableCell align="center">Enquiry No</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell align="center">Class</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Class-Sec
+                  </StyledTableCell>
                   <StyledTableCell align="center">Year</StyledTableCell>
                   <StyledTableCell align="center">Status</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
@@ -352,7 +250,7 @@ const FollowUp = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <div className="mt-10"  />
+          <div className="mt-10" />
 
           {/* <TablePagination
             component="div"
@@ -380,33 +278,14 @@ const FollowUp = () => {
 
 export default FollowUp;
 const Row = (props) => {
-  const {
-    row,
-    salonDetails,
-    setSalonDetails,
-    index,
-    router,
-    handleOpen,
-    handleButtonClick,
-    setEnquiryIdStore,
-  } = props;
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const { row, index, router, handleOpen, handleButtonClick } = props;
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <React.Fragment>
       <TableRow
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -432,7 +311,11 @@ const Row = (props) => {
           </Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-          <Typography>{row?.class}</Typography>
+          <Typography>
+            {row?.class}
+            {row?.section && "-"}
+            {row?.section}
+          </Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "100px" }}>
           <Typography>{row?.joining_year}</Typography>

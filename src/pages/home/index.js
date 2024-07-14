@@ -95,7 +95,7 @@ const Home = () => {
     <Box>
       <Seo />
       {/* new cards */}
-      <Grid className="font-bold w-[177px] h-[20px] text-[16px] mb-2">
+      <Grid className="font-bold w-[250px] h-[20px] text-[16px] mb-2">
         {greeting}
       </Grid>
       <Grid>Here&apos;s what&apos;s happening with your Dashboard today.</Grid>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Paper,
@@ -39,6 +39,10 @@ const ClassWiseAttendance = () => {
   const [markedAttendance, setMarkedAttendance] = useState([]);
   const [markedSms, setMarkedSms] = useState([]);
   const [selectDate, setSelectDate] = useState(dayjs(new Date()));
+
+  const [updatedAttendance, setUpdatedAttendance] = useState({});
+
+
 
   const handleAllMarkDoneChange = (e) => {
     const checked = e.target.checked;
@@ -102,6 +106,22 @@ const ClassWiseAttendance = () => {
       toast.error("Please select all the fields");
     }
   };
+
+
+  const handleAttendanceMArkChange = (studentId, feeGroup) => {
+    console.log(studentId, feeGroup, 'studentId, feeGroup');
+    setUpdatedAttendance(prev => ({ ...prev, [studentId]: feeGroup }));
+  };
+
+  useEffect(() => {
+    if (studentData) {
+      const initialFeeGroups = {};
+      studentData.forEach(student => {
+        initialFeeGroups[student._id] = student.fee_group || "";
+      });
+      setUpdatedAttendance(initialFeeGroups);
+    }
+  }, [studentData]);
 
   return (
     <div className="">
@@ -228,6 +248,8 @@ const ClassWiseAttendance = () => {
                         handleSmsChange={handleSmsChange}
                         markedAttendance={markedAttendance}
                         markedSms={markedSms}
+                        handleAttendanceMArkChange={handleAttendanceMArkChange}
+                        currentAttendanceStatus={updatedAttendance[row._id] || ""}
                       />
                     ))}
                   </>
@@ -274,6 +296,8 @@ const Row = (props) => {
     handleSmsChange,
     markedAttendance,
     markedSms,
+    handleAttendanceMArkChange,
+    currentAttendanceStatus
   } = props;
 
   const isAttendanceChecked = markedAttendance.includes(row._id);
@@ -309,12 +333,32 @@ const Row = (props) => {
         <StyledTableCell align="center" style={{ minWidth: "250px" }}>
           <Typography>{row?.admission_number}</Typography>
         </StyledTableCell>
-        <StyledTableCell key={row._id} align="center" style={{ minWidth: "200px" }}>
+        {/* <StyledTableCell key={row._id} align="center" style={{ minWidth: "200px" }}>
           {!row?.attendance_marked?<Checkbox
             checked={markedAttendance.includes(row._id)}
             onChange={(e) => handleAttendanceChange(row._id, e.target.checked)}
           />:<Typography>Present</Typography>}
+        </StyledTableCell> */}
+        <StyledTableCell key={row._id} align="center" style={{ minWidth: "200px" }}>
+        <FormControl fullWidth>
+            <InputLabel id="fee-group-select-label">Attendance Type</InputLabel>
+            <Select
+              labelId="fee-group-select-label"
+              id="fee-group-select"
+              value={currentAttendanceStatus}
+              label="Attendance Type"
+              onChange={(e) => handleAttendanceMArkChange(row._id, e.target.value)}
+            >
+              {Config?.AttendanceType?.map((item, ind) => (
+                <MenuItem key={ind} value={item.label}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </StyledTableCell>
+
+        
 
         {/* <StyledTableCell align="center" style={{ minWidth: "200px" }}>
           <Typography>{"Remark"}</Typography>

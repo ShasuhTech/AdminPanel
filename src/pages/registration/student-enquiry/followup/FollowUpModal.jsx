@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Formik, Form, Field, useFormik } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import {
   TextField,
@@ -26,8 +26,7 @@ import {
   AddFollowup,
   DeleteStudentById,
   GetFollowupList,
-  GetStudentById,
-  GetStudentLsit,
+  updateFollowup,
 } from "@/services/api";
 import { useQuery } from "react-query";
 import { useRouter } from "next/router";
@@ -57,34 +56,6 @@ const TextFieldComponent = ({
   />
 );
 
-// const DatePickerField = ({ field, form, ...props }) => {
-//   const currentError = form.errors[field.name];
-
-//   return (
-//     <FormControl required fullWidth margin="normal">
-//       <InputLabel>{""}</InputLabel>
-//       <DatePicker
-//         fullWidth
-//         {...field}
-//         required={true}
-//         {...props}
-//         inputFormat="MM/dd/yyyy"
-//         className="w-[100%]"
-//         onChange={(newValue) => form.setFieldValue(field.name, newValue)}
-//         value={field.value || null}
-//         renderInput={(params) => (
-//           <TextField
-//             {...params}
-//             fullWidth
-//             error={Boolean(currentError)}
-//             helperText={currentError}
-//             variant="outlined"
-//           />
-//         )}
-//       />
-//     </FormControl>
-//   );
-// };
 const DatePickerField = ({ field, form, ...props }) => {
   const currentError = form.errors[field.name];
 
@@ -95,7 +66,7 @@ const DatePickerField = ({ field, form, ...props }) => {
           {...field}
           {...props}
           inputFormat="MM/dd/yyyy"
-          value={field.value ? dayjs(field.value):null}
+          value={field.value ? dayjs(field.value) : null}
           onChange={(newValue) => {
             form.setFieldValue(field.name, newValue ? dayjs(newValue) : null);
           }}
@@ -129,17 +100,27 @@ const SelectField = ({ field, form, label, options, ...props }) => (
 
 const FollowUpModal = ({ open, handleClose, data }) => {
   const [SlectedRow, setSlectedRow] = useState(null);
+  useEffect(() => {
+    setSlectedRow(null);
+  }, [open]);
 
   const initialValues = {
     enquiry_no: data?.enquiry_id || "",
     firstName: data?.name?.first_name || "",
     lastName: data?.name?.last_name || "",
     middleName: data?.name?.middle_name || "",
-    followUpdate: dayjs(new Date()),
-    nextfollowUpdate: dayjs(new Date()),
-    modeOfFollowup: "",
-    followUp: "",
-    remarks: "",
+    followUpdate: dayjs(SlectedRow?.follow_up_date) || dayjs(new Date()),
+    nextfollowUpdate:
+      dayjs(SlectedRow?.next_follow_up_date) || dayjs(new Date()),
+    modeOfFollowup: SlectedRow?.follow_up_mode || "",
+    followUp: SlectedRow?.follow_ups || "",
+    remarks: SlectedRow?.remarks || "",
+
+    // followUpdate: dayjs(new Date()),
+    // nextfollowUpdate: dayjs(new Date()),
+    // modeOfFollowup: "",
+    // followUp: "",
+    // remarks: "",
   };
 
   const validationSchema = Yup.object({
@@ -243,11 +224,20 @@ const FollowUpModal = ({ open, handleClose, data }) => {
     };
 
     try {
-      const resp = await AddFollowup(payload);
-      if (resp?.success) {
-        toast.success("FollowUp Added successfully");
-        actions.resetForm();
-        studentRefetch();
+      if (!SlectedRow) {
+        const resp = await AddFollowup(payload);
+        if (resp?.success) {
+          toast.success("FollowUp Added successfully");
+          actions.resetForm();
+          studentRefetch();
+        }
+      } else {
+        const resp = await updateFollowup(payload);
+        if (resp?.success) {
+          toast.success("FollowUp Updated successfully");
+          actions.resetForm();
+          studentRefetch();
+        }
       }
     } catch (error) {
       toast.error("Failed to add FollowUp");
@@ -273,15 +263,18 @@ const FollowUpModal = ({ open, handleClose, data }) => {
   // useEffect(() => {
   //   if (SlectedRow) {
   //     setValues({
-  //       ...values,
-  //       followUpdate: dayjs(SlectedRow.follow_up_date)||dayjs(new Date()),
-  //       nextfollowUpdate: dayjs(SlectedRow.next_follow_up_date)||dayjs(new Date()),
+  //       enquiry_no: data.enquiry_id || "",
+  //       firstName: data?.name?.first_name || "",
+  //       lastName: data?.name?.last_name || "",
+  //       middleName: data?.name?.middle_name || "",
+  //       followUpdate: dayjs(SlectedRow.follow_up_date) || dayjs(new Date()),
+  //       nextfollowUpdate: dayjs(SlectedRow.next_follow_up_date) || dayjs(new Date()),
   //       modeOfFollowup: SlectedRow.follow_up_mode || "",
   //       followUp: SlectedRow.follow_ups || "",
   //       remarks: SlectedRow.remarks || "",
   //     });
   //   }
-  // }, [SlectedRow, setValues]);
+  // }, [SlectedRow, setValues, data]);
 
   return (
     <SimpleModal
@@ -297,34 +290,29 @@ const FollowUpModal = ({ open, handleClose, data }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
         enableReinitialize
-        
       >
-        {({ values, setValues }) => {
-         
-
-          return (
-            <Form>
-              <Box className="flex w-[100%] flex-wrap gap-2 ">
-                {fields.map((field) => (
-                  <Box key={field.id} className="lg:w-[32.5%] gap-2 w-[100%] ">
-                    <Field
-                      name={field.name}
-                      label={field.label}
-                      component={field.component}
-                      options={field.options}
-                      disabled={field.disabled}
-                    />
-                  </Box>
-                ))}
-              </Box>
-              <div className="flex justify-end my-5">
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
-              </div>
-            </Form>
-          );
-        }}
+        {({ values, setValues }) => (
+          <Form>
+            <Box className="flex w-[100%] flex-wrap gap-2">
+              {fields.map((field) => (
+                <Box key={field.id} className="lg:w-[32.5%] gap-2 w-[100%]">
+                  <Field
+                    name={field.name}
+                    label={field.label}
+                    component={field.component}
+                    options={field.options}
+                    disabled={field.disabled}
+                  />
+                </Box>
+              ))}
+            </Box>
+            <div className="flex justify-end my-5">
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
+            </div>
+          </Form>
+        )}
       </Formik>
       <Paper
         sx={{

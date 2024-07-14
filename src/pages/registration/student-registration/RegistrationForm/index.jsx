@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik, useFormik } from "formik";
 import * as Yup from "yup";
-import TextInput from "@/components/TextInput";
 import {
-  Autocomplete,
   Button,
-  Card,
   Checkbox,
   FormControl,
   FormControlLabel,
-  InputLabel,
   MenuItem,
   Radio,
   RadioGroup,
@@ -22,19 +18,15 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Select } from "antd";
 import CustomButton from "@/components/CommonButton/CustomButton";
 import {
-  AddStudent,
   GetStudentListById,
   StateData,
   UpdateStudent,
   cityData,
-  countryData,
 } from "@/services/api";
 import { useQuery } from "react-query";
 import Config from "@/utilities/Config";
-import moment from "moment";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
@@ -46,10 +38,8 @@ import dayjs from "dayjs";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const StudentRegistration = ({
-  setSlectedTab,
   open,
   handleClose,
-  data,
   resetInitialValues,
   setresetInitialValues,
 }) => {
@@ -108,7 +98,6 @@ const StudentRegistration = ({
     ciftyRefetch(studenData?.address?.present_address?.state);
     // }
   }, [presentState, studenData?.address?.present_address?.state]);
-
 
   const handleSubmit = async (values, event) => {
     console.log(values, "-dsfsdfdsfsfsd");
@@ -237,24 +226,151 @@ const StudentRegistration = ({
       section: values.sibling_other_inst_section1,
       name: values.sibling_other_inst_name1,
     };
+    payload.preSchool_Details = {
+      english: {
+        max_marks: values.pre_subject_english_max_marks,
+        obtained_marks: values.pre_subject_english_marks_obtained,
+        percentage: values.pre_subject_english_percentage,
+        grade: values.pre_subject_english_grade,
+      },
+      hindi: {
+        max_marks: values.pre_subject_hindi_max_marks,
+        obtained_marks: values.pre_subject_hindi_marks_obtained,
+        grade: values.pre_subject_hindi_grade,
+        percentage: values.pre_subject_hindi_percentage,
+      },
+      mathematics: {
+        max_marks: values.pre_subject_mathematics_max_marks,
+        obtained_marks: values.pre_subject_mathematics_marks_obtained,
+        grade: values.pre_subject_mathematics_grade,
+        percentage: values.pre_subject_mathematics_percentage,
+      },
+      science: {
+        max_marks: values.pre_subject_science_max_marks,
+        obtained_marks: values.pre_subject_science_marks_obtained,
+        grade: values.pre_subject_science_grade,
+        percentage: values.pre_subject_science_percentage,
+      },
+      social_science: {
+        max_marks: values.pre_subject_social_science_max_marks,
+        obtained_marks: values.pre_subject_social_science_marks_obtained,
+        grade: values.pre_subject_social_science_grade,
+        percentage: values.pre_subject_social_science_percentage,
+      },
+      total: {
+        max_marks: values.pre_subject_total_max_marks,
+        obtained_marks: values.pre_subject_total_marks_obtained,
+        grade: values.pre_subject_total_grade,
+        percentage: values.pre_subject_total_percentage,
+      },
+    };
+    payload.preBoard_Details = {
+      english: {
+        max_marks: values.pre_Board_subject_english_max_marks,
+        obtained_marks: values.pre_Board_subject_english_marks_obtained,
+        grade: values.pre_Board_subject_english_grade,
+        percentage: values.pre_Board_subject_english_percentage,
+      },
+      hindi: {
+        max_marks: values.pre_Board_subject_hindi_max_marks,
+        obtained_marks: values.pre_Board_subject_hindi_marks_obtained,
+        grade: values.pre_Board_subject_hindi_grade,
+        percentage: values.pre_Board_subject_hindi_percentage,
+      },
+      mathematics: {
+        max_marks: values.pre_Board_subject_mathematics_max_marks,
+        obtained_marks: values.pre_Board_subject_mathematics_marks_obtained,
+        grade: values.pre_Board_subject_mathematics_grade,
+        percentage: values.pre_Board_subject_mathematics_percentage,
+      },
+      science: {
+        max_marks: values.pre_Board_subject_science_max_marks,
+        obtained_marks: values.pre_Board_subject_science_marks_obtained,
+        grade: values.pre_Board_subject_science_grade,
+        percentage: values.pre_Board_subject_science_percentage,
+      },
+      social_science: {
+        max_marks: values.pre_Board_subject_social_science_max_marks,
+        obtained_marks: values.pre_Board_subject_social_science_marks_obtained,
+        grade: values.pre_Board_subject_social_science_grade,
+        percentage: values.pre_Board_subject_social_science_percentage,
+      },
+      total: {
+        max_marks: values.pre_Board_subject_total_max_marks,
+        obtained_marks: values.pre_Board_subject_total_marks_obtained,
+        grade: values.pre_Board_subject_total_grade,
+        percentage: values.pre_Board_subject_total_percentage,
+      },
+    };
+    payload.board_Details = {
+      english: {
+        max_marks: values.Board_subject_english_max_marks,
+        obtained_marks: values.Board_subject_english_marks_obtained,
+        grade: values.Board_subject_english_grade,
+        percentage: values.Board_subject_english_percentage,
+      },
+      hindi: {
+        max_marks: values.Board_subject_hindi_max_marks,
+        obtained_marks: values.Board_subject_hindi_marks_obtained,
+        grade: values.Board_subject_hindi_grade,
+        percentage: values.Board_subject_hindi_percentage,
+      },
+      mathematics: {
+        max_marks: values.Board_subject_mathematics_max_marks,
+        obtained_marks: values.Board_subject_mathematics_marks_obtained,
+        grade: values.Board_subject_mathematics_grade,
+        percentage: values.Board_subject_mathematics_percentage,
+      },
+      science: {
+        max_marks: values.Board_subject_science_max_marks,
+        obtained_marks: values.Board_subject_science_marks_obtained,
+        grade: values.Board_subject_science_grade,
+        percentage: values.Board_subject_science_percentage,
+      },
+      social_science: {
+        max_marks: values.Board_subject_social_science_max_marks,
+        obtained_marks: values.Board_subject_social_science_marks_obtained,
+        grade: values.Board_subject_social_science_grade,
+        percentage: values.Board_subject_social_science_percentage,
+      },
+      economic: {
+        max_marks: values.Board_subject_economic_computer_other_max_marks,
+        obtained_marks: values.Board_subject_economic_computer_other_marks_obtained,
+        grade: values.Board_subject_economic_computer_other_grade,
+        percentage: values.Board_subject_economic_computer_other_percentage,
+      },
+      second_language: {
+        max_marks: values.Board_subject_second_language_max_marks,
+        obtained_marks: values.Board_subject_second_language_marks_obtained,
+        grade: values.Board_subject_second_language_grade,
+        percentage: values.Board_subject_second_language_percentage,
+      },
+      total: {
+        max_marks: values.Board_subject_total_max_marks,
+        obtained_marks: values.Board_subject_total_marks_obtained,
+        grade: values.Board_subject_total_grade,
+        percentage: values.Board_subject_total_percentage,
+      },
+    };
+
     payload.student_status = "Register";
     payload.enquiry_id = studenData?.enquiry_id;
 
     console.log(payload, "----payload");
-    try {
-      const resp = await UpdateStudent(payload);
-      if (resp?.success === true) {
-        toast.success("Student Details Add successfully");
-        // setSlectedTab(2);
-        handleClose();
-      }
-      console.log(resp?.success, "-sdcdsf");
-      // Handle form submission
-      console.log(values);
-      // setStatus({ success: true });
-    } catch (error) {
-      // setStatus({ success: false });
-    }
+    // try {
+    //   const resp = await UpdateStudent(payload);
+    //   if (resp?.success === true) {
+    //     toast.success("Student Details Add successfully");
+    //     // setSlectedTab(2);
+    //     handleClose();
+    //   }
+    //   console.log(resp?.success, "-sdcdsf");
+    //   // Handle form submission
+    //   console.log(values);
+    //   // setStatus({ success: true });
+    // } catch (error) {
+    //   // setStatus({ success: false });
+    // }
   };
   const initialValues =
     id && !resetInitialValues
@@ -387,96 +503,117 @@ const StudentRegistration = ({
           subject_science_marks_obtained: "",
           subject_science_grade: "",
           subject_science_percentage: "",
-          subject_social_sceince_max_marks: "",
-          subject_social_sceince_marks_obtained: "",
-          subject_social_sceince_grade: "",
-          subject_social_sceince_percentage: "",
+          subject_social_science_max_marks: "",
+          subject_social_science_marks_obtained: "",
+          subject_social_science_grade: "",
+          subject_social_science_percentage: "",
           subject_third_language_max_marks: "",
           subject_third_language_marks_obtained: "",
           subject_third_language_grade: "",
           subject_third_language_percentage: "",
+
           pre_subject_english_max_marks: "",
           pre_subject_english_marks_obtained: "",
           pre_subject_english_grade: "",
           pre_subject_english_percentage: "",
+
           pre_subject_hindi_max_marks: "",
           pre_subject_hindi_marks_obtained: "",
           pre_subject_hindi_grade: "",
           pre_subject_hindi_percentage: "",
+
           pre_subject_mathematics_max_marks: "",
           pre_subject_mathematics_marks_obtained: "",
           pre_subject_mathematics_grade: "",
           pre_subject_mathematics_percentage: "",
+
           pre_subject_science_max_marks: "",
           pre_subject_science_marks_obtained: "",
           pre_subject_science_grade: "",
           pre_subject_science_percentage: "",
-          pre_subject_social_sceince_max_marks: "",
-          pre_subject_social_sceince_marks_obtained: "",
-          pre_subject_social_sceince_grade: "",
-          pre_subject_social_sceince_percentage: "",
+
+          pre_subject_social_science_max_marks: "",
+          pre_subject_social_science_marks_obtained: "",
+          pre_subject_social_science_grade: "",
+          pre_subject_social_science_percentage: "",
+
           pre_subject_total_max_marks: "",
           pre_subject_total_marks_obtained: "",
           pre_subject_total_grade: "",
           pre_subject_total_percentage: "",
+
           pre_Board_subject_english_max_marks: "",
           pre_Board_subject_english_marks_obtained: "",
           pre_Board_subject_english_grade: "",
           pre_Board_subject_english_percentage: "",
+
           pre_Board_subject_hindi_max_marks: "",
           pre_Board_subject_hindi_marks_obtained: "",
           pre_Board_subject_hindi_grade: "",
           pre_Board_subject_hindi_percentage: "",
+
           pre_Board_subject_mathematics_max_marks: "",
           pre_Board_subject_mathematics_marks_obtained: "",
           pre_Board_subject_mathematics_grade: "",
           pre_Board_subject_mathematics_percentage: "",
+
           pre_Board_subject_science_max_marks: "",
           pre_Board_subject_science_marks_obtained: "",
           pre_Board_subject_science_grade: "",
           pre_Board_subject_science_percentage: "",
-          pre_Board_subject_social_sceince_max_marks: "",
-          pre_Board_subject_social_sceince_marks_obtained: "",
-          pre_Board_subject_social_sceince_grade: "",
-          pre_Board_subject_social_sceince_percentage: "",
+
+          pre_Board_subject_social_science_max_marks: "",
+          pre_Board_subject_social_science_marks_obtained: "",
+          pre_Board_subject_social_science_grade: "",
+          pre_Board_subject_social_science_percentage: "",
+
           pre_Board_subject_total_max_marks: "",
-          pre_Board_subject_total_marks: "",
           pre_Board_subject_total_marks_obtained: "",
           pre_Board_subject_total_grade: "",
           pre_Board_subject_total_percentage: "",
+
           board_details: "",
+
           Board_subject_english_max_marks: "",
           Board_subject_english_marks_obtained: "",
           Board_subject_english_grade: "",
           Board_subject_english_percentage: "",
+
           Board_subject_hindi_max_marks: "",
           Board_subject_hindi_marks_obtained: "",
           Board_subject_hindi_grade: "",
           Board_subject_hindi_percentage: "",
+
           Board_subject_mathematics_max_marks: "",
           Board_subject_mathematics_marks_obtained: "",
           Board_subject_mathematics_grade: "",
           Board_subject_mathematics_percentage: "",
+
           Board_subject_science_max_marks: "",
           Board_subject_science_marks_obtained: "",
           Board_subject_science_grade: "",
           Board_subject_science_percentage: "",
-          Board_subject_social_sceince_max_marks: "",
-          Board_subject_social_sceince_marks_obtained: "",
-          Board_subject_social_sceince_grade: "",
-          Board_subject_social_sceince_percentage: "",
-          Board_subject_economic_max_marks: "",
-          Board_subject_economic_marks_obtained: "",
-          Board_subject_economic_grade: "",
-          Board_subject_economic_percentage: "",
+
+          Board_subject_social_science_max_marks: "",
+          Board_subject_social_science_marks_obtained: "",
+          Board_subject_social_science_grade: "",
+          Board_subject_social_science_percentage: "",
+
+          Board_subject_economic_computer_other_max_marks: "",
+          Board_subject_economic_computer_other_marks_obtained: "",
+          Board_subject_economic_computer_other_grade: "",
+          Board_subject_economic_computer_other_percentage: "",
+
           Board_subject_second_language_max_marks: "",
           Board_subject_second_language_marks_obtained: "",
           Board_subject_second_language_grade: "",
           Board_subject_second_language_percentage: "",
+
           Board_subject_total_max_marks: "",
           Board_subject_total_marks_obtained: "",
           Board_subject_total_grade: "",
           Board_subject_total_percentage: "",
+
           // Stream Details
           stream_details: "",
           stream_common_subject: "",
@@ -624,10 +761,10 @@ const StudentRegistration = ({
           subject_science_marks_obtained: "",
           subject_science_grade: "",
           subject_science_percentage: "",
-          subject_social_sceince_max_marks: "",
-          subject_social_sceince_marks_obtained: "",
-          subject_social_sceince_grade: "",
-          subject_social_sceince_percentage: "",
+          subject_social_science_max_marks: "",
+          subject_social_science_marks_obtained: "",
+          subject_social_science_grade: "",
+          subject_social_science_percentage: "",
           subject_third_language_max_marks: "",
           subject_third_language_marks_obtained: "",
           subject_third_language_grade: "",
@@ -648,10 +785,10 @@ const StudentRegistration = ({
           pre_subject_science_marks_obtained: "",
           pre_subject_science_grade: "",
           pre_subject_science_percentage: "",
-          pre_subject_social_sceince_max_marks: "",
-          pre_subject_social_sceince_marks_obtained: "",
-          pre_subject_social_sceince_grade: "",
-          pre_subject_social_sceince_percentage: "",
+          pre_subject_social_science_max_marks: "",
+          pre_subject_social_science_marks_obtained: "",
+          pre_subject_social_science_grade: "",
+          pre_subject_social_science_percentage: "",
           pre_subject_total_max_marks: "",
           pre_subject_total_marks_obtained: "",
           pre_subject_total_grade: "",
@@ -672,10 +809,10 @@ const StudentRegistration = ({
           pre_Board_subject_science_marks_obtained: "",
           pre_Board_subject_science_grade: "",
           pre_Board_subject_science_percentage: "",
-          pre_Board_subject_social_sceince_max_marks: "",
-          pre_Board_subject_social_sceince_marks_obtained: "",
-          pre_Board_subject_social_sceince_grade: "",
-          pre_Board_subject_social_sceince_percentage: "",
+          pre_Board_subject_social_science_max_marks: "",
+          pre_Board_subject_social_science_marks_obtained: "",
+          pre_Board_subject_social_science_grade: "",
+          pre_Board_subject_social_science_percentage: "",
           pre_Board_subject_total_max_marks: "",
           pre_Board_subject_total_marks_obtained: "",
           pre_Board_subject_total_grade: "",
@@ -697,14 +834,14 @@ const StudentRegistration = ({
           Board_subject_science_marks_obtained: "",
           Board_subject_science_grade: "",
           Board_subject_science_percentage: "",
-          Board_subject_social_sceince_max_marks: "",
-          Board_subject_social_sceince_marks_obtained: "",
-          Board_subject_social_sceince_grade: "",
-          Board_subject_social_sceince_percentage: "",
-          Board_subject_economic_max_marks: "",
-          Board_subject_economic_marks_obtained: "",
-          Board_subject_economic_grade: "",
-          Board_subject_economic_percentage: "",
+          Board_subject_social_science_max_marks: "",
+          Board_subject_social_science_marks_obtained: "",
+          Board_subject_social_science_grade: "",
+          Board_subject_social_science_percentage: "",
+          Board_subject_economic_computer_other_max_marks: "",
+          Board_subject_economic_computer_other_marks_obtained: "",
+          Board_subject_economic_computer_other_grade: "",
+          Board_subject_economic_computer_other_percentage: "",
           Board_subject_second_language_max_marks: "",
           Board_subject_second_language_marks_obtained: "",
           Board_subject_second_language_grade: "",
@@ -764,11 +901,75 @@ const StudentRegistration = ({
     // gender: Yup.string().required("Gender is required"),
   });
 
+  const subjects = [
+    "ENGLISH",
+    "HINDI",
+    "MATHEMATICS",
+    "SCIENCE",
+    "SOCIAL SCIENCE",
+    "Total",
+  ];
+
+  // useEffect(() => {
+  //   // Simulate an API call to fetch initial values
+  //   const fetchData = async () => {
+  //     const response = await fetch('/api/marks'); // Replace with your API endpoint
+  //     const data = await response.json();
+
+  //     // Transform the data from API to fit the form structure
+  //     const transformedData = {};
+  //     data.forEach((subject) => {
+  //       const key = subject.name.toLowerCase().replace(/ /g, '_');
+  //       transformedData[`pre_subject_${key}_max_marks`] = subject.max_marks;
+  //       transformedData[`pre_subject_${key}_marks_obtained`] = subject.marks_obtained;
+  //       transformedData[`pre_subject_${key}_grade`] = subject.grade;
+  //       transformedData[`pre_subject_${key}_percentage`] = subject.percentage;
+  //     });
+
+  //     Formik.setValues(transformedData);
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   const resetBtn = () => {
     router.replace("/registration/student-registration");
     setresetInitialValues(true);
     // handleClose();
   };
+
+  const documents = [
+    "DOB CERTIFICATE",
+    "AADHAR CARD",
+    "STUDENT REPORT CARD",
+    "FATHER ID PRROF",
+    "MOTHER ID PROOF",
+    "HEALTH RECORD",
+    "TERM AND REPORT",
+    "ADMISSION FORM",
+  ];
+
+  const [documentData, setDocumentData] = useState(
+    documents.map((doc, index) => ({
+      slNo: index + 1,
+      name: doc,
+      file: null,
+    }))
+  );
+  console.log(documentData, "---documentData");
+  const handleFileChange = (index, file) => {
+    const newDocumentData = [...documentData];
+    newDocumentData[index].file = file;
+    setDocumentData(newDocumentData);
+  };
+
+  // APi responce send
+  // const formData = new FormData();
+  //   documentData.forEach((doc, index) => {
+  //     if (doc.file) {
+  //       formData.append(`file${index + 1}`, doc.file, doc.name);
+  //     }
+  //   });
 
   console.log(new Date());
   return (
@@ -817,7 +1018,7 @@ const StudentRegistration = ({
                           </div>
                         </div>
                       </div>
-
+{/* basic Details */}
                       <div className="flex  flex-wrap lg:w-[80%] w-[100%] gap-4">
                         {/* Not Required */}
                         <div className="lg:w-[66%] w-[100%]">
@@ -1012,7 +1213,7 @@ const StudentRegistration = ({
                         </div>
                       </div>
                     </div>
-
+{/* Student Details */}
                     <div className="  flex-wrap flex mt-5  gap-4">
                       <div className="lg:w-[32.5%]  w-[100%]">
                         <Field
@@ -1101,7 +1302,7 @@ const StudentRegistration = ({
                       <div className="lg:w-[32.5%]  w-[100%]">
                         <DatePicker
                           label="Date Of Birth"
-                           value={
+                          value={
                             values.dob ? dayjs(values.dob) : dayjs(new Date())
                           }
                           fullWidth
@@ -1164,7 +1365,7 @@ const StudentRegistration = ({
               {
                 <div className="mt-[40px] ">
                   <span className="font-black text-[18px] ">
-                   {` Father's Details`}
+                    {` Father's Details`}
                   </span>
                   <div className=" border  p-6 rounded-2xl mt-3">
                     <div className="lg:flex w-[100%] gap-4">
@@ -2265,7 +2466,7 @@ const StudentRegistration = ({
                   </div>
                 </div>
               }
-              {/* Previous details */}
+              {/* Previous School details */}
               {
                 <div className="mt-[20px] ">
                   <span className="font-black text-[18px] ">
@@ -2560,15 +2761,15 @@ const StudentRegistration = ({
                   </div>
                 </div>
               }
-              {/* Previous Schoole details */}
-              {false && (
-                <div className="mt-[20px] ">
-                  <span className="font-black text-[18px] ">
+              {/* Previous Schoole Marks details */}
+              {
+                <div className="mt-[20px]">
+                  <span className="font-black text-[18px]">
                     Marks Grades Obtained In The Previous School
                   </span>
-                  <div className=" border  p-6 rounded-2xl mt-3">
-                    <div className=" lg:flex w-[100%] gap-4">
-                      <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
+                  <div className="border p-6 rounded-2xl mt-3">
+                    <div className="lg:flex w-[100%] gap-4">
+                      <div className="flex flex-wrap lg:w-[100%] w-[100%] gap-4">
                         <TableContainer sx={{ overflowX: "auto" }}>
                           <Table aria-label="collapsible table">
                             <TableHead>
@@ -2582,7 +2783,7 @@ const StudentRegistration = ({
                                   Max. Marks
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                  Marks Obatined
+                                  Marks Obtained
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
                                   Grade
@@ -2593,29 +2794,16 @@ const StudentRegistration = ({
                               </TableRow>
                             </TableHead>
                             <TableBody
-                              style={{
-                                height: "auto",
-                                position: "relative",
-                              }}
+                              style={{ height: "auto", position: "relative" }}
                             >
-                              <>
-                                {[
-                                  "ENGLISH",
-                                  "HINDI",
-                                  "MATHEMATICS",
-                                  "SCIENCE",
-                                  "SOCIAL SCIENCE",
-                                  "Total",
-                                ]?.map((row, index) => (
-                                  <RowPre
-                                    key={index}
-                                    row={row}
-                                    index={index}
-                                    router={router}
-                                    values={values}
-                                  />
-                                ))}
-                              </>
+                              {subjects.map((row, index) => (
+                                <RowPre
+                                  key={index}
+                                  row={row}
+                                  values={values}
+                                  handleChange={handleChange}
+                                />
+                              ))}
                             </TableBody>
                           </Table>
                         </TableContainer>
@@ -2623,9 +2811,9 @@ const StudentRegistration = ({
                     </div>
                   </div>
                 </div>
-              )}
+              }
               {/* Prebaord details */}
-              {false && (
+              {(
                 <div className="mt-[20px] ">
                   <span className="font-black text-[18px] ">
                     Pre Board Details
@@ -2674,8 +2862,8 @@ const StudentRegistration = ({
                                   <RowPreBoard
                                     key={index}
                                     row={row}
-                                    index={index}
-                                    router={router}
+                                    onChange={onchange}
+                                    values={values}
                                   />
                                 ))}
                               </>
@@ -2688,7 +2876,7 @@ const StudentRegistration = ({
                 </div>
               )}
               {/* Board details */}
-              {false && (
+              { (
                 <div className="mt-[20px] ">
                   <span className="font-black text-[18px] ">Board Details</span>
                   <div className=" border  p-6 rounded-2xl mt-3">
@@ -2756,14 +2944,14 @@ const StudentRegistration = ({
                                   "SCIENCE",
                                   "SOCIAL SCIENCE",
                                   "Economic/Computer/Other",
-                                  "Second Language(Hindi)",
+                                  "Second Language",
                                   "Total",
                                 ]?.map((row, index) => (
                                   <RowBoard
                                     key={index}
                                     row={row}
-                                    index={index}
-                                    router={router}
+                                   handleChange={handleChange}
+                                   values={values}
                                   />
                                 ))}
                               </>
@@ -2939,12 +3127,12 @@ const StudentRegistration = ({
                 </div>
               }
               {/* Document Upload */}
-              {false && (
+              {
                 <div className="mt-[20px] ">
                   <span className="font-black text-[18px] ">
                     Documents Upload
                   </span>
-                  <div className=" border  p-6 rounded-2xl mt-3">
+                  <div className="border p-6 rounded-2xl mt-3">
                     <TableContainer sx={{ overflowX: "auto" }}>
                       <Table aria-label="collapsible table">
                         <TableHead>
@@ -2957,44 +3145,27 @@ const StudentRegistration = ({
                             <StyledTableCell align="center">
                               Name
                             </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Select
-                            </StyledTableCell>
                             <StyledTableCell align="center"></StyledTableCell>
                             <StyledTableCell align="center"></StyledTableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody
-                          style={{
-                            height: "auto",
-                            position: "relative",
-                          }}
+                          style={{ height: "auto", position: "relative" }}
                         >
-                          <>
-                            {[
-                              "DOB CERTIFICATE",
-                              "AADHAR CARD",
-                              "STUDENT REPORT CARD",
-                              "FATHER ID PRROF",
-                              "MOTHER ID PROOF",
-                              "HEALTH RECORD",
-                              "TERM AND REPORT",
-                              "ADMISSION FORM",
-                            ]?.map((row, index) => (
-                              <Row1
-                                key={index}
-                                row={row}
-                                index={index}
-                                router={router}
-                              />
-                            ))}
-                          </>
+                          {documentData.map((row, index) => (
+                            <Row1
+                              key={index}
+                              row={row}
+                              index={index}
+                              handleFileChange={handleFileChange}
+                            />
+                          ))}
                         </TableBody>
                       </Table>
                     </TableContainer>
                   </div>
                 </div>
-              )}
+              }
               {/* Sibling Details */}
               {
                 <div className="mt-[20px] ">
@@ -3510,70 +3681,72 @@ const Row = (props) => {
   );
 };
 const RowPre = (props) => {
-  const { row, index } = props;
-  const [open, setOpen] = useState(false);
+  const { row, values, handleChange } = props;
 
   const getSubjectKey = (subject) => {
-    return subject.toLowerCase().replace(" ", "_");
+    return subject.toLowerCase().replace(/ /g, "_");
   };
 
   const subjectKey = getSubjectKey(row);
-  console.log(subjectKey);
+
   return (
-    <React.Fragment>
-      <TableRow
-        sx={{
-          "& > *": {
-            borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
-            fontWeight: "600",
-            color: "#000",
-            overflow: "scroll",
-            cursor: "pointer",
-          },
-        }}
-      >
-        <StyledTableCell align="center" style={{ minWidth: "100px" }}>
-          <Typography>{row}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Field
-            name={`pre_subject_${subjectKey}_max_marks`}
-            as={TextField}
-            variant="outlined"
-            fullWidth
-          />
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Field
-            name={`pre_subject_${subjectKey}_marks_obtained`}
-            as={TextField}
-            variant="outlined"
-            fullWidth
-          />
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Field
-            name={`pre_subject_${subjectKey}_grade`}
-            as={TextField}
-            variant="outlined"
-            fullWidth
-          />
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Field
-            name={`pre_subject_${subjectKey}_percentage`}
-            as={TextField}
-            variant="outlined"
-            fullWidth
-          />
-        </StyledTableCell>
-      </TableRow>
-    </React.Fragment>
+    <TableRow
+      sx={{
+        "& > *": {
+          borderBottom: "unset",
+          fontWeight: "600",
+          color: "#000",
+          overflow: "scroll",
+          cursor: "pointer",
+        },
+      }}
+    >
+      <StyledTableCell align="center" style={{ minWidth: "100px" }}>
+        <Typography>{row}</Typography>
+      </StyledTableCell>
+      <StyledTableCell align="center" style={{ minWidth: "200px" }}>
+        <TextField
+          name={`pre_subject_${subjectKey}_max_marks`}
+          variant="outlined"
+          fullWidth
+          // value={`${values}pre_subject_${subjectKey}_max_marks`}
+          // value={values.pre_subject_subjectKey_max_marks}
+          onChange={handleChange}
+        />
+      </StyledTableCell>
+      <StyledTableCell align="center" style={{ minWidth: "200px" }}>
+        <TextField
+          name={`pre_subject_${subjectKey}_marks_obtained`}
+          variant="outlined"
+          fullWidth
+          // value={values[`pre_subject_${subjectKey}_marks_obtained`] || ''}
+          onChange={handleChange}
+        />
+      </StyledTableCell>
+      <StyledTableCell align="center" style={{ minWidth: "200px" }}>
+        <TextField
+          name={`pre_subject_${subjectKey}_grade`}
+          variant="outlined"
+          fullWidth
+          // value={values[`pre_subject_${subjectKey}_grade`] || ''}
+          onChange={handleChange}
+        />
+      </StyledTableCell>
+      <StyledTableCell align="center" style={{ minWidth: "200px" }}>
+        <TextField
+          name={`pre_subject_${subjectKey}_percentage`}
+          variant="outlined"
+          fullWidth
+          // value={values[`pre_subject_${subjectKey}_percentage`] || ''}
+          onChange={handleChange}
+        />
+      </StyledTableCell>
+    </TableRow>
   );
 };
+
 const RowPreBoard = (props) => {
-  const { row, index } = props;
+  const { row, index,onchange,values } = props;
   const [open, setOpen] = useState(false);
 
   const getSubjectKey = (subject) => {
@@ -3581,7 +3754,6 @@ const RowPreBoard = (props) => {
   };
 
   const subjectKey = getSubjectKey(row);
-
   return (
     <React.Fragment>
       <TableRow
@@ -3605,6 +3777,7 @@ const RowPreBoard = (props) => {
             as={TextField}
             variant="outlined"
             fullWidth
+            onchange={onchange}
           />
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
@@ -3613,6 +3786,8 @@ const RowPreBoard = (props) => {
             as={TextField}
             variant="outlined"
             fullWidth
+            onchange={onchange}
+
           />
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
@@ -3621,6 +3796,8 @@ const RowPreBoard = (props) => {
             as={TextField}
             variant="outlined"
             fullWidth
+            onchange={onchange}
+
           />
         </StyledTableCell>
 
@@ -3630,6 +3807,8 @@ const RowPreBoard = (props) => {
             as={TextField}
             variant="outlined"
             fullWidth
+            onchange={onchange}
+
           />
         </StyledTableCell>
       </TableRow>
@@ -3637,15 +3816,14 @@ const RowPreBoard = (props) => {
   );
 };
 const RowBoard = (props) => {
-  const { row, index } = props;
+  const { row, index,values,handleChange } = props;
   const [open, setOpen] = useState(false);
 
   const getSubjectKey = (subject) => {
-    return subject.toLowerCase().replace(" ", "_");
+    return subject.toLowerCase().replace(/[\s\/]/g, "_");
   };
 
   const subjectKey = getSubjectKey(row);
-
   return (
     <React.Fragment>
       <TableRow
@@ -3669,6 +3847,7 @@ const RowBoard = (props) => {
             as={TextField}
             variant="outlined"
             fullWidth
+            handleChange={handleChange}
           />
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
@@ -3677,6 +3856,7 @@ const RowBoard = (props) => {
             as={TextField}
             variant="outlined"
             fullWidth
+            handleChange={handleChange}
           />
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
@@ -3685,6 +3865,7 @@ const RowBoard = (props) => {
             as={TextField}
             variant="outlined"
             fullWidth
+            handleChange={handleChange}
           />
         </StyledTableCell>
 
@@ -3694,24 +3875,16 @@ const RowBoard = (props) => {
             as={TextField}
             variant="outlined"
             fullWidth
+            handleChange={handleChange}
           />
         </StyledTableCell>
       </TableRow>
     </React.Fragment>
   );
 };
-const Row1 = (props) => {
-  const { row, salonDetails, setSalonDetails, index, router } = props;
+const Row1 = ({ row, index, handleFileChange }) => {
   const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <React.Fragment>
       <TableRow
@@ -3727,16 +3900,16 @@ const Row1 = (props) => {
         }}
       >
         <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>{index + 1}</Typography>
+          <Typography>{row.slNo}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "100px" }}>
-          <Typography>{row}</Typography>
+          <Typography>{row.name}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Checkbox {...label} />
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <input type="file" />
+          <input
+            type="file"
+            onChange={(e) => handleFileChange(index, e.target.files[0])}
+          />
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
           <Typography>View</Typography>

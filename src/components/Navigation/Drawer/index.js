@@ -129,7 +129,11 @@ const DrawerList = ({
 
   return (
     <>
-      <ListItem disablePadding sx={{ display: "block" }}  className="transition-all duration-300 ease-in-out">
+      <ListItem
+        disablePadding
+        sx={{ display: "block" }}
+        className="transition-all duration-300 ease-in-out"
+      >
         <ListItemButton
           button
           onClick={handleItemClick}
@@ -188,7 +192,11 @@ const DrawerList = ({
           )}
         </ListItemButton>
       </ListItem>
-      <Collapse in={sublistOpen} timeout={500} className="transition-all duration-300 ease-in-out">
+      <Collapse
+        in={sublistOpen}
+        timeout={500}
+        className="transition-all duration-300 ease-in-out"
+      >
         {
           <List
             style={{
@@ -214,7 +222,6 @@ const DrawerList = ({
     </>
   );
 };
-
 
 const DrawerPath = ({
   open,
@@ -318,6 +325,7 @@ const DrawerPath = ({
               title={"Dashboards"}
               ind={1}
             />
+            {/* School */}
             <DrawerList path={""} text={"School"} Icon={SchoolIcon} open={open}>
               <DrawerList
                 path={"/school"}
@@ -334,6 +342,86 @@ const DrawerPath = ({
                 title={"School >> School Overview"}
               /> */}
             </DrawerList>
+            {/* Registration */}
+            <DrawerList
+              path={""}
+              text={"Registration"}
+              Icon={SchoolIcon}
+              open={open}
+            >
+              <DrawerList
+                path={"/registration/student-enquiry"}
+                text={"Student Enquiry"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Student Enquiry"}
+              />
+              <DrawerList
+                path={"/registration/student-registration"}
+                text={"Student Registration"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> student registration"}
+              />
+              <DrawerList
+                path={"/registration/registration-start-details"}
+                text={"Registration Start Details"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Registration Start Details"}
+              />
+              <DrawerList
+                path={"/registration/followup-mood"}
+                text={"Followup Mode"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Followup Mode"}
+              />
+              {/* <DrawerList
+                path={"/registration/selection-process"}
+                text={"Selection Process"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >> Selection Process"}
+              /> */}
+
+              {/* <DrawerList
+                path={"/registration/student-transfer"}
+                text={"Student Transfer"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Student Transfer"}
+              /> */}
+              {/* <DrawerList
+                path={"/registration/subject-assigner"}
+                text={"Subject Assigner"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Subject Assigner"}
+              /> */}
+              {/* <DrawerList
+                path={"/registration/subject-master"}
+                text={"Subject Master"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Subject Master"}
+              /> */}
+              {/* <DrawerList
+                path={"/registration/time-slot-master"}
+                text={"Time Slot Master"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Time Slot Master"}
+              /> */}
+              {/* <DrawerList
+                path={"/registration/age-criteria"}
+                text={"Age Criteria"}
+                Icon={ServiceList}
+                open={open}
+                title={"registration >>Age Criteria"}
+              /> */}
+            </DrawerList>
+            {/* Student */}
             <DrawerList
               path={""}
               text={"Student"}
@@ -389,86 +477,15 @@ const DrawerPath = ({
                 open={open}
                 title={"Field Updation"}
               />
+              <DrawerList
+                path={"/student/certificate-setting"}
+                text={"Certificate Setting"}
+                Icon={ServiceList}
+                open={open}
+                title={"Certificate Setting"}
+              />
             </DrawerList>
-            <DrawerList
-              path={""}
-              text={"Registration"}
-              Icon={SchoolIcon}
-              open={open}
-            >
-              <DrawerList
-                path={"/registration/student-enquiry"}
-                text={"Student Enquiry"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >> Student Enquiry"}
-              />
-              <DrawerList
-                path={"/registration/student-registration"}
-                text={"Student Registration"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >> student registration"}
-              />
-              <DrawerList
-                path={"/registration/registration-start-details"}
-                text={"Registration Start Details"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >> Registration Start Details"}
-              />
-              {/* <DrawerList
-                path={"/registration/followup-mood"}
-                text={"Followup Mode"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >> Followup Mode"}
-              /> */}
-              {/* <DrawerList
-                path={"/registration/selection-process"}
-                text={"Selection Process"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >> Selection Process"}
-              /> */}
-
-              {/* <DrawerList
-                path={"/registration/student-transfer"}
-                text={"Student Transfer"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >>Student Transfer"}
-              /> */}
-              {/* <DrawerList
-                path={"/registration/subject-assigner"}
-                text={"Subject Assigner"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >>Subject Assigner"}
-              /> */}
-              {/* <DrawerList
-                path={"/registration/subject-master"}
-                text={"Subject Master"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >>Subject Master"}
-              /> */}
-              {/* <DrawerList
-                path={"/registration/time-slot-master"}
-                text={"Time Slot Master"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >>Time Slot Master"}
-              /> */}
-              {/* <DrawerList
-                path={"/registration/age-criteria"}
-                text={"Age Criteria"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >>Age Criteria"}
-              /> */}
-            </DrawerList>
-
+            {/* Attendance */}
             <DrawerList
               path={""}
               text={"Attendance"}
