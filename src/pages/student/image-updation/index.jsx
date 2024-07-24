@@ -11,23 +11,28 @@ import {
   TableBody,
   Table,
   CircularProgress,
+  TablePagination,
   MenuItem,
   Select,
+  Menu,
+  IconButton,
   InputLabel,
+  TextField,
   Button,
+  Checkbox,
+  ListItemText,
+  Avatar,
 } from "@mui/material";
-import {
-  GetStudentLsit,
-  postAssignFeeGroup,
-} from "@/services/api";
+import { GetStudentLsit } from "@/services/api";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import FormControl from "@mui/material/FormControl";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import Config from "@/utilities/Config";
-import { toast } from "react-toastify";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/system";
 
-const FeeGroupAssigner = () => {
+const ImageUpdation = () => {
   const router = useRouter();
   const {
     data: studentData,
@@ -36,44 +41,12 @@ const FeeGroupAssigner = () => {
     refetch: studentRefetch,
   } = useQuery("studentData", async () => {
     const res = await GetStudentLsit();
+    console.log(res, "---sdf");
     return res?.data;
   });
 
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
-  const [updatedFeeGroups, setUpdatedFeeGroups] = useState({});
-
-  useEffect(() => {
-    if (studentData) {
-      const initialFeeGroups = {};
-      studentData.forEach((student) => {
-        initialFeeGroups[student._id] = student.fee_group || "";
-      });
-      setUpdatedFeeGroups(initialFeeGroups);
-    }
-  }, [studentData]);
-
-  const handleFeeGroupChange = (studentId, feeGroup) => {
-    console.log(studentId, feeGroup, "studentId, feeGroup");
-    setUpdatedFeeGroups((prev) => ({ ...prev, [studentId]: feeGroup }));
-  };
-
-  const handleSubmit = async () => {
-    const payload = Object.keys(updatedFeeGroups).map((studentId) => ({
-      id: studentId,
-      fee_group: updatedFeeGroups[studentId],
-    }));
-    console.log(payload, "-ferfwref");
-    try {
-      const res = await postAssignFeeGroup(payload);
-      if (res?.success) {
-        toast.success("Succefully Updated...");
-      }
-      studentRefetch();
-    } catch (error) {
-      console.error("Error updating fee groups:", error);
-    }
-  };
 
   return (
     <div className="">
@@ -115,18 +88,14 @@ const FeeGroupAssigner = () => {
               </Select>
             </FormControl>
           </Grid>
+
           <Grid item xs={12} sm={12} md={1}>
             <Button variant="contained" size="large">
-              Filter
+              Submit
             </Button>
           </Grid>
           <Grid item xs={12} sm={12} md={1}>
-            <Button
-              variant="contained"
-              size="large"
-              color="error"
-              onClick={() => setUpdatedFeeGroups({})}
-            >
+            <Button variant="contained" size="large" color="error">
               Reset
             </Button>
           </Grid>
@@ -139,7 +108,8 @@ const FeeGroupAssigner = () => {
                   <StyledTableCell align="center">Sl.No</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
                   <StyledTableCell align="center">Admission No</StyledTableCell>
-                  <StyledTableCell align="center">Fee Group</StyledTableCell>
+                  <StyledTableCell align="center">Image</StyledTableCell>
+                  <StyledTableCell align="left">Download</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody
@@ -172,8 +142,7 @@ const FeeGroupAssigner = () => {
                         key={index}
                         row={row}
                         index={index}
-                        handleFeeGroupChange={handleFeeGroupChange}
-                        currentFeeGroup={updatedFeeGroups[row._id] || ""}
+                    
                       />
                     ))}
                   </>
@@ -198,26 +167,59 @@ const FeeGroupAssigner = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Grid className="flex justify-end py-7 p-5">
-            <Button variant="contained" size="large" onClick={handleSubmit}>
+
+          <TablePagination
+            component="div"
+            rowsPerPageOptions={[]}
+            // count={pagination?.total || 0}
+            // rowsPerPage={15}
+            // page={pagination?.currentPage ? pagination?.currentPage - 1 : 0}
+            // onPageChange={handleChangePage}
+          />
+          {/* <Grid sx={{ display: "flex", justifyContent: "end", p: 3 }}>
+            <Button variant="contained" size="large">
               Submit
             </Button>
-          </Grid>
+          </Grid> */}
         </Paper>
-      </div>
+      </div>{" "}
     </div>
   );
 };
 
-export default FeeGroupAssigner;
+export default ImageUpdation;
 
-const Row = ({ row, index, handleFeeGroupChange, currentFeeGroup }) => {
+const Row = (props) => {
+  const { row, index, setSectionUpdate } = props;
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+//   const [currentSection, setCurrentSection] = useState("");
+//   const [currentStream, setCurrentStream] = useState("");
+
+//   useEffect(() => {
+//     if (row) {
+//       setCurrentSection(row.section || "");
+//       setCurrentStream(row.stream || "");
+//       setCurrentFeeGroup(row.fee_group || "");
+//     }
+//   }, [row]);
+
   return (
     <React.Fragment>
       <TableRow
         sx={{
           "& > *": {
             borderBottom: "unset",
+            // background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -243,23 +245,26 @@ const Row = ({ row, index, handleFeeGroupChange, currentFeeGroup }) => {
           <Typography>{row?.admission_number}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <FormControl fullWidth>
-            <InputLabel id="fee-group-select-label">Fee Group</InputLabel>
-            <Select
-              labelId="fee-group-select-label"
-              id="fee-group-select"
-              value={currentFeeGroup}
-              label="Fee Group"
-              onChange={(e) => handleFeeGroupChange(row._id, e.target.value)}
-            >
-              {Config.FeeGroup.map((item, ind) => (
-                <MenuItem key={ind} value={item.label}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload file
+            <VisuallyHiddenInput type="file" />
+          </Button>
+          {/* <Avatar
+            alt="Remy Sharp"
+            src="/static/images/avatar/1.jpg"
+            sx={{ width: 56, height: 56 }}
+          /> */}
         </StyledTableCell>
+        <StyledTableCell align="center" style={{ minWidth: "100px" }}>
+         <img src="/images/avatar.png" className="object-contain rounded-full h-[50px] w-[50px] " />
+        </StyledTableCell>
+
       </TableRow>
     </React.Fragment>
   );

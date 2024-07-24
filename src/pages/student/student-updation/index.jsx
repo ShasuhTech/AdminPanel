@@ -14,42 +14,24 @@ import {
   TablePagination,
   MenuItem,
   Select,
-  Menu,
-  IconButton,
   InputLabel,
-  TextField,
   Button,
-  Checkbox,
-  ListItemText,
-  Avatar,
 } from "@mui/material";
 import {
   GetStudentLsit,
-  addServices,
-  adminCategory,
-  serviceList,
+  postAssignFeeGroup,
+  postAssignsectionStream,
 } from "@/services/api";
-import QuickSearchToolbar from "@/components/SearchBar";
-import { toast } from "react-toastify";
-import { exportToCSV } from "@/components/Common";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
-import CustomButton from "@/components/CommonButton/CustomButton";
 import FormControl from "@mui/material/FormControl";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
-import { Plus } from "mdi-material-ui";
 import { useQuery } from "react-query";
-import moment from "moment";
-import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
 import Config from "@/utilities/Config";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/system";
+import { toast } from "react-toastify";
 
 const StudentUpdation = () => {
-  const [searchText, setSearchText] = useState("");
   const router = useRouter();
-
   const {
     data: studentData,
     status: studentStatus,
@@ -60,34 +42,68 @@ const StudentUpdation = () => {
     console.log(res, "---sdf");
     return res?.data;
   });
-  const [studentDetailsModal, setstudentDetailsModal] = useState(false);
-  const handleclose = () => {
-    setstudentDetailsModal(false);
-  };
-  const handleOpen = () => {
-    setstudentDetailsModal(true);
-  };
+
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
-  const [selectRollNo, setSelectRollNo] = useState();
-  const [priorities, setPriorities] = useState([]);
-  const [sectionUpdate, setSectionUpdate] = useState();
+  const [updatedSectionGroup, setUpdatedSectionGroup] = useState({});
+  const [updatedStreamUpdate, setUpdatedStreamUpdate] = useState({});
 
-  // Function to handle changes in selection
-  const handlePriorityChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPriorities(typeof value === "string" ? value.split(",") : value);
+  useEffect(() => {
+    if (studentData) {
+      const initialSectionGroup = {};
+      studentData.forEach((student) => {
+        initialSectionGroup[student._id] = student.section || "";
+      });
+      setUpdatedSectionGroup(initialSectionGroup);
+      const initialStreamGroup = {};
+      studentData.forEach((student) => {
+        initialStreamGroup[student._id] = student.stream || "";
+      });
+      setUpdatedStreamUpdate(initialStreamGroup);
+    }
+  }, [studentData]);
+
+  const handleSectionChange = (studentId, sectionGroup) => {
+    console.log(studentId, sectionGroup, "studentId, feeGroup");
+    setUpdatedSectionGroup((prev) => ({ ...prev, [studentId]: sectionGroup }));
+  };
+  const handleStreamChange = (studentId, streamGroup) => {
+    console.log(studentId, streamGroup, "studentId, feeGroup");
+    setUpdatedStreamUpdate((prev) => ({ ...prev, [studentId]: streamGroup }));
   };
 
-  // useEffect to perform an action whenever priorities change
-  useEffect(() => {
-    if (priorities.length > 0) {
-      console.log(`Priorities changed to: ${priorities.join(", ")}`);
-      // You can replace the console.log with any other logic you need to execute
+  const handleSubmit = async () => {
+    const payload = {};
+
+    // Add section information to the payload
+    Object.keys(updatedSectionGroup).forEach((studentId) => {
+      if (!payload[studentId]) {
+        payload[studentId] = {};
+      }
+      payload[studentId].section = updatedSectionGroup[studentId];
+    });
+
+    // Add stream information to the payload
+    Object.keys(updatedStreamUpdate).forEach((studentId) => {
+      if (!payload[studentId]) {
+        payload[studentId] = {};
+      }
+      payload[studentId].stream = updatedStreamUpdate[studentId];
+    });
+
+    console.log(payload, "---hgjh");
+
+    try {
+      const res = await postAssignsectionStream(payload);
+      if (res?.success) {
+        toast.success("Succefully Updated...");
+      }
+      studentRefetch();
+    } catch (error) {
+      console.error("Error updating fee groups:", error);
     }
-  }, [priorities]);
+  };
+
   return (
     <div className="">
       <div sx={{ marginTop: "5rem" }} style={{ backgroundColor: "#fff" }}>
@@ -148,10 +164,8 @@ const StudentUpdation = () => {
                   <StyledTableCell align="center">Sl.No</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
                   <StyledTableCell align="center">Admission No</StyledTableCell>
-                  <StyledTableCell align="center">Image</StyledTableCell>
                   <StyledTableCell align="center">Section</StyledTableCell>
                   <StyledTableCell align="center">Stream</StyledTableCell>
-                  <StyledTableCell align="center">Fee Group</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody
@@ -184,9 +198,10 @@ const StudentUpdation = () => {
                         key={index}
                         row={row}
                         index={index}
-                        router={router}
-                        section={sectionUpdate}
-                        setSectionUpdate={setSectionUpdate}
+                        handleSectionChange={handleSectionChange}
+                        handleStreamChange={handleStreamChange}
+                        currentSectionGroup={updatedSectionGroup[row._id] || ""}
+                        currentStreamGroup={updatedStreamUpdate[row._id] || ""}
                       />
                     ))}
                   </>
@@ -225,9 +240,13 @@ const StudentUpdation = () => {
               Submit
             </Button>
           </Grid> */}
+          <Grid className="flex justify-end py-7 p-5">
+            <Button variant="contained" size="large" onClick={handleSubmit}>
+              Submit
+            </Button>
+          </Grid>
         </Paper>
       </div>{" "}
-      <StudentDetails open={studentDetailsModal} handleClose={handleclose} />
     </div>
   );
 };
@@ -237,45 +256,12 @@ export default StudentUpdation;
 const Row = (props) => {
   const {
     row,
-    salonDetails,
-    setSalonDetails,
     index,
-    router,
-    setSectionUpdate,
-    sectionUpdate,
+    handleSectionChange,
+    handleStreamChange,
+    currentSectionGroup,
+    currentStreamGroup,
   } = props;
-  const VisuallyHiddenInput = styled("input")({
-    clip: "rect(0 0 0 0)",
-    clipPath: "inset(50%)",
-    height: 1,
-    overflow: "hidden",
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    whiteSpace: "nowrap",
-    width: 1,
-  });
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [currentSection, setCurrentSection] = useState("");
-  const [currentStream, setCurrentStream] = useState("");
-  const [currentFeeGroup, setCurrentFeeGroup] = useState("");
-
-  useEffect(() => {
-    if (row) {
-      setCurrentSection(row.section || "");
-      setCurrentStream(row.stream || "");
-      setCurrentFeeGroup(row.fee_group || "");
-    }
-  }, [row]);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <React.Fragment>
@@ -283,7 +269,7 @@ const Row = (props) => {
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
+            // background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -308,35 +294,16 @@ const Row = (props) => {
         <StyledTableCell align="center" style={{ minWidth: "150px" }}>
           <Typography>{row?.admission_number}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-          >
-            Upload file
-            <VisuallyHiddenInput type="file" />
-          </Button>
-          {/* <Avatar
-            alt="Remy Sharp"
-            src="/static/images/avatar/1.jpg"
-            sx={{ width: 56, height: 56 }}
-          /> */}
-        </StyledTableCell>
+
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
           <FormControl fullWidth>
             <InputLabel id="section-select-label">Section</InputLabel>
             <Select
               labelId="section-select-label"
               id="section-select"
-              value={currentSection}
+              value={currentSectionGroup}
               label="Section"
-              onChange={(e) => {
-                setCurrentSection(e.target.value);
-                setSectionUpdate(e.target.value);
-              }}
+              onChange={(e) => handleSectionChange(row._id, e.target.value)}
             >
               {Config.SectionList.map((item, ind) => (
                 <MenuItem key={ind} value={item.label}>
@@ -352,33 +319,11 @@ const Row = (props) => {
             <Select
               labelId="stream-select-label"
               id="stream-select"
-              value={currentStream}
+              value={currentStreamGroup}
               label="Stream"
-              onChange={(e) => {
-                setCurrentStream(e.target.value);
-              }}
+              onChange={(e) => handleStreamChange(row._id, e.target.value)}
             >
               {Config.StreamList.map((item, ind) => (
-                <MenuItem key={ind} value={item.label}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <FormControl fullWidth>
-            <InputLabel id="fee-group-select-label">Fee Group</InputLabel>
-            <Select
-              labelId="fee-group-select-label"
-              id="fee-group-select"
-              value={currentFeeGroup}
-              label="Fee Group"
-              onChange={(e) => {
-                setCurrentFeeGroup(e.target.value);
-              }}
-            >
-              {Config.FeeGroup.map((item, ind) => (
                 <MenuItem key={ind} value={item.label}>
                   {item.label}
                 </MenuItem>

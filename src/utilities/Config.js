@@ -743,33 +743,82 @@ const genders = [
 ];
 const TrueFalse = [
   {
-    value: 'True',
+    value: "True",
     label: "Yes",
   },
   {
-    value: 'False',
+    value: "False",
     label: "No",
   },
-
 ];
 const AttendanceType = [
   {
-    value: '1',
+    value: "1",
     label: "Present",
   },
   {
-    value: '2',
+    value: "2",
     label: "Absent",
   },
   {
-    value: '3',
+    value: "3",
     label: "Halfday",
   },
   {
-    value: '4',
+    value: "4",
     label: "Short Halfday",
   },
+];
 
+const reportType = [
+  {
+    value: "1",
+    label: "Student List",
+  },
+  {
+    value: "2",
+    label: "New Admission",
+  },
+  {
+    value: "3",
+    label: "Student Summary",
+  },
+  {
+    value: "4",
+    label: "Student Dropout List",
+  },
+  {
+    value: "5",
+    label: "Student TC Details",
+  },
+  {
+    value: "6",
+    label: "Sibling Details",
+  },
+  {
+    value: "7",
+    label: "Admission Register",
+  },
+  {
+    value: "8",
+    label: "Student Overview",
+  },
+  {
+    value: "9",
+    label: "House and Gender Wise Strength",
+  },
+  {
+    value: "10",
+    label: "Class section wise strength",
+  },
+  {
+    value: "11",
+    label: "School Strength Report",
+  },
+  {
+    value: "12",
+    label: "Student Type Report",
+  },
 ];
 
 export default {
@@ -800,5 +849,6 @@ export default {
   CountryDta,
   ModeOfFollowUp,
   TrueFalse,
-  AttendanceType
+  AttendanceType,
+  reportType
 };

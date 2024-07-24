@@ -79,3 +79,7 @@ export const postAssignFeeGroup = async (payload) => {
   const response = await axiosInstance.post("/assig-fee-group", payload);
   return response?.data;
 };
+export const postAssignsectionStream = async (payload) => {
+  const response = await axiosInstance.post("/section-stream-update", payload);
+  return response?.data;
+};

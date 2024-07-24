@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Paper,
@@ -19,31 +19,32 @@ import {
   Checkbox,
   Tooltip,
 } from "@mui/material";
-import { GetStudentLsit } from "@/services/api";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import FormControl from "@mui/material/FormControl";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
+import { useMutation } from "react-query";
 import Config from "@/utilities/Config";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { addAttendance, addMarkAttendance } from "@/services/Attendance";
+import dayjs from "dayjs";
+import { toast } from "react-toastify";
+import QuickSearchToolbar from "@/components/SearchBar";
 
-const StudentWiseAttendance = () => {
+const ClassWiseAttendance = () => {
   const router = useRouter();
-  const { data: studentData, isLoading: studentLoading } = useQuery(
-    "studentData",
-    async () => {
-      const res = await GetStudentLsit();
-      console.log(res, "---sdf");
-      return res?.data;
-    }
-  );
-
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
   const [allMarkDone, setAllMarkDone] = useState(false);
   const [allSmsDone, setAllSmsDone] = useState(false);
   const [markedAttendance, setMarkedAttendance] = useState([]);
   const [markedSms, setMarkedSms] = useState([]);
+  const [selectFromDate, setSelectFromDate] = useState(dayjs(new Date()));
+  const [selectToDate, setSelectToDate] = useState(dayjs(new Date()));
+  const [searchText, setSearchText] = useState("");
+
+  const [updatedAttendance, setUpdatedAttendance] = useState({});
+
+  // attendance_marked
 
   const handleAllMarkDoneChange = (e) => {
     const checked = e.target.checked;
@@ -77,18 +78,75 @@ const StudentWiseAttendance = () => {
     }
   };
 
-  const handleSubmit = () => {
-    const payload = {
-      markedAttendance: markedAttendance,
-      markedSms: markedSms,
-    };
-    console.log(payload, "----payload");
+  const {
+    mutate,
+    data: studentData,
+    error,
+    isLoading: studentLoading,
+  } = useMutation(addAttendance);
+
+  const filterHandler = () => {
+    if (selectClass && selectSection && selectFromDate) {
+      const payload = {
+        class: selectClass,
+        section: selectSection,
+        date: selectFromDate,
+      };
+      mutate(payload);
+    } else {
+      toast.error("Please select all the fields");
+    }
   };
+
+  const {
+    mutate: mutateMark,
+    data: markData,
+    errormarkError,
+    isLoading: markLoading,
+  } = useMutation(addMarkAttendance);
+
+  const handleSubmit = () => {
+    if (markedAttendance && selectFromDate) {
+      const payload = {};
+
+      Object.keys(updatedAttendance).forEach((studentId) => {
+        if (!payload[studentId]) {
+          payload[studentId] = {};
+        }
+        payload[studentId].attendance_marked = updatedAttendance[studentId];
+      });
+      payload.markedSms = markedSms;
+      payload.date = selectFromDate;
+
+      mutateMark(payload);
+      filterHandler();
+    } else {
+      toast.error("Please select all the fields");
+    }
+  };
+
+  const handleAttendanceMArkChange = (studentId, attendance_marked) => {
+    console.log(studentId, attendance_marked, "studentId, attendance_marked");
+    setUpdatedAttendance((prev) => ({
+      ...prev,
+      [studentId]: attendance_marked,
+    }));
+  };
+
+  useEffect(() => {
+    if (studentData) {
+      const initialAttendanceGroup = {};
+      studentData.forEach((student) => {
+        initialAttendanceGroup[student._id] = student?.attendance_marked || "";
+      });
+      setUpdatedAttendance(initialAttendanceGroup);
+    }
+  }, [studentData]);
 
   return (
     <div className="">
       <div sx={{ marginTop: "5rem" }} style={{ backgroundColor: "#fff" }}>
-        <Grid className="mt-5">
+      <Grid className="mt-5">
           <Typography className="text-red-500 mb-4 mt-5">
             (Note: [Date of join can change first academic year only]
             <br />
@@ -98,14 +156,25 @@ const StudentWiseAttendance = () => {
           </Typography>
         </Grid>
         <Grid container spacing={2} sx={{ py: 2, px: 2, alignItems: "center" }}>
+        <Grid item xs={12} sm={6} md={3} lg={3}>
+            <QuickSearchToolbar
+              onChange={(event) => setSearchText(event.target.value)}
+              isTeamMember="Search by Admission No, name, Class, Section"
+              value={searchText}
+              fullWidth
+              rootSx={{ p: 0, pb: 0, marginLeft: 0 }}
+              variant="outlined"
+              // onFilterClick={handleFilterClick}
+            />
+          </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <DatePicker
-              label="Date"
-              value={null}
+              label="From Date"
+              value={selectFromDate}
               fullWidth
               className="w-[100%]"
               onChange={(newValue) => {
-                setSelectClass(newValue);
+                setSelectFromDate(newValue);
               }}
               renderInput={(params) => (
                 <TextField
@@ -118,6 +187,25 @@ const StudentWiseAttendance = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
+            <DatePicker
+              label="To Date"
+              value={selectToDate}
+              fullWidth
+              className="w-[100%]"
+              onChange={(newValue) => {
+                setSelectToDate(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  fullWidth
+                  error={false}
+                />
+              )}
+            />
+          </Grid>
+          {/* <Grid item xs={12} sm={6} md={3}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Class</InputLabel>
               <Select
@@ -152,11 +240,17 @@ const StudentWiseAttendance = () => {
                 ))}
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={12} md={3}>
-            <Button variant="contained" size="large">
-              Filter
+            <Button
+              variant="contained"
+              size="large"
+              onClick={filterHandler}
+              disabled={studentLoading}
+            >
+              {studentLoading ? "Loading..." : "Student List"}
             </Button>
+            {error && <div className="text-red-500">Error fetching data</div>}
           </Grid>
         </Grid>
         <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
@@ -176,7 +270,7 @@ const StudentWiseAttendance = () => {
                       />
                     </Tooltip>
                   </StyledTableCell>
-                  <StyledTableCell align="center">Remark</StyledTableCell>
+                  {/* <StyledTableCell align="center">Remark</StyledTableCell> */}
                   <StyledTableCell align="center">
                     Send SMS{" "}
                     <Tooltip title="Select All">
@@ -218,6 +312,10 @@ const StudentWiseAttendance = () => {
                         handleSmsChange={handleSmsChange}
                         markedAttendance={markedAttendance}
                         markedSms={markedSms}
+                        handleAttendanceMArkChange={handleAttendanceMArkChange}
+                        currentAttendanceStatus={
+                          updatedAttendance[row._id] || ""
+                        }
                       />
                     ))}
                   </>
@@ -253,7 +351,8 @@ const StudentWiseAttendance = () => {
   );
 };
 
-export default StudentWiseAttendance;
+export default ClassWiseAttendance;
+
 const Row = (props) => {
   const {
     row,
@@ -263,6 +362,8 @@ const Row = (props) => {
     handleSmsChange,
     markedAttendance,
     markedSms,
+    handleAttendanceMArkChange,
+    currentAttendanceStatus,
   } = props;
 
   const isAttendanceChecked = markedAttendance.includes(row._id);
@@ -298,15 +399,34 @@ const Row = (props) => {
         <StyledTableCell align="center" style={{ minWidth: "250px" }}>
           <Typography>{row?.admission_number}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
-          <Checkbox
-            checked={isAttendanceChecked}
-            onChange={(e) => handleAttendanceChange(row._id, e.target.checked)}
-          />
+        <StyledTableCell
+          key={row._id}
+          align="center"
+          style={{ minWidth: "200px" }}
+        >
+          <FormControl fullWidth>
+            <InputLabel id="fee-group-select-label">Attendance Type</InputLabel>
+            <Select
+              labelId="fee-group-select-label"
+              id="fee-group-select"
+              value={currentAttendanceStatus}
+              label="Attendance Type"
+              onChange={(e) =>
+                handleAttendanceMArkChange(row._id, e.target.value)
+              }
+            >
+              {Config?.AttendanceType?.map((item, ind) => (
+                <MenuItem key={ind} value={item.label}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "200px" }}>
+
+        {/* <StyledTableCell align="center" style={{ minWidth: "200px" }}>
           <Typography>{"Remark"}</Typography>
-        </StyledTableCell>
+        </StyledTableCell> */}
         <StyledTableCell align="center" style={{ minWidth: "200px" }}>
           <Checkbox
             checked={isSmsChecked}

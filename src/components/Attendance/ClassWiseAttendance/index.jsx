@@ -19,11 +19,10 @@ import {
   Checkbox,
   Tooltip,
 } from "@mui/material";
-import { GetStudentLsit } from "@/services/api";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import FormControl from "@mui/material/FormControl";
 import { useRouter } from "next/router";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import Config from "@/utilities/Config";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { addAttendance, addMarkAttendance } from "@/services/Attendance";
@@ -42,7 +41,7 @@ const ClassWiseAttendance = () => {
 
   const [updatedAttendance, setUpdatedAttendance] = useState({});
 
-
+  // attendance_marked
 
   const handleAllMarkDoneChange = (e) => {
     const checked = e.target.checked;
@@ -76,7 +75,12 @@ const ClassWiseAttendance = () => {
     }
   };
 
-  const { mutate, data:studentData, error, isLoading:studentLoading } = useMutation(addAttendance);
+  const {
+    mutate,
+    data: studentData,
+    error,
+    isLoading: studentLoading,
+  } = useMutation(addAttendance);
 
   const filterHandler = () => {
     if (selectClass && selectSection && selectDate) {
@@ -86,40 +90,53 @@ const ClassWiseAttendance = () => {
         date: selectDate,
       };
       mutate(payload);
-    }else{
+    } else {
       toast.error("Please select all the fields");
     }
   };
 
-  const { mutate:mutateMark, data:markData, errormarkError, isLoading:markLoading } = useMutation(addMarkAttendance);
+  const {
+    mutate: mutateMark,
+    data: markData,
+    errormarkError,
+    isLoading: markLoading,
+  } = useMutation(addMarkAttendance);
 
   const handleSubmit = () => {
-    if(markedAttendance&&selectDate){
-      const payload = {
-        studentIds: markedAttendance,
-        markedSms: markedSms,
-        date: selectDate
-      };
+    if (markedAttendance && selectDate) {
+      const payload = {};
+
+      Object.keys(updatedAttendance).forEach((studentId) => {
+        if (!payload[studentId]) {
+          payload[studentId] = {};
+        }
+        payload[studentId].attendance_marked = updatedAttendance[studentId];
+      });
+      payload.markedSms = markedSms;
+      payload.date = selectDate;
+
       mutateMark(payload);
-      filterHandler()
-    }else{
+      filterHandler();
+    } else {
       toast.error("Please select all the fields");
     }
   };
 
-
-  const handleAttendanceMArkChange = (studentId, feeGroup) => {
-    console.log(studentId, feeGroup, 'studentId, feeGroup');
-    setUpdatedAttendance(prev => ({ ...prev, [studentId]: feeGroup }));
+  const handleAttendanceMArkChange = (studentId, attendance_marked) => {
+    console.log(studentId, attendance_marked, "studentId, attendance_marked");
+    setUpdatedAttendance((prev) => ({
+      ...prev,
+      [studentId]: attendance_marked,
+    }));
   };
 
   useEffect(() => {
     if (studentData) {
-      const initialFeeGroups = {};
-      studentData.forEach(student => {
-        initialFeeGroups[student._id] = student.fee_group || "";
+      const initialAttendanceGroup = {};
+      studentData.forEach((student) => {
+        initialAttendanceGroup[student._id] = student?.attendance_marked || "";
       });
-      setUpdatedAttendance(initialFeeGroups);
+      setUpdatedAttendance(initialAttendanceGroup);
     }
   }, [studentData]);
 
@@ -183,8 +200,13 @@ const ClassWiseAttendance = () => {
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={3}>
-            <Button variant="contained" size="large" onClick={filterHandler} disabled={studentLoading}>
-            {studentLoading ? 'Loading...' : 'Student List'}
+            <Button
+              variant="contained"
+              size="large"
+              onClick={filterHandler}
+              disabled={studentLoading}
+            >
+              {studentLoading ? "Loading..." : "Student List"}
             </Button>
             {error && <div className="text-red-500">Error fetching data</div>}
           </Grid>
@@ -249,7 +271,9 @@ const ClassWiseAttendance = () => {
                         markedAttendance={markedAttendance}
                         markedSms={markedSms}
                         handleAttendanceMArkChange={handleAttendanceMArkChange}
-                        currentAttendanceStatus={updatedAttendance[row._id] || ""}
+                        currentAttendanceStatus={
+                          updatedAttendance[row._id] || ""
+                        }
                       />
                     ))}
                   </>
@@ -297,7 +321,7 @@ const Row = (props) => {
     markedAttendance,
     markedSms,
     handleAttendanceMArkChange,
-    currentAttendanceStatus
+    currentAttendanceStatus,
   } = props;
 
   const isAttendanceChecked = markedAttendance.includes(row._id);
@@ -339,15 +363,21 @@ const Row = (props) => {
             onChange={(e) => handleAttendanceChange(row._id, e.target.checked)}
           />:<Typography>Present</Typography>}
         </StyledTableCell> */}
-        <StyledTableCell key={row._id} align="center" style={{ minWidth: "200px" }}>
-        <FormControl fullWidth>
+        <StyledTableCell
+          key={row._id}
+          align="center"
+          style={{ minWidth: "200px" }}
+        >
+          <FormControl fullWidth>
             <InputLabel id="fee-group-select-label">Attendance Type</InputLabel>
             <Select
               labelId="fee-group-select-label"
               id="fee-group-select"
               value={currentAttendanceStatus}
               label="Attendance Type"
-              onChange={(e) => handleAttendanceMArkChange(row._id, e.target.value)}
+              onChange={(e) =>
+                handleAttendanceMArkChange(row._id, e.target.value)
+              }
             >
               {Config?.AttendanceType?.map((item, ind) => (
                 <MenuItem key={ind} value={item.label}>
@@ -357,8 +387,6 @@ const Row = (props) => {
             </Select>
           </FormControl>
         </StyledTableCell>
-
-        
 
         {/* <StyledTableCell align="center" style={{ minWidth: "200px" }}>
           <Typography>{"Remark"}</Typography>

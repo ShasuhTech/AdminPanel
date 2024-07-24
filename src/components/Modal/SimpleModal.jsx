@@ -45,6 +45,7 @@ export default function SimpleModal({
           ...style,
           width: !isMobile ? width : "100%",
           height: height ? height : "auto%",
+          overflow:'scroll'
         }}
       >
         <Close
