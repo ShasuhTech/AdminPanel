@@ -15,24 +15,26 @@ import { StyledTableCell } from "@/styles/TableStyle/indx";
 import { useQuery } from "react-query";
 import CustomButton from "@/components/CommonButton/CustomButton";
 
-import { DeleteFollowUpById, getHolidayList } from "@/services/Attendance";
+import { DeleteAccountTupeById, getHolidayList } from "@/services/Attendance";
 import AccountTypeModal from "./Modal";
+import { DeleteAccountTypeId, GetAccountTypeList } from "@/services/api";
+import { toast } from "react-toastify";
 
 const AccountType = () => {
   const [open, setOpen] = useState(false);
   const [selectedItem, setSlectedItem] = useState();
 
-  const updateFollowUp = (item) => {
+  const updateAccountType = (item) => {
     setOpen(true);
     setSlectedItem(item);
   };
 
   const {
-    data: HolidayData,
-    status: HolidayStatus,
-    isLoading: HolidayLoading,
-    refetch: HolidayRefetch,
-  } = useQuery("getHolidayList", async () => {
+    data: AccountTyepData,
+    status: AccountTyepStatus,
+    isLoading: AccountTyepLoading,
+    refetch: AccountTyepRefetch,
+  } = useQuery("GetAccountTypeList", async () => {
     const payload = {};
     (payload.page = 1), (payload.limit = 100);
     // (payload.q = searchText),
@@ -40,19 +42,22 @@ const AccountType = () => {
     // (payload.section = selectSection),
     // (payload.status = selectStatus);
 
-    const res = await getHolidayList(payload);
+    const res = await GetAccountTypeList(payload);
     return res?.data;
   });
 
   useEffect(() => {
-    HolidayRefetch();
+    AccountTyepRefetch();
   }, [open]);
 
-  const deleteFollowUp = async (id) => {
+  const deleteAccountTupe = async (id) => {
     alert("Are You sure you want to delete");
     try {
-      await DeleteFollowUpById(id);
-      HolidayRefetch();
+      const res = await DeleteAccountTypeId(id);
+      if (res.success) {
+        toast.success("Successfully Deleted...");
+        AccountTyepRefetch();
+      }
     } catch (error) {}
   };
 
@@ -64,7 +69,7 @@ const AccountType = () => {
             <CustomButton
               onClick={() => {
                 setOpen(true);
-                setSlectedItem();
+                setSlectedItem("");
               }}
               sx={{ marginRight: "10px" }}
               variant="outlined"
@@ -81,7 +86,7 @@ const AccountType = () => {
               <Table aria-label="collapsible table">
                 <TableHead>
                   <TableRow style={{ fontWeight: "500", color: "#000" }}>
-                    <StyledTableCell align="center">Sl.No</StyledTableCell>
+                    {/* <StyledTableCell align="center">Sl.No</StyledTableCell> */}
                     <StyledTableCell align="left">Account Type</StyledTableCell>
                     <StyledTableCell align="left">Priority</StyledTableCell>
                     <StyledTableCell align="center">Action</StyledTableCell>
@@ -93,7 +98,7 @@ const AccountType = () => {
                     position: "relative",
                   }}
                 >
-                  {HolidayLoading ? (
+                  {AccountTyepLoading ? (
                     <TableRow>
                       <TableCell colSpan={12}>
                         <div
@@ -110,15 +115,15 @@ const AccountType = () => {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ) : HolidayData?.length > 0 ? (
+                  ) : AccountTyepData?.length > 0 ? (
                     <>
-                      {HolidayData?.map((row, index) => (
+                      {AccountTyepData?.map((row, index) => (
                         <Row
                           key={index}
                           row={row}
                           index={index}
-                          updateFollowUp={updateFollowUp}
-                          deleteFollowUp={deleteFollowUp}
+                          updateAccountType={updateAccountType}
+                          deleteAccountTupe={deleteAccountTupe}
                         />
                       ))}
                     </>
@@ -158,7 +163,7 @@ const AccountType = () => {
 
 export default AccountType;
 const Row = (props) => {
-  const { index, row, updateFollowUp, deleteFollowUp } = props;
+  const { index, row, updateAccountType, deleteAccountTupe } = props;
 
   return (
     <React.Fragment>
@@ -174,15 +179,15 @@ const Row = (props) => {
           },
         }}
       >
-        <StyledTableCell align="center" style={{ minWidth: "50px" }}>
+        {/* <StyledTableCell align="center" style={{ minWidth: "50px" }}>
           <Typography>{index + 1}</Typography>
-        </StyledTableCell>
+        </StyledTableCell> */}
 
         <StyledTableCell align="left" style={{ minWidth: "600px" }}>
-          <Typography>{"The Heritage School"}</Typography>
+          <Typography>{row?.name}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "200px" }}>
-          <Typography>{"1"}</Typography>
+          <Typography>{index + 1}</Typography>
         </StyledTableCell>
         <StyledTableCell
           align="center"
@@ -194,7 +199,7 @@ const Row = (props) => {
           }}
         >
           <CustomButton
-            onClick={() => updateFollowUp(row)}
+            onClick={() => updateAccountType(row)}
             sx={{ marginRight: "10px" }}
             variant="outlined"
             color="success"
@@ -205,7 +210,7 @@ const Row = (props) => {
           </CustomButton>
 
           <Button
-            onClick={() => deleteFollowUp(row?._id)}
+            onClick={() => deleteAccountTupe(row?._id)}
             variant="outlined"
             color="error"
             className="my-3"

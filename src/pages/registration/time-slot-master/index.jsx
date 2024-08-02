@@ -23,7 +23,13 @@ import {
   ListItemText,
   FormControlLabel,
 } from "@mui/material";
-import { GetStudentLsit } from "@/services/api";
+import {
+  AddTimeSlot,
+  DeleteTimeSlotId,
+  GetStudentLsit,
+  GetTimeSlotList,
+  updateTimeSlot,
+} from "@/services/api";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
@@ -34,19 +40,24 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 import * as Yup from "yup";
 import Config from "@/utilities/Config";
+import { toast } from "react-toastify";
+import moment from "moment";
+import dayjs from "dayjs";
+import SubmitButton from "@/components/CommonButton/SubmitButton";
 
 const TimeSlotMaster = () => {
   const [searchText, setSearchText] = useState("");
   const [folloeupModeModal, setFolloeupModeModal] = useState(false);
+  const [selectedRow, setselectedRow] = useState("");
   const router = useRouter();
 
   const {
-    data: studentData,
-    status: studentStatus,
-    isLoading: studentLoading,
-    refetch: studentRefetch,
-  } = useQuery("studentData", async () => {
-    const res = await GetStudentLsit();
+    data: timeslotData,
+    status: timeslotStatus,
+    isLoading: timeslotLoading,
+    refetch: timeslotRefetch,
+  } = useQuery("GetTimeSlotList", async () => {
+    const res = await GetTimeSlotList();
     console.log(res, "---sdf");
     return res?.data;
   });
@@ -55,8 +66,22 @@ const TimeSlotMaster = () => {
   };
   const handleOpen = () => {
     setFolloeupModeModal(true);
+    setselectedRow("");
   };
+  useEffect(() => {
+    timeslotRefetch();
+  }, [folloeupModeModal]);
 
+  const deleteHoliday = async (id) => {
+    alert("Are You sure you want to delete");
+    try {
+      const res = await DeleteTimeSlotId(id);
+      if (res?.success) {
+        timeslotRefetch();
+        toast.success("Successfully Deleted...");
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="">
@@ -79,8 +104,10 @@ const TimeSlotMaster = () => {
                   <StyledTableCell align="left">Date</StyledTableCell>
                   <StyledTableCell align="left">Slot Time</StyledTableCell>
                   <StyledTableCell align="left">End Tiem</StyledTableCell>
-                  <StyledTableCell align="left">Number Of Student</StyledTableCell>
-                  <StyledTableCell align="left">Total Schedule</StyledTableCell>
+                  <StyledTableCell align="left">
+                    Number Of Student
+                  </StyledTableCell>
+                  {/* <StyledTableCell align="left">Total Schedule</StyledTableCell> */}
                   <StyledTableCell align="left">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -90,7 +117,7 @@ const TimeSlotMaster = () => {
                   position: "relative",
                 }}
               >
-                {false ? (
+                {timeslotLoading ? (
                   <TableRow>
                     <TableCell colSpan={12}>
                       <div
@@ -107,14 +134,17 @@ const TimeSlotMaster = () => {
                       </div>
                     </TableCell>
                   </TableRow>
-                ) : true ? (
+                ) : timeslotData?.length > 0 ? (
                   <>
-                    {[1, 1, 1, 1]?.map((row, index) => (
+                    {timeslotData?.map((row, index) => (
                       <Row
                         key={index}
                         row={row}
                         index={index}
                         router={router}
+                        deleteHoliday={deleteHoliday}
+                        setselectedRow={setselectedRow}
+                        setFolloeupModeModal={setFolloeupModeModal}
                       />
                     ))}
                   </>
@@ -141,8 +171,11 @@ const TimeSlotMaster = () => {
           </TableContainer>
         </Paper>
       </div>{" "}
-      <TimeSlotModal open={folloeupModeModal} handleClose={handleclose} />
-     
+      <TimeSlotModal
+        open={folloeupModeModal}
+        handleClose={handleclose}
+        selectedRow={selectedRow}
+      />
     </div>
   );
 };
@@ -150,24 +183,20 @@ const TimeSlotMaster = () => {
 export default TimeSlotMaster;
 
 const Row = (props) => {
-  const { row, salonDetails, setSalonDetails, index, router } = props;
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const {
+    row,
+    index,
+    deleteHoliday,
+    setselectedRow,
+    setFolloeupModeModal,
+  } = props;
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <React.Fragment>
       <TableRow
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -179,32 +208,45 @@ const Row = (props) => {
           <Typography>{index + 1}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "100px" }}>
-          <Typography>{"1"}</Typography>
+          <Typography>{row?.slot_name}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"10"}</Typography>
-        </StyledTableCell>
-
-        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"01/07/2023"}</Typography>
+          <Typography>{row?.class}</Typography>
         </StyledTableCell>
 
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"10:00 AM"}</Typography>
+          <Typography>{moment(row?.date).format("DD/MM/YYYY")}</Typography>
+        </StyledTableCell>
+
+        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
+          <Typography>{moment(row?.start_time).format("hh:mm A")}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "100px" }}>
-        <Typography>{"10:00 AM"}</Typography>
+          <Typography>{moment(row?.end_time).format("hh:mm A")}</Typography>
         </StyledTableCell>
         <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>{"2"}</Typography>
+          <Typography>{row?.no_of_students}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "100px" }}>
+        {/* <StyledTableCell align="center" style={{ minWidth: "100px" }}>
           <Typography>{"0"}</Typography>
-        </StyledTableCell>
+        </StyledTableCell> */}
 
         <StyledTableCell align="left" style={{ minWidth: "200px", gap: 2 }}>
-          <Button variant="outlined">Edit</Button>
-          <Button sx={{ marginLeft: "10px" }} variant="outlined" color="error">
+          <Button
+            onClick={() => {
+              setselectedRow(row);
+              setFolloeupModeModal(true);
+            }}
+            variant="outlined"
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={() => deleteHoliday(row?._id)}
+            sx={{ marginLeft: "10px" }}
+            variant="outlined"
+            color="error"
+          >
             Delete
           </Button>
         </StyledTableCell>
@@ -213,34 +255,66 @@ const Row = (props) => {
   );
 };
 
-const TimeSlotModal = ({ open, handleClose }) => {
+const TimeSlotModal = ({ open, handleClose, selectedRow }) => {
+  const initialValues = {
+    slotName: selectedRow?.slot_name || "",
+    numberOfStudents: selectedRow?.no_of_students || "",
+    date: selectedRow?.date ? dayjs(selectedRow.date) : dayjs(new Date()),
+    startTime: selectedRow?.start_time ? dayjs(selectedRow.start_time) : null,
+    endTime: selectedRow?.end_time ? dayjs(selectedRow.end_time) : null,
+    class: selectedRow?.class || "",
+  };
+
+  const validationSchema = Yup.object({
+    slotName: Yup.string().required("Required"),
+    numberOfStudents: Yup.number().required("Required").positive().integer(),
+    date: Yup.date().required("Required"),
+    startTime: Yup.date().required("Required"),
+    endTime: Yup.date().required("Required"),
+    class: Yup.string().required("Required"),
+  });
+
+  const handleSubmit = async (values, { setSubmitting, setStatus }) => {
+    setSubmitting(true);
+    setStatus(null);
+  
+    const payload = {
+      date: values.date.toISOString(),
+      start_time: values.startTime.toISOString(),
+      end_time: values.endTime.toISOString(),
+      class: values.class,
+      no_of_students: values.numberOfStudents,
+      slot_name: values.slotName,
+      ...(selectedRow?._id && { id: selectedRow._id }),
+    };
+  
+    try {
+      const response = selectedRow
+        ? await updateTimeSlot(payload)
+        : await AddTimeSlot(payload);
+  
+      if (response) {
+        toast.success(`Time slot ${selectedRow ? "updated" : "created"} successfully`);
+        handleClose();
+      }
+    } catch (error) {
+      const errorMessage = "Something went wrong. Please try again.";
+      toast.error(errorMessage);
+      setStatus({ error: errorMessage });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <SimpleModal open={open} handleClose={handleClose}>
       <Typography variant="h5">Time Slot</Typography>
 
       <Formik
-        initialValues={{
-          name: "",
-          email: "",
-          date: null,
-          time: null,
-          Class: "",
-        }}
-        validationSchema={Yup.object({
-          name: Yup.string().required("Required"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Required"),
-          date: Yup.date().required("Required"),
-          time: Yup.date().required("Required"),
-        })}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
         validateOnBlur
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
+        onSubmit={handleSubmit}
       >
         {({
           isSubmitting,
@@ -254,13 +328,15 @@ const TimeSlotModal = ({ open, handleClose }) => {
         }) => (
           <Form>
             <Grid container spacing={2} mt={2}>
-            <Grid item xs={12} sm={12} md={6} className="">
+              <Grid item xs={12} sm={12} md={6}>
                 <DatePicker
                   label="Date"
                   name="date"
-                  fullWidth
-                  className="w-[100%]"
                   inputFormat="MM/dd/yyyy"
+                  value={values.date}
+                  fullWidth
+                  className="w-full"
+                  onChange={(value) => setFieldValue("date", value)}
                   renderInput={(params) => <TextField fullWidth {...params} />}
                 />
                 <ErrorMessage name="date" component="div" />
@@ -275,7 +351,6 @@ const TimeSlotModal = ({ open, handleClose }) => {
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={false}
                   value={values.class}
                   helperText={<ErrorMessage name="class" />}
                 >
@@ -286,66 +361,75 @@ const TimeSlotModal = ({ open, handleClose }) => {
                   ))}
                 </Field>
               </Grid>
-
-              <Grid item xs={12} sm={12} md={6} className="">
-              <TimePicker
+              <Grid item xs={12} sm={12} md={6}>
+                <TimePicker
                   label="Start Time"
-                  name="time"
-                  className="w-[100%]"
-                  renderInput={(params) => <TextField {...params} />}
+                  name="startTime"
+                  fullWidth
+                  className="w-full"
+                  value={values.startTime}
+                  onChange={(value) => setFieldValue("startTime", value)}
+                  renderInput={(params) => <TextField {...params} fullWidth />}
                 />
-                <ErrorMessage name="time" component="div" />
+                <ErrorMessage name="startTime" component="div" />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} className="">
-              <TimePicker
+              <Grid item xs={12} sm={12} md={6}>
+                <TimePicker
                   label="End Time"
-                  name="time"
-                  className="w-[100%]"
+                  name="endTime"
+                  value={values.endTime}
+                  className="w-full"
+                  onChange={(value) => setFieldValue("endTime", value)}
                   renderInput={(params) => <TextField {...params} />}
                 />
-                <ErrorMessage name="time" component="div" />
+                <ErrorMessage name="endTime" component="div" />
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Field
-                  name="first_name"
+                  name="slotName"
                   as={TextField}
                   label="Slot Name"
                   variant="outlined"
-                  // required
-                  value={values.first_name}
+                  value={values.slotName}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={false}
-                  helperText={<ErrorMessage name="first_name" />}
+                  helperText={<ErrorMessage name="slotName" />}
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Field
-                  name="first_name"
+                  name="numberOfStudents"
                   as={TextField}
-                  label="No Of Student"
+                  label="Number of Students"
                   variant="outlined"
-                  // required
-                  value={values.first_name}
+                  type="number"
+                  value={values.numberOfStudents}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={false}
-                  helperText={<ErrorMessage name="first_name" />}
+                  helperText={<ErrorMessage name="numberOfStudents" />}
                 />
               </Grid>
-              
-              <Grid item xs={12} sx={{display:'flex',justifyContent:'flex-end'}}>
-                <Button
+              <Grid
+                item
+                xs={12}
+                sx={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <SubmitButton
                   type="submit"
                   variant="contained"
                   color="primary"
                   disabled={isSubmitting}
                 >
-                  Submit
-                </Button>
+                  {!selectedRow ? " Submit" : "Update"}
+                </SubmitButton>
               </Grid>
+              {/* {status && status.error && (
+                <Grid item xs={12}>
+                  <Typography color="error">{status.error}</Typography>
+                </Grid>
+              )} */}
             </Grid>
           </Form>
         )}
@@ -353,5 +437,3 @@ const TimeSlotModal = ({ open, handleClose }) => {
     </SimpleModal>
   );
 };
-
-

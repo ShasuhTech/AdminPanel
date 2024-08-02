@@ -11,32 +11,33 @@ import {
   TableBody,
   Table,
   CircularProgress,
-  TablePagination,
   MenuItem,
-  Select,
-  Menu,
-  IconButton,
-  InputLabel,
   TextField,
   Button,
-  Checkbox,
-  ListItemText,
-  FormControlLabel,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
-import { GetStudentLsit } from "@/services/api";
+import {
+  AddAgeCriteria,
+  GetAgeCriteriaId,
+  GetStudentLsit,
+  updateAgeCriteria,
+} from "@/services/api";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import SimpleModal from "@/components/Modal/SimpleModal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 import * as Yup from "yup";
 import Config from "@/utilities/Config";
+import { addHolidayList } from "@/services/Attendance";
+import dayjs from "dayjs";
+import CustomButton from "@/components/CommonButton/CustomButton";
 
 const AgeCriteria = () => {
-  const [searchText, setSearchText] = useState("");
   const [folloeupModeModal, setFolloeupModeModal] = useState(false);
   const router = useRouter();
 
@@ -56,7 +57,6 @@ const AgeCriteria = () => {
   const handleOpen = () => {
     setFolloeupModeModal(true);
   };
-
 
   return (
     <div className="">
@@ -113,6 +113,7 @@ const AgeCriteria = () => {
                         row={row}
                         index={index}
                         router={router}
+                        // selectedItem={selectedItem}
                       />
                     ))}
                   </>
@@ -140,7 +141,6 @@ const AgeCriteria = () => {
         </Paper>
       </div>{" "}
       <RegStartModal open={folloeupModeModal} handleClose={handleclose} />
-     
     </div>
   );
 };
@@ -148,24 +148,15 @@ const AgeCriteria = () => {
 export default AgeCriteria;
 
 const Row = (props) => {
-  const { row, salonDetails, setSalonDetails, index, router } = props;
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const { row, salonDetails, setSalonDetails, index, router, selectedItem } =
+    props;
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <React.Fragment>
       <TableRow
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -205,138 +196,160 @@ const Row = (props) => {
   );
 };
 
-const RegStartModal = ({ open, handleClose }) => {
+const RegStartModal = ({ open, handleClose, selectedItem }) => {
+  const [selectClass, setselectClass] = useState()
+  const [minDateBirth, setminDateBirth] = useState(dayjs(new Date()));
+  const [maxDateBirth, setmaxDateBirth] = useState(dayjs(new Date()));
+  const [session, setsession] = useState("");
+  const [remark, setRemark] = useState("");
+
+  const submitHandler = async () => {
+    const payload = {
+      from: minDateBirth,
+      holiday_type: session,
+      remark: remark,
+    };
+    if (value !== "single") {
+      payload.to = maxDateBirth;
+    }
+
+    try {
+      if (!selectedItem?._id) {
+        await AddAgeCriteria(payload);
+      } else {
+        await updateAgeCriteria({ ...payload, id: selectedItem._id });
+      }
+      handleClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const { data: HolidayData, refetch: HolidayRefetch } = useQuery(
+    "GetAgeCriteriaById",
+    async () => {
+      if (!selectedItem?._id) return null;
+      const res = await GetAgeCriteriaId(selectedItem._id);
+      return res?.data;
+    },
+    {
+      enabled: !!selectedItem?._id,
+    }
+  );
+
+  useEffect(() => {
+    if (selectedItem?._id) {
+      HolidayRefetch();
+    }
+  }, [selectedItem?._id]);
+
+  useEffect(() => {
+    if (selectedItem?._id) {
+      if (HolidayData) {
+        console.log("Fetched Holiday Data:", HolidayData);
+        setminDateBirth(
+          HolidayData?.from ? dayjs(HolidayData?.from) : dayjs(new Date())
+        );
+        setmaxDateBirth(HolidayData?.to ? dayjs(HolidayData?.to) : dayjs(new Date()));
+        setsession(HolidayData?.holiday_type || "");
+        setRemark(HolidayData?.remark || "");
+      }
+    } else {
+      // Reset to initial state when selectedItem?._id is undefined
+      setminDateBirth(dayjs(new Date()));
+      setmaxDateBirth(dayjs(new Date()));
+      setsession("");
+      setRemark("");
+    }
+  }, [HolidayData, selectedItem?._id]);
+
   return (
     <SimpleModal open={open} handleClose={handleClose}>
       <Typography variant="h5">Age Criteria</Typography>
 
-      <Formik
-        initialValues={{
-          name: "",
-          email: "",
-          date: null,
-          time: null,
-          Class: "",
-        }}
-        validationSchema={Yup.object({
-          name: Yup.string().required("Required"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Required"),
-          date: Yup.date().required("Required"),
-          time: Yup.date().required("Required"),
-        })}
-        validateOnBlur
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
-      >
-        {({
-          isSubmitting,
-          status,
-          handleChange,
-          handleBlur,
-          values,
-          setFieldValue,
-          errors,
-          touched,
-        }) => (
-          <Form>
-            <Grid container spacing={2} mt={2}>
-              <Grid item xs={12} sm={12} md={6}>
-                <Field
-                  name="class"
-                  as={TextField}
-                  select
-                  label="Class"
-                  variant="outlined"
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
-                >
-                  {Config?.ClassList.map((option) => (
-                    <MenuItem key={option.label} value={option.label}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Field>
-              </Grid>
+      <Grid container spacing={2} mt={2}>
+        <Grid item xs={12} sm={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel id="holiday-type-label">Class</InputLabel>
+            <Select
+              labelId="holiday-type-label"
+              id="holiday-type"
+              value={session}
+              label="Class"
+              onChange={(e) => setsession(e.target.value)}
+            >
+              {Config?.ClassList.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
 
-              <Grid item xs={12} sm={12} md={6} className="">
-                <DatePicker
-                  label="Min Birth Date"
-                  name="date"
-                  fullWidth
-                  className="w-[100%]"
-                  inputFormat="MM/dd/yyyy"
-                  renderInput={(params) => <TextField fullWidth {...params} />}
-                />
-                <ErrorMessage name="date" component="div" />
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} className="">
-                <DatePicker
-                  label="Max Birth Date"
-                  name="date"
-                  fullWidth
-                  className="w-[100%]"
-                  inputFormat="MM/dd/yyyy"
-                  renderInput={(params) => <TextField fullWidth {...params} />}
-                />
-                <ErrorMessage name="date" component="div" />
-              </Grid>
-              <Grid item xs={12} sm={12} md={6}>
-                <Field
-                  name="class"
-                  as={TextField}
-                  select
-                  label="Session"
-                  variant="outlined"
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
-                >
-                  {Config?.ClassList.map((option) => (
-                    <MenuItem key={option.label} value={option.label}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Field>
-              </Grid>
-             
-              <Grid item xs={12} sm={12} md={6}>
-                <Field
-                  component={TextField}
-                  name="email"
-                  type="Registration Fee"
-                  label="Comments"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  disabled={isSubmitting}
-                >
-                  Submit
-                </Button>
-              </Grid>
-            </Grid>
-          </Form>
-        )}
-      </Formik>
+        <Grid item xs={12} sm={12} md={6} className="">
+          <DatePicker
+            label={"Min Birth Date"}
+            value={minDateBirth}
+            className="w-full"
+            onChange={(newValue) => setminDateBirth(newValue)}
+            renderInput={(params) => (
+              <TextField {...params} variant="outlined" />
+            )}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} className="">
+          <DatePicker
+            label="Max Birth Date"
+            value={maxDateBirth}
+            className="w-full"
+            fullWidth
+            onChange={(newValue) => setmaxDateBirth(newValue)}
+            renderInput={(params) => (
+              <TextField {...params} variant="outlined" fullWidth />
+            )}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel id="holiday-type-label">Class</InputLabel>
+            <Select
+              labelId="holiday-type-label"
+              id="holiday-type"
+              value={session}
+              label="Class"
+              onChange={(e) => setsession(e.target.value)}
+            >
+              {Config?.ClassList.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={12} sm={12} md={12}>
+          <TextField
+            id="remark"
+            label="Remark"
+            fullWidth
+            value={remark}
+            variant="outlined"
+            onChange={(e) => setRemark(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} className="flex justify-end">
+          <CustomButton
+            type="submit"
+            variant="contained"
+            color="primary"
+            // disabled={isSubmitting}
+          >
+            Submit
+          </CustomButton>
+        </Grid>
+      </Grid>
     </SimpleModal>
   );
 };
-
-

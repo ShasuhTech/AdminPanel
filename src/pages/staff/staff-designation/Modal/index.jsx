@@ -2,8 +2,14 @@
 import CustomButton from "@/components/CommonButton/CustomButton";
 import {
   AddAccountType,
+  AddDepartment,
+  AddDesignation,
+  AddOccupation,
   GetAccountTypeId,
   updateAccountType,
+  updateDepartment,
+  updateDesignation,
+  updateOccupation,
 } from "@/services/api";
 import { GetHolidayById } from "@/services/Attendance";
 import Config from "@/utilities/Config";
@@ -25,11 +31,10 @@ const style = {
   borderRadius: "10px",
 };
 
-const AccountTypeModal = ({ open, handleClose, selectedItem }) => {
-  console.log(selectedItem, "--selectedItem");
+const StaffDesignationModal = ({ open, handleClose, selectedItem }) => {
   const [remark, setRemark] = useState("");
   useEffect(() => {
-    setRemark(selectedItem?.name||'');
+    setRemark(selectedItem?.name || "");
   }, [selectedItem]);
 
   const submitHandler = async () => {
@@ -39,52 +44,25 @@ const AccountTypeModal = ({ open, handleClose, selectedItem }) => {
 
     try {
       if (!selectedItem?._id) {
-        const res = await AddAccountType(payload);
+        const res = await AddDesignation(payload);
         if (res?.success) {
           toast.success("Successfully Added...");
+          handleClose();
         }
       } else {
-        const res = await updateAccountType({
+        const res = await updateDesignation({
           ...payload,
           id: selectedItem._id,
         });
         if (res?.success) {
           toast.success("Successfully Updated...");
+          handleClose();
         }
       }
-      handleClose();
     } catch (error) {
       console.error(error);
     }
   };
-
-  // const { data: AccpuntTypeData, refetch: AccountTypeRefetch } = useQuery(
-  //   "GetAccountTypeId",
-  //   async () => {
-  //     if (!selectedItem?._id) return null;
-  //     const res = await GetAccountTypeId(selectedItem._id);
-  //     return res?.data;
-  //   },
-  //   {
-  //     enabled: !!selectedItem?._id,
-  //   }
-  // );
-
-  // useEffect(() => {
-  //   if (selectedItem?._id) {
-  //     AccountTypeRefetch();
-  //   }
-  // }, [selectedItem?._id]);
-
-  // useEffect(() => {
-  //   if (selectedItem?._id) {
-  //     if (AccpuntTypeData) {
-  //       setRemark(AccpuntTypeData?.name || "");
-  //     }
-  //   } else {
-  //     setRemark("");
-  //   }
-  // }, [AccpuntTypeData, selectedItem?._id]);
 
   return (
     <Modal
@@ -95,7 +73,7 @@ const AccountTypeModal = ({ open, handleClose, selectedItem }) => {
     >
       <Box sx={style}>
         <Typography id="modal-title" mb={3} component="h4">
-          Account Type
+          Staff Designation
         </Typography>
 
         <Box sx={{ width: "100%" }}>
@@ -119,4 +97,4 @@ const AccountTypeModal = ({ open, handleClose, selectedItem }) => {
   );
 };
 
-export default AccountTypeModal;
+export default StaffDesignationModal;

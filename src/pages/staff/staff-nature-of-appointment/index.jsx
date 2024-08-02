@@ -14,42 +14,42 @@ import {
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import { useQuery } from "react-query";
 import CustomButton from "@/components/CommonButton/CustomButton";
-import { DeleteDepartmentId, DeleteOccupationId, DeleteStaffOccupationId, GetDepartmentList, GetOccupationList, GetStaffOccupationList } from "@/services/api";
+import { DeleteDepartmentId, DeleteNatureOfAppointmentId, DeleteOccupationId, DeleteStaffNatureOfAppointmentId, GetDepartmentList, GetNatureOfAppointmentList, GetOccupationList, GetStaffNatureOfAppointmentList } from "@/services/api";
 import { toast } from "react-toastify";
-import StaffOccupationModal from "./Modal";
+import StaffNatureOfAppointmentModal from "./Modal";
 
-const StaffOccupation = () => {
+const StaffNatureOfAppointment = () => {
   const [open, setOpen] = useState(false);
   const [selectedItem, setSlectedItem] = useState();
 
-  const updateStaffOccupation = (item) => {
+  const updateStaffNatureOfAppointment = (item) => {
     setOpen(true);
     setSlectedItem(item);
   };
 
   const {
-    data: StaffOccupationData,
-    status: StaffOccupationStatus,
-    isLoading: StaffOccupationLoading,
-    refetch: StaffOccupationRefetch,
-  } = useQuery("GetOccupationList", async () => {
+    data: StaffNatureOfAppointmentData,
+    status: StaffNatureOfAppointmentStatus,
+    isLoading: StaffNatureOfAppointmentLoading,
+    refetch: StaffNatureOfAppointmentRefetch,
+  } = useQuery("GetNatureOfAppointmentList", async () => {
     const payload = {};
     (payload.page = 1), (payload.limit = 100);
-    const res = await GetOccupationList(payload);
+    const res = await GetNatureOfAppointmentList(payload);
     return res?.data;
   });
 
   useEffect(() => {
-    StaffOccupationRefetch();
+    StaffNatureOfAppointmentRefetch();
   }, [open]);
 
-  const deleteStaffOccupation = async (id) => {
+  const deleteStaffNatureOfAppointment = async (id) => {
     alert("Are You sure you want to delete");
     try {
-      const res = await DeleteOccupationId(id);
+      const res = await DeleteNatureOfAppointmentId(id);
       if (res.success) {
         toast.success("Successfully Deleted...");
-        StaffOccupationRefetch();
+        StaffNatureOfAppointmentRefetch();
       }
     } catch (error) {}
   };
@@ -70,7 +70,7 @@ const StaffOccupation = () => {
               width={"250px"}
               py={2}
             >
-              Create Staff Occupation
+              Create Nature Of Appointment
             </CustomButton>
           </div>
 
@@ -81,7 +81,7 @@ const StaffOccupation = () => {
                   <TableRow style={{ fontWeight: "500", color: "#000" }}>
                     {/* <StyledTableCell align="center">Sl.No</StyledTableCell> */}
                     <StyledTableCell align="left">
-                      Staff Occupation
+                      Staff Nature Of Appointment
                     </StyledTableCell>
                     <StyledTableCell align="left">Priority</StyledTableCell>
                     <StyledTableCell align="center">Action</StyledTableCell>
@@ -93,7 +93,7 @@ const StaffOccupation = () => {
                     position: "relative",
                   }}
                 >
-                  {StaffOccupationLoading ? (
+                  {StaffNatureOfAppointmentLoading ? (
                     <TableRow>
                       <TableCell colSpan={12}>
                         <div
@@ -110,15 +110,15 @@ const StaffOccupation = () => {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ) : StaffOccupationData?.length > 0 ? (
+                  ) : StaffNatureOfAppointmentData?.length > 0 ? (
                     <>
-                      {StaffOccupationData?.map((row, index) => (
+                      {StaffNatureOfAppointmentData?.map((row, index) => (
                         <Row
                           key={index}
                           row={row}
                           index={index}
-                          updateStaffOccupation={updateStaffOccupation}
-                          deleteStaffOccupation={deleteStaffOccupation}
+                          updateStaffNatureOfAppointment={updateStaffNatureOfAppointment}
+                          deleteStaffNatureOfAppointment={deleteStaffNatureOfAppointment}
                         />
                       ))}
                     </>
@@ -147,7 +147,7 @@ const StaffOccupation = () => {
           </Paper>
         </div>
       </div>
-      <StaffOccupationModal
+      <StaffNatureOfAppointmentModal
         open={open}
         handleClose={() => setOpen(false)}
         selectedItem={selectedItem}
@@ -156,9 +156,9 @@ const StaffOccupation = () => {
   );
 };
 
-export default StaffOccupation;
+export default StaffNatureOfAppointment;
 const Row = (props) => {
-  const { index, row, updateStaffOccupation, deleteStaffOccupation } = props;
+  const { index, row, updateStaffNatureOfAppointment, deleteStaffNatureOfAppointment } = props;
 
   return (
     <React.Fragment>
@@ -194,7 +194,7 @@ const Row = (props) => {
           }}
         >
           <CustomButton
-            onClick={() => updateStaffOccupation(row)}
+            onClick={() => updateStaffNatureOfAppointment(row)}
             sx={{ marginRight: "10px" }}
             variant="outlined"
             color="success"
@@ -205,7 +205,7 @@ const Row = (props) => {
           </CustomButton>
 
           <Button
-            onClick={() => deleteStaffOccupation(row?._id)}
+            onClick={() => deleteStaffNatureOfAppointment(row?._id)}
             variant="outlined"
             color="error"
             className="my-3"

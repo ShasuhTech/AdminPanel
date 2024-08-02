@@ -10,69 +10,47 @@ import {
   Button,
   CircularProgress,
   Typography,
-  TextField,
 } from "@mui/material";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
-import { GetStudentLsit } from "@/services/api";
 import { useQuery } from "react-query";
 import CustomButton from "@/components/CommonButton/CustomButton";
-import AssignTeacherModal from "./Modal";
-import QuickSearchToolbar from "@/components/SearchBar";
-import HolidayAssignModal from "./Modal";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
-import { DeleteFollowUpById, getHolidayList } from "@/services/Attendance";
-import moment from "moment";
-import { ErrorMessage } from "formik";
+import { DeleteDepartmentId, DeleteStaffDepartmentId, GetDepartmentList, GetStaffDepartmentList } from "@/services/api";
+import { toast } from "react-toastify";
+import StaffDepartmentModal from "./Modal";
 
-const initialData = [
-  { id: 1, userId: "adm", classSec: "I-A, IV-C, VII-F, XI-FPN..." },
-  { id: 2, userId: "SCHOOLADMIN_1", classSec: "I-A, IV-C, VII-F, XI-FPN..." },
-  { id: 3, userId: "ANAND.TIWARI", classSec: "I-A, IV-C, VII-F, XI-FPN..." },
-  { id: 4, userId: "ABIR.MUKHERJEE", classSec: "X-A" },
-];
-
-const FollowUpMode = () => {
-  const [data, setData] = useState(initialData);
+const StaffDepartment = () => {
   const [open, setOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [searchText, setSearchText] = useState("");
   const [selectedItem, setSlectedItem] = useState();
-  const [date, setDate] = useState(dayjs(new Date()));
-  const updateFollowUp = (item) => {
+
+  const updateStaffDepartment = (item) => {
     setOpen(true);
     setSlectedItem(item);
   };
 
   const {
-    data: HolidayData,
-    status: HolidayStatus,
-    isLoading: HolidayLoading,
-    refetch: HolidayRefetch,
-  } = useQuery("getHolidayList", async () => {
+    data: StaffDepartmentData,
+    status: StaffDepartmentStatus,
+    isLoading: StaffDepartmentLoading,
+    refetch: StaffDepartmentRefetch,
+  } = useQuery("GetDepartmentList", async () => {
     const payload = {};
     (payload.page = 1), (payload.limit = 100);
-    // (payload.q = searchText),
-    // (payload.classNumber = selectClass),
-    // (payload.section = selectSection),
-    // (payload.status = selectStatus);
-
-    const res = await getHolidayList(payload);
+    const res = await GetDepartmentList(payload);
     return res?.data;
   });
 
   useEffect(() => {
-    HolidayRefetch();
+    StaffDepartmentRefetch();
   }, [open]);
 
-  const deleteFollowUp = async (id) => {
+  const deleteStaffDepartment = async (id) => {
     alert("Are You sure you want to delete");
     try {
-      await DeleteFollowUpById(id);
-      HolidayRefetch();
+      const res = await DeleteDepartmentId(id);
+      if (res.success) {
+        toast.success("Successfully Deleted...");
+        StaffDepartmentRefetch();
+      }
     } catch (error) {}
   };
 
@@ -81,12 +59,10 @@ const FollowUpMode = () => {
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <div className="p-4">
           <div className="flex items-center justify-end gap-4 mb-4">
-           
-            
             <CustomButton
               onClick={() => {
                 setOpen(true);
-                setSlectedItem();
+                setSlectedItem("");
               }}
               sx={{ marginRight: "10px" }}
               variant="outlined"
@@ -94,7 +70,7 @@ const FollowUpMode = () => {
               width={"200px"}
               py={2}
             >
-              Add FollowUp Mode
+              Create Staff Department
             </CustomButton>
           </div>
 
@@ -103,8 +79,11 @@ const FollowUpMode = () => {
               <Table aria-label="collapsible table">
                 <TableHead>
                   <TableRow style={{ fontWeight: "500", color: "#000" }}>
-                    <StyledTableCell align="center">Sl.No</StyledTableCell>
-                    <StyledTableCell align="left">FollowUp</StyledTableCell>
+                    {/* <StyledTableCell align="center">Sl.No</StyledTableCell> */}
+                    <StyledTableCell align="left">
+                      Staff Department
+                    </StyledTableCell>
+                    <StyledTableCell align="left">Priority</StyledTableCell>
                     <StyledTableCell align="center">Action</StyledTableCell>
                   </TableRow>
                 </TableHead>
@@ -114,7 +93,7 @@ const FollowUpMode = () => {
                     position: "relative",
                   }}
                 >
-                  {HolidayLoading ? (
+                  {StaffDepartmentLoading ? (
                     <TableRow>
                       <TableCell colSpan={12}>
                         <div
@@ -131,15 +110,15 @@ const FollowUpMode = () => {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ) : HolidayData?.length > 0 ? (
+                  ) : StaffDepartmentData?.length > 0 ? (
                     <>
-                      {HolidayData?.map((row, index) => (
+                      {StaffDepartmentData?.map((row, index) => (
                         <Row
                           key={index}
                           row={row}
                           index={index}
-                          updateFollowUp={updateFollowUp}
-                          deleteFollowUp={deleteFollowUp}
+                          updateStaffDepartment={updateStaffDepartment}
+                          deleteStaffDepartment={deleteStaffDepartment}
                         />
                       ))}
                     </>
@@ -168,7 +147,7 @@ const FollowUpMode = () => {
           </Paper>
         </div>
       </div>
-      <HolidayAssignModal
+      <StaffDepartmentModal
         open={open}
         handleClose={() => setOpen(false)}
         selectedItem={selectedItem}
@@ -177,9 +156,9 @@ const FollowUpMode = () => {
   );
 };
 
-export default FollowUpMode;
+export default StaffDepartment;
 const Row = (props) => {
-  const { index, row, updateFollowUp, deleteFollowUp } = props;
+  const { index, row, updateStaffDepartment, deleteStaffDepartment } = props;
 
   return (
     <React.Fragment>
@@ -195,12 +174,15 @@ const Row = (props) => {
           },
         }}
       >
-        <StyledTableCell align="center" style={{ minWidth: "50px" }}>
+        {/* <StyledTableCell align="center" style={{ minWidth: "50px" }}>
           <Typography>{index + 1}</Typography>
+        </StyledTableCell> */}
+
+        <StyledTableCell align="left" style={{ minWidth: "600px" }}>
+          <Typography>{row?.name}</Typography>
         </StyledTableCell>
-       
-        <StyledTableCell align="left" style={{ minWidth: "750px" }}>
-          <Typography>{'Phone'}</Typography>
+        <StyledTableCell align="left" style={{ minWidth: "200px" }}>
+          <Typography>{index + 1}</Typography>
         </StyledTableCell>
         <StyledTableCell
           align="center"
@@ -212,7 +194,7 @@ const Row = (props) => {
           }}
         >
           <CustomButton
-            onClick={() => updateFollowUp(row)}
+            onClick={() => updateStaffDepartment(row)}
             sx={{ marginRight: "10px" }}
             variant="outlined"
             color="success"
@@ -223,7 +205,7 @@ const Row = (props) => {
           </CustomButton>
 
           <Button
-            onClick={() => deleteFollowUp(row?._id)}
+            onClick={() => deleteStaffDepartment(row?._id)}
             variant="outlined"
             color="error"
             className="my-3"

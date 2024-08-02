@@ -1,39 +1,19 @@
 "use client";
 import CustomButton from "@/components/CommonButton/CustomButton";
 import {
-  GetHolidayById,
-  addHolidayList,
-  updateHolidayList,
-} from "@/services/Attendance";
+  AddAccountType,
+  AddDepartment,
+  GetAccountTypeId,
+  updateAccountType,
+  updateDepartment,
+} from "@/services/api";
+import { GetHolidayById } from "@/services/Attendance";
 import Config from "@/utilities/Config";
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  Modal,
-  OutlinedInput,
-  Radio,
-  RadioGroup,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import { Box, Grid, Modal, TextField, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-
-const holidayList = [
-  { id: 1, name: "Holiday" },
-  { id: 2, name: "Working" },
-  { id: 3, name: "Halfday" },
-];
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -47,105 +27,40 @@ const style = {
   borderRadius: "10px",
 };
 
-const HolidayAssignModal = ({ open, handleClose, selectedItem }) => {
-  const names = [];
-  const [classSectionName, setClassSectionName] = useState([]);
-  const [dateFrom, setDateFrom] = useState(dayjs(new Date()));
-  const [dateTo, setDateTo] = useState(dayjs(new Date()));
-  const [holidayType, setHolidayType] = useState("");
+const StaffDepartmentModal = ({ open, handleClose, selectedItem }) => {
+  console.log(selectedItem, "--selectedItem");
   const [remark, setRemark] = useState("");
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setClassSectionName(typeof value === "string" ? value.split(",") : value);
-  };
-
-  Config.ClassList.forEach((classItem) => {
-    Config.SectionList.forEach((sectionItem) => {
-      names.push(`${classItem.value}-${sectionItem.value}`);
-    });
-  });
-
-  const ITEM_HEIGHT = 90;
-  const ITEM_PADDING_TOP = -10;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
+  useEffect(() => {
+    setRemark(selectedItem?.name||'');
+  }, [selectedItem]);
 
   const submitHandler = async () => {
     const payload = {
-      from: dateFrom,
-      holiday_type: holidayType,
-      class_section: classSectionName,
-      remark: remark,
+      name: remark,
     };
-    if (value !== "single") {
-      payload.to = dateTo;
-    }
 
-    // try {
-    //   if (!selectedItem?._id) {
-    //     await addHolidayList(payload);
-    //   } else {
-    //     await updateHolidayList({ ...payload, id: selectedItem._id });
-    //   }
-    //   handleClose();
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  };
+    try {
+      if (!selectedItem?._id) {
+        const res = await AddDepartment(payload);
+        if (res?.success) {
+          toast.success("Successfully Added...");
+      handleClose();
 
-  const { data: HolidayData, refetch: HolidayRefetch } = useQuery(
-    "GetHolidayById",
-    async () => {
-      if (!selectedItem?._id) return null;
-      const res = await GetHolidayById(selectedItem._id);
-      return res?.data;
-    },
-    {
-      enabled: !!selectedItem?._id,
-    }
-  );
+        }
+      } else {
+        const res = await updateDepartment({
+          ...payload,
+          id: selectedItem._id,
+        });
+        if (res?.success) {
+          toast.success("Successfully Updated...");
+      handleClose();
 
-  useEffect(() => {
-    if (selectedItem?._id) {
-      HolidayRefetch();
-    }
-  }, [selectedItem?._id]);
-
-  useEffect(() => {
-    if (selectedItem?._id) {
-      if (HolidayData) {
-        console.log("Fetched Holiday Data:", HolidayData);
-        setClassSectionName(HolidayData?.class_section || []);
-        setDateFrom(
-          HolidayData?.from ? dayjs(HolidayData?.from) : dayjs(new Date())
-        );
-        setDateTo(HolidayData?.to ? dayjs(HolidayData?.to) : dayjs(new Date()));
-        setHolidayType(HolidayData?.holiday_type || "");
-        setRemark(HolidayData?.remark || "");
+        }
       }
-    } else {
-      // Reset to initial state when selectedItem?._id is undefined
-      setClassSectionName([]);
-      setDateFrom(dayjs(new Date()));
-      setDateTo(dayjs(new Date()));
-      setHolidayType("");
-      setRemark("");
+    } catch (error) {
+      console.error(error);
     }
-  }, [HolidayData, selectedItem?._id]);
-
-  const [value, setValue] = React.useState("single");
-
-  const handleChangeradio = (event) => {
-    setValue(event.target.value);
   };
 
   return (
@@ -157,7 +72,7 @@ const HolidayAssignModal = ({ open, handleClose, selectedItem }) => {
     >
       <Box sx={style}>
         <Typography id="modal-title" mb={3} component="h4">
-          Follow Up Mode
+         Staff Department
         </Typography>
 
         <Box sx={{ width: "100%" }}>
@@ -181,4 +96,4 @@ const HolidayAssignModal = ({ open, handleClose, selectedItem }) => {
   );
 };
 
-export default HolidayAssignModal;
+export default StaffDepartmentModal;

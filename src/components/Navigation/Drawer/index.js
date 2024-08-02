@@ -550,12 +550,14 @@ const DrawerPath = ({
                 title={"Attendance >>Leave Approval"}
               />
             </DrawerList>
-            <DrawerList
-              path={""}
-              text={"Staff"}
-              Icon={SchoolIcon}
-              open={open}
-            >
+            <DrawerList path={""} text={"Staff"} Icon={SchoolIcon} open={open}>
+              <DrawerList
+                path={"/staff/add-staff"}
+                text={"Add Staff"}
+                Icon={ServiceList}
+                open={open}
+                title={"Staff >> Add Staff"}
+              />
               <DrawerList
                 path={"/staff/account-type"}
                 text={"Account Type"}
@@ -584,7 +586,34 @@ const DrawerPath = ({
                 open={open}
                 title={"Staff >> Staff Occupation"}
               />
-             
+              <DrawerList
+                path={"/staff/staff-designation"}
+                text={"Staff Designation"}
+                Icon={ServiceList}
+                open={open}
+                title={"Staff >> Staff designation"}
+              />
+              <DrawerList
+                path={"/staff/staff-educational-qualification"}
+                text={"Staff Qualification"}
+                Icon={ServiceList}
+                open={open}
+                title={"Staff >> Staff qualification"}
+              />
+              <DrawerList
+                path={"/staff/staff-nature-of-appointment"}
+                text={"Nature Of Appointment"}
+                Icon={ServiceList}
+                open={open}
+                title={"Staff >> Staff Nature Of Appointment"}
+              />
+              <DrawerList
+                path={"/staff/staff-subject"}
+                text={"Staff Subject"}
+                Icon={ServiceList}
+                open={open}
+                title={"Staff >> Staff subject"}
+              />
             </DrawerList>
           </List>
           <Divider />

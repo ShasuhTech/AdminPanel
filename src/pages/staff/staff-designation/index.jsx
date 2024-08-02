@@ -14,42 +14,42 @@ import {
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import { useQuery } from "react-query";
 import CustomButton from "@/components/CommonButton/CustomButton";
-import { DeleteDepartmentId, DeleteOccupationId, DeleteStaffOccupationId, GetDepartmentList, GetOccupationList, GetStaffOccupationList } from "@/services/api";
+import { DeleteDepartmentId, DeleteDesignationId, DeleteOccupationId, DeleteStaffDesignationId, GetDepartmentList, GetDesignationList, GetOccupationList, GetStaffDesignationList } from "@/services/api";
 import { toast } from "react-toastify";
-import StaffOccupationModal from "./Modal";
+import StaffDesignationModal from "./Modal";
 
-const StaffOccupation = () => {
+const StaffDesignation = () => {
   const [open, setOpen] = useState(false);
   const [selectedItem, setSlectedItem] = useState();
 
-  const updateStaffOccupation = (item) => {
+  const updateStaffDesignation = (item) => {
     setOpen(true);
     setSlectedItem(item);
   };
 
   const {
-    data: StaffOccupationData,
-    status: StaffOccupationStatus,
-    isLoading: StaffOccupationLoading,
-    refetch: StaffOccupationRefetch,
-  } = useQuery("GetOccupationList", async () => {
+    data: StaffDesignationData,
+    status: StaffDesignationStatus,
+    isLoading: StaffDesignationLoading,
+    refetch: StaffDesignationRefetch,
+  } = useQuery("GetDesignationList", async () => {
     const payload = {};
     (payload.page = 1), (payload.limit = 100);
-    const res = await GetOccupationList(payload);
+    const res = await GetDesignationList(payload);
     return res?.data;
   });
 
   useEffect(() => {
-    StaffOccupationRefetch();
+    StaffDesignationRefetch();
   }, [open]);
 
-  const deleteStaffOccupation = async (id) => {
+  const deleteStaffDesignation = async (id) => {
     alert("Are You sure you want to delete");
     try {
-      const res = await DeleteOccupationId(id);
+      const res = await DeleteDesignationId(id);
       if (res.success) {
         toast.success("Successfully Deleted...");
-        StaffOccupationRefetch();
+        StaffDesignationRefetch();
       }
     } catch (error) {}
   };
@@ -70,7 +70,7 @@ const StaffOccupation = () => {
               width={"250px"}
               py={2}
             >
-              Create Staff Occupation
+              Create Staff Designation
             </CustomButton>
           </div>
 
@@ -81,7 +81,7 @@ const StaffOccupation = () => {
                   <TableRow style={{ fontWeight: "500", color: "#000" }}>
                     {/* <StyledTableCell align="center">Sl.No</StyledTableCell> */}
                     <StyledTableCell align="left">
-                      Staff Occupation
+                      Staff Designation
                     </StyledTableCell>
                     <StyledTableCell align="left">Priority</StyledTableCell>
                     <StyledTableCell align="center">Action</StyledTableCell>
@@ -93,7 +93,7 @@ const StaffOccupation = () => {
                     position: "relative",
                   }}
                 >
-                  {StaffOccupationLoading ? (
+                  {StaffDesignationLoading ? (
                     <TableRow>
                       <TableCell colSpan={12}>
                         <div
@@ -110,15 +110,15 @@ const StaffOccupation = () => {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ) : StaffOccupationData?.length > 0 ? (
+                  ) : StaffDesignationData?.length > 0 ? (
                     <>
-                      {StaffOccupationData?.map((row, index) => (
+                      {StaffDesignationData?.map((row, index) => (
                         <Row
                           key={index}
                           row={row}
                           index={index}
-                          updateStaffOccupation={updateStaffOccupation}
-                          deleteStaffOccupation={deleteStaffOccupation}
+                          updateStaffDesignation={updateStaffDesignation}
+                          deleteStaffDesignation={deleteStaffDesignation}
                         />
                       ))}
                     </>
@@ -147,7 +147,7 @@ const StaffOccupation = () => {
           </Paper>
         </div>
       </div>
-      <StaffOccupationModal
+      <StaffDesignationModal
         open={open}
         handleClose={() => setOpen(false)}
         selectedItem={selectedItem}
@@ -156,9 +156,9 @@ const StaffOccupation = () => {
   );
 };
 
-export default StaffOccupation;
+export default StaffDesignation;
 const Row = (props) => {
-  const { index, row, updateStaffOccupation, deleteStaffOccupation } = props;
+  const { index, row, updateStaffDesignation, deleteStaffDesignation } = props;
 
   return (
     <React.Fragment>
@@ -166,7 +166,6 @@ const Row = (props) => {
         sx={{
           "& > *": {
             borderBottom: "unset",
-            // background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -174,10 +173,6 @@ const Row = (props) => {
           },
         }}
       >
-        {/* <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-          <Typography>{index + 1}</Typography>
-        </StyledTableCell> */}
-
         <StyledTableCell align="left" style={{ minWidth: "600px" }}>
           <Typography>{row?.name}</Typography>
         </StyledTableCell>
@@ -194,7 +189,7 @@ const Row = (props) => {
           }}
         >
           <CustomButton
-            onClick={() => updateStaffOccupation(row)}
+            onClick={() => updateStaffDesignation(row)}
             sx={{ marginRight: "10px" }}
             variant="outlined"
             color="success"
@@ -205,7 +200,7 @@ const Row = (props) => {
           </CustomButton>
 
           <Button
-            onClick={() => deleteStaffOccupation(row?._id)}
+            onClick={() => deleteStaffDesignation(row?._id)}
             variant="outlined"
             color="error"
             className="my-3"

@@ -821,6 +821,67 @@ const reportType = [
   },
 ];
 
+const SelectionStatus = [
+  {
+    value: "1",
+    label: "Approved",
+  },
+  {
+    value: "2",
+    label: "Not Approved",
+  },
+  {
+    value: "3",
+    label: "Waiting",
+  },
+  {
+    value: "4",
+    label: "Rejected",
+  },
+];
+const MathematicalCondition = [
+  {
+    value: "1",
+    label: ">",
+  },
+  {
+    value: "2",
+    label: "<",
+  },
+  {
+    value: "3",
+    label: "=",
+  },
+ 
+];
+
+const SelectionCriteria = [
+  {
+    value: "1",
+    label: "Date Of Submission",
+  },
+  {
+    value: "2",
+    label: "Form No",
+  },
+  {
+    value: "3",
+    label: "Reference No",
+  },
+  {
+    value: "4",
+    label: "Religion",
+  },
+  {
+    value: "5",
+    label: "Social Category",
+  },
+  {
+    value: "6",
+    label: "Marks In Percentage",
+  },
+];
+
 export default {
   ClassList,
   SectionList,
@@ -850,5 +911,9 @@ export default {
   ModeOfFollowUp,
   TrueFalse,
   AttendanceType,
-  reportType
+  reportType,
+  SelectionStatus,
+  SelectionCriteria,
+  MathematicalCondition
+
 };

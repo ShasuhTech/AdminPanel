@@ -14,14 +14,9 @@ import {
   TablePagination,
   MenuItem,
   Select,
-  Menu,
-  IconButton,
-  InputLabel,
   TextField,
   Button,
   Checkbox,
-  ListItemText,
-  FormControlLabel,
   FormControl,
 } from "@mui/material";
 import { GetStudentLsit } from "@/services/api";
@@ -30,10 +25,6 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import SimpleModal from "@/components/Modal/SimpleModal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-// import { TextField } from 'formik-material-ui';
-// import {  TimePicker } from '@mui/lab';
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 import * as Yup from "yup";
 import Config from "@/utilities/Config";
@@ -220,18 +211,35 @@ const Row = (props) => {
 };
 
 const RegStartModal = ({ open, handleClose }) => {
+  const initialValues = {
+    class: "",
+    selection_process: "",
+    from_reg_No: "",
+    to_reg_no: "",
+    select_criteria1: "",
+    select_condition1: "",
+    select_value1: "",
+    select_criteria2: "",
+    select_condition2: "",
+    select_value2: "",
+    select_criteria3: "",
+    select_condition3: "",
+    select_value3: "",
+  };
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    setTimeout(() => {
+      alert(JSON.stringify(values, null, 2));
+      setSubmitting(false);
+    }, 400);
+  };
+
   return (
     <SimpleModal open={open} handleClose={handleClose} width={1000}>
       <Typography variant="h5">Selection Process</Typography>
 
       <Formik
-        initialValues={{
-          name: "",
-          email: "",
-          date: null,
-          time: null,
-          Class: "",
-        }}
+        initialValues={initialValues}
         validationSchema={Yup.object({
           name: Yup.string().required("Required"),
           email: Yup.string()
@@ -241,12 +249,7 @@ const RegStartModal = ({ open, handleClose }) => {
           time: Yup.date().required("Required"),
         })}
         validateOnBlur
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
+        onSubmit={handleSubmit}
       >
         {({
           isSubmitting,
@@ -283,7 +286,7 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Field
-                  name="class"
+                  name="selection_process"
                   as={TextField}
                   select
                   label="Selection Status"
@@ -292,10 +295,10 @@ const RegStartModal = ({ open, handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
+                  value={values.selection_process}
+                  helperText={<ErrorMessage name="selection_process" />}
                 >
-                  {Config?.ClassList.map((option) => (
+                  {Config?.SelectionStatus.map((option) => (
                     <MenuItem key={option.label} value={option.label}>
                       {option.label}
                     </MenuItem>
@@ -304,37 +307,37 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Field
-                  name="first_name"
+                  name="from_reg_No"
                   as={TextField}
                   label="From Reg No"
                   variant="outlined"
                   // required
-                  value={values.first_name}
+                  value={values.from_reg_No}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  helperText={<ErrorMessage name="first_name" />}
+                  helperText={<ErrorMessage name="from_reg_No" />}
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Field
-                  name="first_name"
+                  name="to_reg_no"
                   as={TextField}
                   label="To Reg No"
                   variant="outlined"
                   // required
-                  value={values.first_name}
+                  value={values.to_reg_no}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  helperText={<ErrorMessage name="first_name" />}
+                  helperText={<ErrorMessage name="to_reg_no" />}
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={5}>
                 <Field
-                  name="class"
+                  name="select_criteria1"
                   as={TextField}
                   select
                   label="Select Criteria"
@@ -343,10 +346,10 @@ const RegStartModal = ({ open, handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
+                  value={values.select_criteria1}
+                  helperText={<ErrorMessage name="select_criteria1" />}
                 >
-                  {Config?.ClassList.map((option) => (
+                  {Config?.SelectionCriteria.map((option) => (
                     <MenuItem key={option.label} value={option.label}>
                       {option.label}
                     </MenuItem>
@@ -355,7 +358,7 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={2}>
                 <Field
-                  name="class"
+                  name="select_condition1"
                   as={TextField}
                   select
                   label="Condition"
@@ -364,10 +367,10 @@ const RegStartModal = ({ open, handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
+                  value={values.select_condition1}
+                  helperText={<ErrorMessage name="select_condition1" />}
                 >
-                  {Config?.ClassList.map((option) => (
+                  {Config?.MathematicalCondition.map((option) => (
                     <MenuItem key={option.label} value={option.label}>
                       {option.label}
                     </MenuItem>
@@ -376,22 +379,22 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={5}>
                 <Field
-                  name="first_name"
+                  name="select_value1"
                   as={TextField}
                   label="Criteria Value"
                   variant="outlined"
                   // required
-                  value={values.first_name}
+                  value={values.select_value1}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  helperText={<ErrorMessage name="first_name" />}
+                  helperText={<ErrorMessage name="select_value1" />}
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={5}>
                 <Field
-                  name="class"
+                  name="select_criteria2"
                   as={TextField}
                   select
                   label="Select Criteria"
@@ -400,10 +403,10 @@ const RegStartModal = ({ open, handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
+                  value={values.select_criteria2}
+                  helperText={<ErrorMessage name="select_criteria2" />}
                 >
-                  {Config?.ClassList.map((option) => (
+                  {Config?.SelectionCriteria.map((option) => (
                     <MenuItem key={option.label} value={option.label}>
                       {option.label}
                     </MenuItem>
@@ -412,7 +415,7 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={2}>
                 <Field
-                  name="class"
+                  name="select_condition2"
                   as={TextField}
                   select
                   label="Condition"
@@ -421,10 +424,10 @@ const RegStartModal = ({ open, handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
+                  value={values.select_condition2}
+                  helperText={<ErrorMessage name="select_condition2" />}
                 >
-                  {Config?.ClassList.map((option) => (
+                  {Config?.MathematicalCondition.map((option) => (
                     <MenuItem key={option.label} value={option.label}>
                       {option.label}
                     </MenuItem>
@@ -433,22 +436,22 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={5}>
                 <Field
-                  name="first_name"
+                  name="select_value2"
                   as={TextField}
                   label="Criteria Value"
                   variant="outlined"
                   // required
-                  value={values.first_name}
+                  value={values.select_value2}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  helperText={<ErrorMessage name="first_name" />}
+                  helperText={<ErrorMessage name="select_value2" />}
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={5}>
                 <Field
-                  name="class"
+                  name="select_criteria3"
                   as={TextField}
                   select
                   label="Select Criteria"
@@ -457,10 +460,10 @@ const RegStartModal = ({ open, handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
+                  value={values.select_criteria3}
+                  helperText={<ErrorMessage name="select_criteria3" />}
                 >
-                  {Config?.ClassList.map((option) => (
+                  {Config?.SelectionCriteria.map((option) => (
                     <MenuItem key={option.label} value={option.label}>
                       {option.label}
                     </MenuItem>
@@ -469,7 +472,7 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={2}>
                 <Field
-                  name="class"
+                  name="select_condition3"
                   as={TextField}
                   select
                   label="Condition"
@@ -478,10 +481,10 @@ const RegStartModal = ({ open, handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  value={values.class}
-                  helperText={<ErrorMessage name="class" />}
+                  value={values.select_condition3}
+                  helperText={<ErrorMessage name="select_condition3" />}
                 >
-                  {Config?.ClassList.map((option) => (
+                  {Config?.MathematicalCondition.map((option) => (
                     <MenuItem key={option.label} value={option.label}>
                       {option.label}
                     </MenuItem>
@@ -490,17 +493,17 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={5}>
                 <Field
-                  name="first_name"
+                  name="select_value3"
                   as={TextField}
                   label="Criteria Value"
                   variant="outlined"
                   // required
-                  value={values.first_name}
+                  value={values.select_value3}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  helperText={<ErrorMessage name="first_name" />}
+                  helperText={<ErrorMessage name="select_value3" />}
                 />
               </Grid>
 
