@@ -43,7 +43,6 @@ const SchoolService = () => {
   } = useQuery("schoolData", async () => {
     const payload = {};
     const res = await GetSchoolList(payload);
-    console.log(res, "---sdf");
     return res?.data;
   });
 
@@ -56,45 +55,7 @@ const SchoolService = () => {
     schoolRefetch();
   }, [isModalOpen]);
 
-  // const getUserData = async (page) => {
-  //   setLoading(true);
-  //   try {
-  //     const payload = {
-  //       q: searchText,
-  //       categoryId: category === 10 ? null : category,
-  //       genderId:
-  //         gender === 10 ? null : gender === 20 ? 1 : gender === 30 ? 2 : null,
-  //       page,
-  //       // status: filter?.status,
-  //     };
-  //     const res = await serviceList(payload);
-  //     setPagination(res?.meta?.pagination);
-  //     setUserSalonData(res?.data);
-  //     setLoading(false);
-  //   } catch (err) {
-  //     setLoading(false);
-  //     console.error("Error fetching salon data:", err);
-  //   }
-  // };
-
-  // const csvHandler = async ({ page }) => {
-  //   setLoading(true);
-  //   try {
-  //     const payload = {
-  //       q: searchText,
-  //       page,
-  //       // status: filter?.status,
-  //     };
-  //     const res = await serviceList(payload);
-  //     if (res?.code === 200) {
-  //       exportToCSV(res?.data, "service_report.csv");
-  //     }
-  //     setLoading(false);
-  //   } catch (err) {
-  //     setLoading(false);
-  //     console.error("Error fetching salon data:", err);
-  //   }
-  // };
+ 
 
   return (
     <div className="">
@@ -334,11 +295,11 @@ const Row = (props) => {
           style={{
             minWidth: "150px",
             display: "flex",
-            gap: 3,
+            gap: 4,
             alignItems: "center",
           }}
         >
-          <CustomButton width={80} onClick={() => editHandler(row)}>
+          <CustomButton width={80} py={2} onClick={() => editHandler(row)}>
             Edit
           </CustomButton>
           <Button variant="outlined" color="error">

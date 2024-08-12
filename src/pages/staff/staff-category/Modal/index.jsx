@@ -2,8 +2,10 @@
 import CustomButton from "@/components/CommonButton/CustomButton";
 import {
   AddAccountType,
+  AddStaffCategory,
   GetAccountTypeId,
   updateAccountType,
+  updateStaffCategory,
 } from "@/services/api";
 import { GetHolidayById } from "@/services/Attendance";
 import Config from "@/utilities/Config";
@@ -39,14 +41,14 @@ const StaffCategoryModal = ({ open, handleClose, selectedItem }) => {
 
     try {
       if (!selectedItem?._id) {
-        const res = await AddAccountType(payload);
+        const res = await AddStaffCategory(payload);
         if (res?.success) {
           toast.success("Successfully Added...");
       handleClose();
 
         }
       } else {
-        const res = await updateAccountType({
+        const res = await updateStaffCategory({
           ...payload,
           id: selectedItem._id,
         });

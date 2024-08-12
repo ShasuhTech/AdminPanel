@@ -49,6 +49,7 @@ const StaffQualificationModal = ({ open, handleClose, selectedItem }) => {
         if (res?.success) {
           toast.success("Successfully Added...");
           handleClose();
+          setRemark('')
         }
       } else {
         const res = await updateEducationalQualification({
@@ -58,6 +59,7 @@ const StaffQualificationModal = ({ open, handleClose, selectedItem }) => {
         if (res?.success) {
           toast.success("Successfully Updated...");
           handleClose();
+          setRemark('')
         }
       }
     } catch (error) {

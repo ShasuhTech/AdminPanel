@@ -41,7 +41,6 @@ export const UpdateStudent = async (payload) => {
   return response?.data;
 };
 export const GetStudentLsit = async (payload) => {
-  console.log(payload,'---payload')
   const response = await axiosInstance.get("/student", {
     params: payload,
   });
@@ -92,8 +91,8 @@ export const updateAgeCriteria = async (payload) => {
   const response = await axiosInstance.put("/age-criteria", payload);
   return response?.data;
 };
-export const GetAgeCriteriaList = async (payload) => {
-  const response = await axiosInstance.post("/age-criteria");
+export const GetAgeCriteriaList = async () => {
+  const response = await axiosInstance.get("/age-criteria");
   return response?.data;
 };
 export const GetAgeCriteriaId = async (payload) => {
@@ -314,3 +313,41 @@ export const DeleteNatureOfAppointmentId = async (payload) => {
   return response?.data;
 };
 
+export const AddStaffDetails = async (payload) => {
+  const response = await axiosInstance.post("/staff", payload);
+  return response?.data;
+};
+export const UpdateStaffDetails = async (payload) => {
+  const response = await axiosInstance.put("/staff", payload);
+  return response?.data;
+};
+
+export const getStallById = async (payload) => {
+  const response = await axiosInstance.get(`/staff/${payload}`)
+  return response?.data;
+};
+export const getStallAllData = async (payload) => {
+  const response = await axiosInstance.get(`/staff`)
+  return response?.data;
+};
+
+export const AddSelectionProcess = async (payload) => {
+  const response = await axiosInstance.post("/selection-process", payload);
+  return response?.data;
+};
+export const updateSelectionProcess = async (payload) => {
+  const response = await axiosInstance.put("/selection-process", payload);
+  return response?.data;
+};
+export const GetSelectionProcessList = async (payload) => {
+  const response = await axiosInstance.get("/selection-process");
+  return response?.data;
+};
+export const GetSelectionProcessId = async (payload) => {
+  const response = await axiosInstance.get(`/selection-process/${payload}`);
+  return response?.data;
+};
+export const DeleteSelectionProcessId = async (payload) => {
+  const response = await axiosInstance.delete(`/selection-process/${payload}`);
+  return response?.data;
+};

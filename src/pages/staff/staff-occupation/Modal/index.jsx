@@ -47,6 +47,7 @@ const StaffOccupationModal = ({ open, handleClose, selectedItem }) => {
         if (res?.success) {
           toast.success("Successfully Added...");
           handleClose();
+          setRemark('')
         }
       } else {
         const res = await updateOccupation({
@@ -56,6 +57,8 @@ const StaffOccupationModal = ({ open, handleClose, selectedItem }) => {
         if (res?.success) {
           toast.success("Successfully Updated...");
           handleClose();
+          setRemark('')
+
         }
       }
     } catch (error) {

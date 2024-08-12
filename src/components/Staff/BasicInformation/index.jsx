@@ -1,143 +1,117 @@
-import CustomButton from "@/components/CommonButton/CustomButton";
-import { AddFollowup, GetFollowupList, updateFollowup } from "@/services/api";
-import Config from "@/utilities/Config";
+import SubmitButton from "@/components/CommonButton/SubmitButton";
 import {
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+  DatePickerField,
+  SelectField,
+  TextFieldComponent,
+} from "@/components/FormikComponent";
+import {
+  AddStaffDetails,
+  cityData,
+  getStallById,
+  StateData,
+  UpdateStaffDetails,
+} from "@/services/api";
+import Config from "@/utilities/Config";
+import { Button, FormControl, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 
-const TextFieldComponent = ({
-  field,
-  form: { touched, errors },
-  disabled,
-  ...props
-}) => (
-  <TextField
-    {...field}
-    {...props}
-    error={touched[field.name] && Boolean(errors[field.name])}
-    helperText={touched[field.name] && errors[field.name]}
-    variant="outlined"
-    fullWidth
-    disabled={disabled}
-    margin="normal"
-    // required
-  />
-);
+const BasicInformation = ({ setSlectedTab ,data}) => {
+  const router = useRouter();
+  const id = router?.query?.id;
 
-const DatePickerField = ({ field, form, ...props }) => {
-  const currentError = form.errors[field.name];
+  const defaultValues = {
+    employee_code: "",
+    file_no: "",
+    gender: "",
+    first_name: "",
+    last_name: "",
+    middle_name: "",
+    date_of_birth: "",
+    nationality: "",
+    appointment_date: dayjs(),
+    joining_date: dayjs(),
+    father_name: "",
+    mother_name: "",
+    father_occupation: "",
+    mother_tongue: "",
+    religion: "",
+    social_category: "",
+    marital_status: "",
+    blood_group: "",
+    adhar_card_no: "",
+    caste: "",
+    place_of_birth: "",
+    weight: "",
+    height: "",
+    mobile_no: "",
+    wedding_date: dayjs(),
+    qualification_for_printing: "",
+    email_id: "",
+    class: "",
+    section: "",
+    reporting_person: "",
+    rejoin_reason: "",
 
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <FormControl required fullWidth margin="normal">
-        <DatePicker
-          {...field}
-          {...props}
-          inputFormat="MM/dd/yyyy"
-          value={field.value ? dayjs(field.value) : null}
-          onChange={(newValue) => {
-            form.setFieldValue(field.name, newValue ? dayjs(newValue) : null);
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              error={Boolean(currentError)}
-              helperText={currentError}
-              variant="outlined"
-            />
-          )}
-        />
-      </FormControl>
-    </LocalizationProvider>
-  );
-};
-
-const SelectField = ({ field, form, label, options, ...props }) => (
-  <FormControl fullWidth margin="normal">
-    <InputLabel>{label}</InputLabel>
-    <Select fullWidth {...field} {...props} label={label}>
-      {options.map((option) => (
-        <MenuItem fullWidth key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
-);
-
-const BasicInformation = () => {
-  const data = "";
-  const initialValues = {
-    employee_code: data?.employee_code || "",
-    file_no: data?.file_no || "",
-    gender: data?.gender || "",
-    first_name: data?.name?.first_name || "",
-    lastName: data?.name?.last_name || "",
-    middleName: data?.name?.middle_name || "",
-    date_of_birth: data?.date_of_birth || "",
-    nationality: data?.nationality || "",
-    appointment_date: dayjs(data?.appointment_date) || dayjs(new Date()),
-    joining_date: dayjs(data?.joining_date) || dayjs(new Date()),
-    father_name: data?.father_name || "",
-    mother_name: data?.mother_name || "",
-    father_occupation: data?.father_occupation || "",
-    mother_tounge: data?.mother_tounge || "",
-    religion: data?.religion || "",
-    social_category: data?.social_category || "",
-    marital_status: data?.marital_status || "",
-    blood_group: data?.blood_group || "",
-    adhar_card_no: data?.adhar_card_no || "",
-    cast: data?.cast || "",
-    place_of_birth: data?.place_of_birth || "",
-    weight: data?.weight || "",
-    height: data?.height || "",
-    mobile_no: data?.mobile_no || "",
-    wedding_date: dayjs(data?.wedding_date) || dayjs(new Date()),
-    qualification_for_printing: data?.qualification_for_printing || "",
-    email_id: data?.email_id || "",
-    class: data?.class || "",
-    section: data?.section || "",
-    reporting_person: data?.reporting_person || "",
-    rejoin_reason: data?.rejoin_reason || "",
-    persent_address: data?.persent_address || "",
-    persent_country: data?.persent_country || "",
-    persent_state: data?.persent_state || "",
-    persent_city: data?.persent_city || "",
-    persent_pincode: data?.persent_pincode || "",
-    persent_number: data?.persent_number || "",
-    permanent_address: data?.permanent_address || "",
-    permanent_country: data?.permanent_country || "",
-    permanent_state: data?.permanent_state || "",
-    permanent_city: data?.permanent_city || "",
-    permanent_pincode: data?.permanent_pincode || "",
-    permanent_number: data?.permanent_number || "",
   };
+  const initialValues = data
+    ? {
+        ...defaultValues,
+        employee_code: data?.employee_code || "",
+        file_no: data?.file_no || "",
+        gender: data?.gender || "",
+        first_name: data?.first_name || "",
+        last_name: data?.last_name || "",
+        middle_name: data?.middle_name || "",
+        date_of_birth: data?.date_of_birth || "",
+        nationality: data?.nationality || "",
+        appointment_date: data?.appointment_date
+          ? dayjs(data.appointment_date)
+          : dayjs(),
+        joining_date: data?.joining_date ? dayjs(data.joining_date) : dayjs(),
+        father_name: data?.father_name || "",
+        mother_name: data?.mother_name || "",
+        father_occupation: data?.father_occupation || "",
+        mother_tongue: data?.mother_tongue || "",
+        religion: data?.religion || "",
+        social_category: data?.social_category || "",
+        marital_status: data?.marital_status || "",
+        blood_group: data?.blood_group || "",
+        adhar_card_no: data?.adhar_card_no || "",
+        caste: data?.caste || "",
+        place_of_birth: data?.place_of_birth || "",
+        weight: data?.weight || "",
+        height: data?.height || "",
+        mobile_no: data?.mobile_no || "",
+        wedding_date: data?.wedding_date ? dayjs(data.wedding_date) : dayjs(),
+        qualification_for_printing: data?.qualification_for_printing || "",
+        email_id: data?.email_id || "",
+        class: data?.class || "",
+        section: data?.section || "",
+        reporting_person: data?.reporting_person || "",
+        rejoin_reason: data?.rejoin_reason || "",
+
+      }
+    : defaultValues;
+
+  // const data = "";
+  // const initialValues = {
+
+  // };
 
   const validationSchema = Yup.object({
     employee_code: Yup.string().required("Employee Code is required"),
     file_no: Yup.string().required("File No is required"),
     gender: Yup.string().required("Gender is required"),
     first_name: Yup.string().required("First Name is required"),
-    lastName: Yup.string().required("Last Name is required"),
-    middleName: Yup.string(),
+    last_name: Yup.string().required("Last Name is required"),
+    middle_name: Yup.string(),
     date_of_birth: Yup.date().required("Date of Birth is required"),
     nationality: Yup.string().required("Nationality is required"),
     appointment_date: Yup.date().required("Appointment Date is required"),
@@ -145,13 +119,13 @@ const BasicInformation = () => {
     father_name: Yup.string(),
     mother_name: Yup.string(),
     father_occupation: Yup.string(),
-    mother_tounge: Yup.string(),
+    mother_tongue: Yup.string(),
     religion: Yup.string(),
     social_category: Yup.string(),
     marital_status: Yup.string().required("Marital Status is required"),
     blood_group: Yup.string(),
     adhar_card_no: Yup.string(),
-    cast: Yup.string(),
+    caste: Yup.string(),
     place_of_birth: Yup.string().required("Place of Birth is required"),
     weight: Yup.number(),
     height: Yup.number(),
@@ -163,12 +137,12 @@ const BasicInformation = () => {
     section: Yup.string().required("Section is required"),
     reporting_person: Yup.string(),
     rejoin_reason: Yup.string(),
-    persent_address: Yup.string(),
-    persent_country: Yup.string(),
-    persent_state: Yup.string(),
-    persent_city: Yup.string(),
-    persent_pincode: Yup.string(),
-    persent_number: Yup.string(),
+    present_address: Yup.string(),
+    present_country: Yup.string(),
+    present_state: Yup.string(),
+    present_city: Yup.string(),
+    present_pincode: Yup.string(),
+    present_number: Yup.string(),
     permanent_address: Yup.string(),
     permanent_country: Yup.string(),
     permanent_state: Yup.string(),
@@ -208,16 +182,16 @@ const BasicInformation = () => {
       component: TextFieldComponent,
     },
     {
-      id: "middleName",
+      id: "middle_name",
       label: "Middle Name",
-      name: "middleName",
+      name: "middle_name",
       // disabled: true,
       component: TextFieldComponent,
     },
     {
-      id: "lastName",
+      id: "last_name",
       label: "Last Name",
-      name: "lastName",
+      name: "last_name",
       // disabled: true,
       component: TextFieldComponent,
     },
@@ -270,9 +244,9 @@ const BasicInformation = () => {
       options: Config.occupations,
     },
     {
-      id: "mother_tounge",
+      id: "mother_tongue",
       label: "Mother Tounge",
-      name: "mother_tounge",
+      name: "mother_tongue",
       component: SelectField,
       options: Config.MotherTongues,
     },
@@ -313,9 +287,9 @@ const BasicInformation = () => {
     },
 
     {
-      id: "cast",
-      label: "Cast",
-      name: "cast",
+      id: "caste",
+      label: "caste",
+      name: "caste",
       component: SelectField,
       options: Config.AllCastes,
     },
@@ -398,148 +372,39 @@ const BasicInformation = () => {
     },
   ];
 
-  const persentAddress = [
-    {
-      id: "persent_address",
-      label: "Address",
-      name: "persent_address",
-      component: TextFieldComponent,
-    },
-
-    {
-      id: "persent_country",
-      label: "Country",
-      name: "persent_country",
-      component: SelectField,
-      options: Config.CountryDta,
-    },
-    {
-      id: "persent_state",
-      label: "State",
-      name: "persent_state",
-      component: SelectField,
-      options: Config.SectionList,
-    },
-    {
-      id: "persent_city",
-      label: "City",
-      name: "persent_city",
-      component: SelectField,
-      options: Config.SectionList,
-    },
-    {
-      id: "persent_pincode",
-      label: "Pincode",
-      name: "persent_pincode",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "persent_number",
-      label: "Mobile No.",
-      name: "persent_number",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-  ];
-  const permanentAddress = [
-    {
-      id: "permanent_address",
-      label: "Address",
-      name: "permanent_address",
-      component: TextFieldComponent,
-    },
-
-    {
-      id: "permanent_country",
-      label: "Country",
-      name: "permanent_country",
-      component: SelectField,
-      options: Config.CountryDta,
-    },
-    {
-      id: "permanent_state",
-      label: "State",
-      name: "permanent_state",
-      component: SelectField,
-      options: Config.SectionList,
-    },
-    {
-      id: "permanent_city",
-      label: "City",
-      name: "permanent_city",
-      component: SelectField,
-      options: Config.SectionList,
-    },
-    {
-      id: "permanent_pincode",
-      label: "Pincode",
-      name: "permanent_pincode",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "permanent_number",
-      label: "Mobile No.",
-      name: "permanent_number",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-  ];
-
-  const router = useRouter();
-
-  const {
-    data: studentData,
-    isLoading: studentLoading,
-    refetch: studentRefetch,
-  } = useQuery("followupdata", async () => {
-    const paylaod = { student_id: data?._id };
-    if (!data?._id) {
-      return;
-    }
-    const res = await GetFollowupList(paylaod);
-    return res?.data;
-  });
-
-  useEffect(() => {
-    studentRefetch();
-  }, [data]);
 
   const handleSubmit = async (values, actions) => {
     console.log(values, "----values");
     const payload = {
-      //   student_id: data?._id,
-      //   next_follow_up_date: dayjs(values.nextfollowUpdate),
-      //   follow_ups: values.followUp,
-      //   remarks: values.remarks,
-      //   follow_up_mode: values.modeOfFollowup,
-      //   follow_up_date: dayjs(values.followUpdate),
-      //   enquiry_id: data.enquiry_id,
+      ...values,
+      id: id,
     };
+    console.log(payload, "payload");
 
-    // try {
-    //   if (!SlectedRow) {
-    //     const resp = await AddFollowup(payload);
-    //     if (resp?.success) {
-    //       toast.success("FollowUp Added successfully");
-    //       actions.resetForm();
-    //       studentRefetch();
-    //     }
-    //   } else {
-    //     const resp = await updateFollowup(payload);
-    //     if (resp?.success) {
-    //       toast.success("FollowUp Updated successfully");
-    //       actions.resetForm();
-    //       studentRefetch();
-    //     }
-    //   }
-    // } catch (error) {
-    //   toast.error("Failed to add FollowUp");
-    // }
+    try {
+      if (!id) {
+        const resp = await AddStaffDetails(payload);
+        console.log(resp, "resp");
+        if (resp?.success) {
+          toast.success("Staff Added successfully");
+          actions.resetForm();
+          setSlectedTab(2);
+          router.replace(`/staff/add-staff/?id=${resp?.data?._id}`);
+        }
+      } else {
+        const resp = await UpdateStaffDetails(payload);
+        if (resp?.success) {
+          toast.success("Staff Updated successfully");
+          actions.resetForm();
+          setSlectedTab(2);
+          router.replace(`/staff/add-staff/?id=${resp?.data?._id}`);
+        }
+      }
+    } catch (error) {
+      toast.error("Failed to add Saff");
+    }
   };
 
-  console.log(initialValues, "===sferw");
 
   return (
     <>
@@ -565,56 +430,10 @@ const BasicInformation = () => {
                 </Box>
               ))}
             </Box>
-            <Typography
-              className="font-bold text-[20px] mt-5"
-              sx={{ mt: 2, mb: 1, fontSize: "20px" }}
-              variant="h5"
-            >
-              Persent Address
-            </Typography>
-            <Grid className="border rounded-lg p-6">
-              <Box className="flex w-[100%] flex-wrap justify-between mt-7">
-                {persentAddress.map((field) => (
-                  <Box key={field.id} className="lg:w-[32.5%] w-[100%]">
-                    <Field
-                      name={field.name}
-                      label={field.label}
-                      component={field.component}
-                      options={field.options}
-                      disabled={field.disabled}
-                      values={values}
-                    />
-                  </Box>
-                ))}
-              </Box>
-            </Grid>
-            <Typography
-              className="font-bold text-[20px] mt-5"
-              sx={{ mt: 2, mb: 1, fontSize: "20px" }}
-              variant="h5"
-            >
-              Permanent Address
-            </Typography>
-            <Grid className="border rounded-lg p-6">
-              <Box className="flex w-[100%] flex-wrap justify-between mt-7">
-                {permanentAddress.map((field) => (
-                  <Box key={field.id} className="lg:w-[32.5%] w-[100%]">
-                    <Field
-                      name={field.name}
-                      label={field.label}
-                      component={field.component}
-                      options={field.options}
-                      disabled={field.disabled}
-                      values={values}
-                    />
-                  </Box>
-                ))}
-              </Box>
-            </Grid>
             <div className="flex justify-end my-5">
-              <Button type="submit" variant="contained" color="primary">
-                Submit
-              </Button>
+              <SubmitButton type="submit" variant="contained" color="primary">
+                {id ? "Update" : " Submit"}
+              </SubmitButton>
             </div>
           </Form>
         )}

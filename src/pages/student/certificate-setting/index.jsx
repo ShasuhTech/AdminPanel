@@ -1,9 +1,10 @@
 const React = require('react');
 const { useState } = require('react');
-const jsPDF = require('jspdf');
+// const jsPDF = require('jspdf');
 const html2canvas = require('html2canvas');
 const { Close } = require('mdi-material-ui');
 const { Tooltip } = require('antd');
+import jsPDF from "jspdf";
 
 const fields = [
     "Title",

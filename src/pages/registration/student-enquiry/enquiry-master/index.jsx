@@ -94,6 +94,43 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
     ciftyRefetch(studenData?.address?.present_address?.state);
     // }
   }, [presentState, studenData?.address?.present_address?.state]);
+  const { data: allcityFather, refetch: ciftyRefetchFather } = useQuery(
+    "cityDataFather",
+    async () => {
+      const payload = {
+        state: fatherState || studenData.parent?.father_address?.state,
+      };
+      if (fatherState || studenData.parent?.father_address?.state) {
+        const res = await cityData(payload);
+        return res?.data;
+      }
+    }
+  );
+
+  useEffect(() => {
+    // if (fatherState) {
+    ciftyRefetchFather(studenData.parent?.father_address?.state);
+    // }
+  }, [fatherState, studenData.parent?.father_address?.state]);
+
+  const { data: allcityMother, refetch: ciftyRefetchMother } = useQuery(
+    "cityDataMother",
+    async () => {
+      const payload = {
+        state: motherState || studenData.parent?.mother_address?.state,
+      };
+      if (motherState || studenData.parent?.mother_address?.state) {
+        const res = await cityData(payload);
+        return res?.data;
+      }
+    }
+  );
+
+  useEffect(() => {
+    // if (fatherState) {
+    ciftyRefetchMother(studenData.parent?.mother_address?.state);
+    // }
+  }, [motherState, studenData.parent?.mother_address?.state]);
 
   const handleSubmit = async (values, actions) => {
     console.log(values, "-dsfsdfdsfsfsd");
@@ -898,38 +935,6 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               }}
                               state={presentState}
                             />
-                            {/* {
-                          <Field
-                            name="present_state"
-                            as={TextField}
-                            select
-                            label="State"
-                            variant="outlined"
-                            fullWidth
-                            onBlur={handleBlur}
-                            onChange={(event) => {
-                              const selectedState = event.target.value;
-                              setFieldValue("present_state", selectedState);
-                              setPresentState(selectedState);
-                            }}
-                            error={false}
-                            value={values.present_state}
-                            helperText={<ErrorMessage name="present_state" />}
-                          >
-                            {allState?.length > 0 &&
-                              allState.map((option) => (
-                                <MenuItem
-                                  key={option.name}
-                                  onChange={(e) =>
-                                    setPresentState(e?.target?.value)
-                                  }
-                                  value={option.name}
-                                >
-                                  {option.name}
-                                </MenuItem>
-                              ))}
-                          </Field>
-                        } */}
                           </div>
                           <div className="lg:w-[32.5%]  w-[100%]">
                             <CitySelectPersent
@@ -938,26 +943,6 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               value={values.present_city}
                               state={presentState}
                             />
-                            {/* <Field
-                          name="present_city"
-                          as={TextField}
-                          select
-                          label="City"
-                          variant="outlined"
-                          fullWidth
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          error={false}
-                          value={values.present_city}
-                          helperText={<ErrorMessage name="present_city" />}
-                        >
-                          {allcity?.length > 0 &&
-                            allcity.map((option) => (
-                              <MenuItem key={option} value={option}>
-                                {option}
-                              </MenuItem>
-                            ))}
-                        </Field> */}
                           </div>
 
                           <div className="lg:w-[32.5%]  w-[100%]">
@@ -990,29 +975,6 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               }
                             />
                           </div>
-                          {/* <div className="lg:w-[32.5%]  w-[100%]">
-                            <Field
-                              name="present_telephone"
-                              as={TextField}
-                              label="Telephone"
-                              variant="outlined"
-                              fullWidth
-                              onBlur={handleBlur}
-                              // onChange={handleChange}
-                              onChange={(event) => {
-                                const value = event.target.value;
-                                // Allow only numbers and limit the length to 10
-                                if (/^\d*$/.test(value) && value.length <= 10) {
-                                  // setFieldValue(values.emergency_no, value);
-                                  setFieldValue("present_telephone", value);
-                                }
-                              }}
-                              error={false}
-                              helperText={
-                                <ErrorMessage name="present_telephone" />
-                              }
-                            />
-                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -1023,14 +985,14 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                         Permanent Address
                       </span>
                       <div className="flex items-center">
-      <Checkbox
-        checked={confirmAddress}
-        onChange={(e) => setConfirmAddress(e.target.checked)}
-      />
-      <Typography variant="h6" fontWeight="bold">
-        Same as Present Address
-      </Typography>
-    </div>
+                        <Checkbox
+                          checked={confirmAddress}
+                          onChange={(e) => setConfirmAddress(e.target.checked)}
+                        />
+                        <Typography variant="h6" fontWeight="bold">
+                          Same as Present Address
+                        </Typography>
+                      </div>
                     </div>
                     <div className=" border  p-6 rounded-2xl mt-3">
                       <div className=" w-[100%] ">
@@ -1318,12 +1280,22 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           />
                         </div>
                         <div className="lg:w-[32.5%]  w-[100%]">
-                          <CitySelectFather
-                            name="father_city"
-                            label="City"
+                          <Field
+                            name={"father_city"}
+                            as={TextField}
+                            select
+                            label={"City"}
+                            variant="outlined"
+                            fullWidth
                             value={values.father_city}
-                            state={fatherState}
-                          />
+                          >
+                            {allcityFather?.length > 0 &&
+                              allcityFather.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
+                          </Field>
                         </div>
 
                         <div className="lg:w-[32.5%]  w-[100%]">
@@ -1529,12 +1501,28 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           />
                         </div>
                         <div className="lg:w-[32.5%]  w-[100%]">
-                          <CitySelectMother
+                          {/* <CitySelectMother
                             name="mother_city"
                             label="City"
                             value={values.mother_city}
                             state={motherState}
-                          />
+                          /> */}
+                          <Field
+                            name={"mother_city"}
+                            as={TextField}
+                            select
+                            label={"City"}
+                            variant="outlined"
+                            fullWidth
+                            value={values.mother_city}
+                          >
+                            {allcityMother?.length > 0 &&
+                              allcityMother.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
+                          </Field>
                         </div>
 
                         <div className="lg:w-[32.5%]  w-[100%]">

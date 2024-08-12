@@ -1,30 +1,27 @@
 import { Provider } from "react-redux";
 import store from "../redux/store";
-import "../styles/globals.css"; // corrected path for globals.css
+import "../styles/globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
-// import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import { useState, useEffect } from "react";
 import Layout from "@/components/Navigation/Layout";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import LoginPage from "./login";
 import { getCookie, setCookie } from "@/utilities/cookies";
 import { Cookies } from "@/config/cookies";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Define a new QueryClient instance
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }) {
-  const [token, setToken] = useState(null); //Store token due to hydration error
+  const [token, setToken] = useState(null); 
   const [loading, setLoading] = useState(true);
   const theme = createTheme({
     palette: {
-      mode: 'light', // Change to 'dark' if you want a dark theme
+      mode: "light", 
     },
   });
   useEffect(() => {
@@ -41,27 +38,26 @@ export default function App({ Component, pageProps }) {
 
   return (
     <ThemeProvider theme={theme}>
-    <QueryClientProvider client={queryClient}>
-      <CssBaseline />
+      <QueryClientProvider client={queryClient}>
+        <CssBaseline />
 
-      <Provider store={store}>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-
-          {loading ? ( // Show loading indicator while fetching token
-            <div></div>
-          ) : !token ? (
-            <div className="">
-              <LoginPage />
-            </div>
-          ) : (
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          )}
-          <ToastContainer />
-        </LocalizationProvider>
-      </Provider>
-    </QueryClientProvider>
+        <Provider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+            {loading ? ( // Show loading indicator while fetching token
+              <div></div>
+            ) : !token ? (
+              <div className="">
+                <LoginPage />
+              </div>
+            ) : (
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            )}
+            <ToastContainer />
+          </LocalizationProvider>
+        </Provider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

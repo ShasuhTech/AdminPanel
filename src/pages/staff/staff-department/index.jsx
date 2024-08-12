@@ -67,7 +67,7 @@ const StaffDepartment = () => {
               sx={{ marginRight: "10px" }}
               variant="outlined"
               color="success"
-              width={"200px"}
+              width={"250px"}
               py={2}
             >
               Create Staff Department

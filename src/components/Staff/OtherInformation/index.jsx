@@ -1,184 +1,372 @@
-import CustomButton from "@/components/CommonButton/CustomButton";
-import { AddFollowup, GetFollowupList, updateFollowup } from "@/services/api";
+import { UpdateStaffDetails } from "@/services/api";
 import Config from "@/utilities/Config";
-// import Config from "@/utilities/Config";
-import {
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { Box } from "@mui/system";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import {
+  DatePickerField,
+  SelectField,
+  TextFieldComponent,
+} from "@/components/FormikComponent";
 import dayjs from "dayjs";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 
-const TextFieldComponent = ({
-  field,
-  form: { touched, errors },
-  disabled,
-  ...props
-}) => (
-  <TextField
-    {...field}
-    {...props}
-    error={touched[field.name] && Boolean(errors[field.name])}
-    helperText={touched[field.name] && errors[field.name]}
-    variant="outlined"
-    fullWidth
-    disabled={disabled}
-    margin="normal"
-    // required
-  />
-);
+const OtherInformation = ({ data, staffRefetch, setSlectedTab }) => {
+  const router = useRouter();
+  const id = router?.query?.id;
 
-const DatePickerField = ({ field, form, ...props }) => {
-  const currentError = form.errors[field.name];
+  const defaultValues = {
+    // Passport Details
+    passport_no: "",
+    passport_issue_place: "",
+    passport_issue_date: null,
+    passport_expiry_date: null,
 
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <FormControl required fullWidth margin="normal">
-        <DatePicker
-          {...field}
-          {...props}
-          inputFormat="MM/dd/yyyy"
-          value={field.value ? dayjs(field.value) : null}
-          onChange={(newValue) => {
-            form.setFieldValue(field.name, newValue ? dayjs(newValue) : null);
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              error={Boolean(currentError)}
-              helperText={currentError}
-              variant="outlined"
-            />
-          )}
-        />
-      </FormControl>
-    </LocalizationProvider>
-  );
-};
+    // Visa Details
+    visa_no: "",
+    visa_issue_place: "",
+    visa_issue_date: null,
+    visa_expiry_date: null,
 
-const SelectField = ({ field, form, label, options, ...props }) => (
-  <FormControl fullWidth margin="normal">
-    <InputLabel>{label}</InputLabel>
-    <Select fullWidth {...field} {...props} label={label}>
-      {options.map((option) => (
-        <MenuItem fullWidth key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
-);
+    // Other Details
+    honors: "",
+    sports: "",
+    dramatic: "",
+    literacy: "",
+    music: "",
+    other: "",
+    identification_marks: "",
+    interview_board: "",
+    observation_at_the_time_of_interview: "",
+    any_other_relevent_information: "",
 
-const OtherInformation = () => {
-  const data = "";
-  const initialValues = {
-    designation: data?.designation || "",
-    designationDate: dayjs(data?.designationDate) || dayjs(new Date()),
-    school_name: data?.school_name || "",
-    department: data?.department || "",
-    departmentDate: dayjs(data?.departmentDate) || dayjs(new Date()),
-    payment: data?.payment || "",
-    appointmentDate: dayjs(data?.appointmentDate) || dayjs(new Date()),
-    bank: data?.bank || "",
-    confirmation_date: dayjs(data?.confirmation_date) || dayjs(new Date()),
-    bank_account_no: data?.bank_account_no || "",
-    saving_bank_name: data?.saving_bank_name || "",
-    bank_ifsc_code: data?.bank_ifsc_code || "",
-    probation_upto: dayjs(data?.probation_upto) || dayjs(new Date()),
-    org_name_in_form_16: data?.org_name_in_form_16 || "",
-    nature_of_appointment: data?.nature_of_appointment || "",
-    nature_of_appointment_date:
-      dayjs(data?.nature_of_appointment_date) || dayjs(new Date()),
-    leave_category: data?.leave_category || "",
-    staff_category: data?.staff_category || "",
-    staff_category_date: dayjs(data?.staff_category_date) || dayjs(new Date()),
-    vol_pf: data?.vol_pf || "",
-    pf_no: data?.pf_no || "",
-    pension_no: data?.pension_no || "",
-    uan_no: data?.uan_no || "",
-    pan_no: data?.pan_no || "",
-    esi_no: data?.esi_no || "",
-    date_of_leaving: dayjs(data?.date_of_leaving) || dayjs(new Date()),
-    calculation_mode: data?.calculation_mode || "",
-    increment_date: dayjs(data?.increment_date) || dayjs(new Date()),
-    salary_upto: dayjs(data?.salary_upto) || dayjs(new Date()),
-    pay_scale: data?.pay_scale || "",
-    pay_scale_date: dayjs(data?.pay_scale_date) || dayjs(new Date()),
-    reason: data?.reason || "",
-    grade_pay: data?.grade_pay || "",
-    grade_pay_date: dayjs(data?.grade_pay_date) || dayjs(new Date()),
-    leaving_remark: data?.leaving_remark || "",
-    basic_pay: data?.basic_pay || "",
-    basic_pay_date: dayjs(data?.basic_pay_date) || dayjs(new Date()),
-    gross: data?.gross || "",
-    net_pay: data?.net_pay || "",
-    pf_type: data?.pf_type || "",
-    pf_joining_date: dayjs(data?.pf_joining_date) || dayjs(new Date()),
+    // Spouse Details
+    spouse_name: "",
+    spouse_date_of_birth: null,
+    spouse_mobile: "",
+    spouse_qualification: "",
+    spouse_employer_details: "",
+
+    // Children Details
+    children_name: "",
+    children_gender: "",
+    children_date_of_birth: null,
+    children_mobile: "",
+    children_institute_name: "",
+
+    // Qualification Details
+    qualification_name: "",
+    qualification_passing_year: "",
+    qualification_univercity: "",
+    qualification_institution: "",
+    qualification_percentage: "",
+    qualification_medium: "",
+    qualification_main_subject: "",
+
+    // Specialized Details
+    specialized_name_of_training: "",
+    specialized_place_of_training: "",
+    specialized_date_from: null,
+    specialized_date_to: null,
+    specialized_organized_by: "",
+    specialized_resource_person: "",
+
+    // Dependent Details
+    dependent_name: "",
+    dependent_relationship: "",
+    dependent_date_of_birth: null,
+    dependent_mobile: "",
+    dependent_remark: "",
+
+    // Pre Experience Details
+    preExperience_organization_name: "",
+    preExperience_date_from: null,
+    preExperience_date_to: null,
+    preExperience_designation_name: "",
+    preExperience_job_description: "",
+    preExperience_salary_drawn: "",
+    preExperience_reason_for_leaving: "",
+
+    // PF Nominee Details
+    pf_nominee_nominee_name: "",
+    pf_nominee_relationship: "",
+    pf_nominee_date_of_birth: null,
+    pf_nominee_percentage_of_share: "",
+
+    // Reference Details
+    reference_name: "",
+    reference_designation_name: "",
+    reference_address: "",
   };
 
+  const initialValues = data
+    ? {
+        // Passport Details
+        passport_no: data?.additionalDetails?.passport_no || "",
+        passport_issue_place: data?.additionalDetails?.passport_issue_place || "",
+        passport_issue_date: data?.additionalDetails?.passport_issue_date
+          ? dayjs(data.passport_issue_date)
+          : dayjs(new Date()),
+        passport_expiry_date: data?.additionalDetails?.passport_expiry_date
+          ? dayjs(data.passport_expiry_date)
+          : dayjs(new Date()),
+
+        // Visa Details
+        visa_no: data?.additionalDetails?.visa_no || "",
+        visa_issue_place: data?.additionalDetails?.visa_issue_place || "",
+        visa_issue_date: data?.additionalDetails?.visa_issue_date
+          ? dayjs(data.visa_issue_date)
+          : dayjs(new Date()),
+        visa_expiry_date: data?.additionalDetails?.visa_expiry_date
+          ? dayjs(data.visa_expiry_date)
+          : dayjs(new Date()),
+
+        // Other Details
+        honors: data?.additionalDetails?.honors || "",
+        sports: data?.additionalDetails?.sports || "",
+        dramatic: data?.additionalDetails?.dramatic || "",
+        literacy: data?.additionalDetails?.literacy || "",
+        music: data?.additionalDetails?.music || "",
+        other: data?.additionalDetails?.other || "",
+        identification_marks: data?.additionalDetails?.identification_marks || "",
+        interview_board: data?.additionalDetails?.interview_board || "",
+        observation_at_the_time_of_interview:
+          data?.additionalDetails?.observation_at_the_time_of_interview || "",
+        any_other_relevent_information:
+          data?.additionalDetails?.any_other_relevent_information || "",
+
+        // Spouse Details
+        spouse_name: data?.additionalDetails?.spouse_name || "",
+        spouse_date_of_birth: data?.additionalDetails?.spouse_date_of_birth
+          ? dayjs(data.spouse_date_of_birth)
+          : dayjs(new Date()),
+        spouse_mobile: data?.additionalDetails?.spouse_mobile || "",
+        spouse_qualification: data?.additionalDetails?.spouse_qualification || "",
+        spouse_employer_details: data?.additionalDetails?.spouse_employer_details || "",
+
+        // Children Details
+        children_name: data?.additionalDetails?.children_name || "",
+        children_gender:
+          data?.additionalDetails?.children_gender ||
+          ( ""),
+        children_date_of_birth: data?.additionalDetails?.children_date_of_birth
+          ? dayjs(data.children_date_of_birth)
+          : dayjs(new Date()),
+        children_mobile: data?.additionalDetails?.children_mobile || "",
+        children_institute_name: data?.additionalDetails?.children_institute_name || "",
+
+        // Qualification Details
+        qualification_name:
+          data?.additionalDetails?.qualification_name ||
+          ( ""),
+        qualification_passing_year:
+          data?.additionalDetails?.qualification_passing_year || "",
+        qualification_univercity:
+          data?.additionalDetails?.qualification_univercity || "",
+        qualification_institution:
+          data?.additionalDetails?.qualification_institution || "",
+        qualification_percentage:
+          data?.additionalDetails?.qualification_percentage || "",
+        qualification_medium:
+          data?.additionalDetails?.qualification_medium ||
+          ( ""),
+        qualification_main_subject:
+          data?.additionalDetails?.qualification_main_subject ||
+          ( ""),
+
+        // Specialized Details
+        specialized_name_of_training:
+          data?.additionalDetails?.specialized_name_of_training || "",
+        specialized_place_of_training:
+          data?.additionalDetails?.specialized_place_of_training || "",
+        specialized_date_from: data?.additionalDetails?.specialized_date_from
+          ? dayjs(data.specialized_date_from)
+          : dayjs(new Date()),
+        specialized_date_to: data?.additionalDetails?.specialized_date_to
+          ? dayjs(data.specialized_date_to)
+          : dayjs(new Date()),
+        specialized_organized_by:
+          data?.additionalDetails?.specialized_organized_by || "",
+        specialized_resource_person:
+          data?.additionalDetails?.specialized_resource_person || "",
+
+        // Dependent Details
+        dependent_name: data?.additionalDetails?.dependent_name || "",
+        dependent_relationship: data?.additionalDetails?.dependent_relationship || "",
+        dependent_date_of_birth: data?.additionalDetails?.dependent_date_of_birth
+          ? dayjs(data.dependent_date_of_birth)
+          : dayjs(new Date()),
+        dependent_mobile: data?.additionalDetails?.dependent_mobile || "",
+        dependent_remark: data?.additionalDetails?.dependent_remark || "",
+
+        // Pre Experience Details
+        preExperience_organization_name:
+          data?.additionalDetails?.preExperience_organization_name || "",
+        preExperience_date_from: data?.additionalDetails?.preExperience_date_from
+          ? dayjs(data.preExperience_date_from)
+          : dayjs(new Date()),
+        preExperience_date_to: data?.additionalDetails?.preExperience_date_to
+          ? dayjs(data.preExperience_date_to)
+          : dayjs(new Date()),
+        preExperience_designation_name:
+          data?.additionalDetails?.preExperience_designation_name || "",
+        preExperience_job_description:
+          data?.additionalDetails?.preExperience_job_description || "",
+        preExperience_salary_drawn:
+          data?.additionalDetails?.preExperience_salary_drawn || "",
+        preExperience_reason_for_leaving:
+          data?.additionalDetails?.preExperience_reason_for_leaving || "",
+
+        // PF Nominee Details
+        pf_nominee_nominee_name: data?.additionalDetails?.pf_nominee_nominee_name || "",
+        pf_nominee_relationship: data?.additionalDetails?.pf_nominee_relationship || "",
+        pf_nominee_date_of_birth: data?.additionalDetails?.pf_nominee_date_of_birth
+          ? dayjs(data.pf_nominee_date_of_birth)
+          : dayjs(new Date()),
+        pf_nominee_percentage_of_share:
+          data?.additionalDetails?.pf_nominee_percentage_of_share || "",
+
+        // Reference Details
+        reference_name: data?.additionalDetails?.reference_name || "",
+        reference_designation_name:
+          data?.additionalDetails?.reference_designation_name || "",
+        reference_address: data?.additionalDetails?.reference_address || "",
+      }
+    : defaultValues;
+
   const validationSchema = Yup.object({
-    designation: Yup.string().required("Designation is required"),
-    designationDate: Yup.date().required("Designation Date is required"),
-    school_name: Yup.string().required("School Name is required"),
-    department: Yup.string().required("Department is required"),
-    departmentDate: Yup.date().required("Department Date is required"),
-    payment: Yup.string().required("Payment is required"),
-    appointmentDate: Yup.date().required("Appointment Date is required"),
-    bank: Yup.string().required("Bank is required"),
-    confirmation_date: Yup.date().required("Confirmation Date is required"),
-    bank_account_no: Yup.string().required("Bank Account No is required"),
-    saving_bank_name: Yup.string().required("Saving Bank Name is required"),
-    bank_ifsc_code: Yup.string().required("Bank IFSC Code is required"),
-    probation_upto: Yup.date().required("Probation Upto is required"),
-    org_name_in_form_16: Yup.string().required(
-      "Org Name in Form 16 is required"
+    // Passport Details
+    passport_no: Yup.string().required("Passport No is required"),
+    passport_issue_place: Yup.string().required(
+      "Passport Issue Place is required"
     ),
-    nature_of_appointment: Yup.string().required(
-      "Nature Of Appointment is required"
+    passport_issue_date: Yup.date().required("Passport Issue Date is required"),
+    passport_expiry_date: Yup.date().required(
+      "Passport Expiry Date is required"
     ),
-    nature_of_appointment_date: Yup.date().required(
-      "Nature Of Appointment Date is required"
+
+    // Visa Details
+    visa_no: Yup.string().required("Visa No is required"),
+    visa_issue_place: Yup.string().required("Visa Issue Place is required"),
+    visa_issue_date: Yup.date().required("Visa Issue Date is required"),
+    visa_expiry_date: Yup.date().required("Visa Expiry Date is required"),
+
+    // Other Details
+    honors: Yup.string().required("Honors/Awards is required"),
+    sports: Yup.string().required("Sports is required"),
+    dramatic: Yup.string().required("Dramatic is required"),
+    literacy: Yup.string().required("Literacy is required"),
+    music: Yup.string().required("Music/Dance is required"),
+    other: Yup.string().required("Other is required"),
+    identification_marks: Yup.string().required(
+      "Identification Marks is required"
     ),
-    leave_category: Yup.string().required("Leave Category is required"),
-    staff_category: Yup.string().required("Staff Category is required"),
-    staff_category_date: Yup.date().required("Staff Category Date is required"),
-    vol_pf: Yup.string().required("Vol PF is required"),
-    pf_no: Yup.string().required("PF No is required"),
-    pension_no: Yup.string().required("Pension No is required"),
-    uan_no: Yup.string().required("UAN No is required"),
-    pan_no: Yup.string().required("Pan No is required"),
-    esi_no: Yup.string().required("ESI No is required"),
-    date_of_leaving: Yup.date().required("Date Of Leaving is required"),
-    calculation_mode: Yup.string().required("Calculation Mode is required"),
-    increment_date: Yup.date().required("Increment Date is required"),
-    salary_upto: Yup.date().required("Salary Upto is required"),
-    pay_scale: Yup.string().required("Pay Scale is required"),
-    pay_scale_date: Yup.date().required("Pay Scale Date is required"),
-    reason: Yup.string().required("Reason is required"),
-    grade_pay: Yup.string().required("Grade Pay is required"),
-    grade_pay_date: Yup.date().required("Grade Pay Date is required"),
-    leaving_remark: Yup.string().required("Leaving Remark is required"),
-    basic_pay: Yup.string().required("Basic Pay is required"),
-    basic_pay_date: Yup.date().required("Basic Pay Date is required"),
-    gross: Yup.string().required("Gross is required"),
-    net_pay: Yup.string().required("Net Pay is required"),
-    pf_type: Yup.string().required("PF Type is required"),
-    pf_joining_date: Yup.date().required("PF Joining Date is required"),
+    interview_board: Yup.string().required("Interview Board is required"),
+    observation_at_the_time_of_interview: Yup.string().required(
+      "Observation At the Time Of Interview is required"
+    ),
+    any_other_relevent_information: Yup.string().required(
+      "Any Other Relevant Information is required"
+    ),
+
+    // Spouse Details
+    spouse_name: Yup.string().required("Spouse Name is required"),
+    spouse_date_of_birth: Yup.date().required(
+      "Spouse Date Of Birth is required"
+    ),
+    spouse_mobile: Yup.string().required("Spouse Mobile Number is required"),
+    spouse_qualification: Yup.string().required(
+      "Spouse Qualification is required"
+    ),
+    spouse_employer_details: Yup.string().required(
+      "Spouse Employer Details is required"
+    ),
+
+    // Children Details
+    children_name: Yup.string().required("Child Name is required"),
+    children_gender: Yup.string().required("Child Gender is required"),
+    children_date_of_birth: Yup.date().required(
+      "Child Date Of Birth is required"
+    ),
+    children_mobile: Yup.string().required("Child Mobile Number is required"),
+    children_institute_name: Yup.string().required(
+      "Child Institute Name is required"
+    ),
+
+    // Qualification Details
+    qualification_name: Yup.string().required("Qualification is required"),
+    qualification_passing_year: Yup.string().required(
+      "Passing Year is required"
+    ),
+    qualification_univercity: Yup.string().required("University is required"),
+    qualification_institution: Yup.string().required("Institution is required"),
+    qualification_percentage: Yup.string().required(
+      "Division/Percentage is required"
+    ),
+    qualification_medium: Yup.string().required(
+      "Medium Of Instruction is required"
+    ),
+    qualification_main_subject: Yup.string().required(
+      "Main Subject is required"
+    ),
+
+    // Specialized Details
+    specialized_name_of_training: Yup.string().required(
+      "Name Of Training is required"
+    ),
+    specialized_place_of_training: Yup.string().required(
+      "Place Of Training is required"
+    ),
+    specialized_date_from: Yup.date().required("Date From is required"),
+    specialized_date_to: Yup.date().required("Date To is required"),
+    specialized_organized_by: Yup.string().required("Organized By is required"),
+    specialized_resource_person: Yup.string().required(
+      "Resource Person is required"
+    ),
+
+    // Dependent Details
+    dependent_name: Yup.string().required("Dependent Name is required"),
+    dependent_relationship: Yup.string().required("Relationship is required"),
+    dependent_date_of_birth: Yup.date().required("Date Of Birth is required"),
+    dependent_mobile: Yup.string().required("Mobile Number is required"),
+    dependent_remark: Yup.string().required("Remark is required"),
+
+    // Pre Experience Details
+    preExperience_organization_name: Yup.string().required(
+      "Organisation Name is required"
+    ),
+    preExperience_date_from: Yup.date().required("Date From is required"),
+    preExperience_date_to: Yup.date().required("Date To is required"),
+    preExperience_designation_name: Yup.string().required(
+      "Designation Name is required"
+    ),
+    preExperience_job_description: Yup.string().required(
+      "Job Description is required"
+    ),
+    preExperience_salary_drawn: Yup.string().required(
+      "Salary Drawn is required"
+    ),
+    preExperience_reason_for_leaving: Yup.string().required(
+      "Reason For Leaving is required"
+    ),
+
+    // PF Nominee Details
+    pf_nominee_nominee_name: Yup.string().required("Nominee Name is required"),
+    pf_nominee_relationship: Yup.string().required("Relationship is required"),
+    pf_nominee_date_of_birth: Yup.date().required("Date of Birth is required"),
+    pf_nominee_percentage_of_share: Yup.string().required(
+      "Percentage Of Share is required"
+    ),
+
+    // Reference Details
+    reference_name: Yup.string().required("Reference Name is required"),
+    reference_designation_name: Yup.string().required(
+      "Designation Name is required"
+    ),
+    reference_address: Yup.string().required("Address is required"),
   });
 
   const passportDetails = [
@@ -573,328 +761,37 @@ const OtherInformation = () => {
     },
   ];
 
-  const fields = [
-    {
-      id: "designation",
-      label: "Designation",
-      name: "designation",
-      component: SelectField,
-      options: Config.occupations,
-    },
-    {
-      id: "designationDate",
-      label: "Designation Date",
-      name: "designationDate",
-      component: DatePickerField,
-    },
-    {
-      id: "school_name",
-      label: "school_name",
-      name: "school_name",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "department",
-      label: "Department",
-      name: "department",
-      component: SelectField,
-      options: Config.occupations,
-    },
-    {
-      id: "departmentDate",
-      label: "Department Date",
-      name: "departmentDate",
-      component: DatePickerField,
-    },
-    {
-      id: "payment",
-      label: "Payment",
-      name: "payment",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "appointmentDate",
-      label: "Appointment Date",
-      name: "appointmentDate",
-      component: DatePickerField,
-    },
-    {
-      id: "bank",
-      label: "Bank",
-      name: "bank",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "confirmation_date",
-      label: "Confirmation Date",
-      name: "confirmation_date",
-      component: DatePickerField,
-    },
-    {
-      id: "bank_account_no",
-      label: "Bank Account No",
-      name: "bank_account_no",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "saving_bank_name",
-      label: "Saving Bank Name",
-      name: "saving_bank_name",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "bank_ifsc_code",
-      label: "Bank IFSC Code",
-      name: "bank_ifsc_code",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "probation_upto",
-      label: "Probation Upto",
-      name: "probation_upto",
-      component: DatePickerField,
-    },
-    {
-      id: "org_name_in_form_16",
-      label: "Org name in Form 16",
-      name: "org_name_in_form_16",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "nature_of_appointment",
-      label: "Nature Of Appointment",
-      name: "nature_of_appointment",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "nature_of_appointment_date",
-      label: "Nature Of Appointment Date",
-      name: "nature_of_appointment_date",
-      component: DatePickerField,
-    },
-    {
-      id: "leave_category",
-      label: "Leave Category",
-      name: "leave_category",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "staff_category",
-      label: "Staff Category",
-      name: "staff_category",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "staff_category_date",
-      label: "Staff Category Date",
-      name: "staff_category_date",
-      component: DatePickerField,
-    },
-    {
-      id: "vol_pf",
-      label: "Vol PF",
-      name: "vol_pf",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "pf_no",
-      label: "PF No",
-      name: "pf_no",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "pension_no",
-      label: "Pension No",
-      name: "pension_no",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "uan_no",
-      label: "UAN No",
-      name: "uan_no",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "pan_no",
-      label: "Pan No",
-      name: "pan_no",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "esi_no",
-      label: "ESI No",
-      name: "esi_no",
-      // disabled: true,
-      component: TextFieldComponent,
-    },
-    {
-      id: "date_of_leaving",
-      label: "Date Of Leaving",
-      name: "date_of_leaving",
-      component: DatePickerField,
-    },
-    {
-      id: "calculation_mode",
-      label: "Calculation Mode",
-      name: "calculation_mode",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "increment_date",
-      label: "Increment Date",
-      name: "increment_date",
-      component: DatePickerField,
-    },
-    {
-      id: "salary_upto",
-      label: "Salary Upto",
-      name: "salary_upto",
-      component: DatePickerField,
-    },
-    {
-      id: "pay_scale",
-      label: "Pay Scale",
-      name: "pay_scale",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "pay_scale_date",
-      label: "Pay Scale Date",
-      name: "pay_scale_date",
-      component: DatePickerField,
-    },
-    {
-      id: "reason",
-      label: "Reason",
-      name: "reason",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "grade_pay",
-      label: "Grade Pay",
-      name: "grade_pay",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "grade_pay_date",
-      label: "Grade Pay Date",
-      name: "grade_pay_date",
-      component: DatePickerField,
-    },
-    {
-      id: "leaving_remark",
-      label: "Leaving Remark",
-      name: "leaving_remark",
-      component: TextFieldComponent,
-    },
-    {
-      id: "basic_pay",
-      label: "Basic Pay",
-      name: "basic_pay",
-      component: TextFieldComponent,
-    },
-    {
-      id: "basic_pay_date",
-      label: "Basic Pay Date",
-      name: "basic_pay_date",
-      component: DatePickerField,
-    },
-    {
-      id: "gross",
-      label: "Gross",
-      name: "gross",
-      component: TextFieldComponent,
-    },
-    {
-      id: "net_pay",
-      label: "Net Pay",
-      name: "net_pay",
-      component: TextFieldComponent,
-    },
-    {
-      id: "pf_type",
-      label: "Pf Type",
-      name: "pf_type",
-      component: SelectField,
-      options: Config.genders,
-    },
-    {
-      id: "pf_joining_date",
-      label: "Pf Joining Date",
-      name: "pf_joining_date",
-      component: DatePickerField,
-    },
-  ];
-
-  const router = useRouter();
-
-  const {
-    data: studentData,
-    isLoading: studentLoading,
-    refetch: studentRefetch,
-  } = useQuery("followupdata", async () => {
-    const paylaod = { student_id: data?._id };
-    if (!data?._id) {
-      return;
-    }
-    const res = await GetFollowupList(paylaod);
-    return res?.data;
-  });
-
-  useEffect(() => {
-    studentRefetch();
-  }, [data]);
-
   const handleSubmit = async (values, actions) => {
     console.log(values, "----values");
+
+    // Ensure id is defined before proceeding
+    if (!id) {
+      toast.warning("Please fill in the basic information first.");
+      return;
+    }
+
     const payload = {
-      //   student_id: data?._id,
-      //   next_follow_up_date: dayjs(values.nextfollowUpdate),
-      //   follow_ups: values.followUp,
-      //   remarks: values.remarks,
-      //   follow_up_mode: values.modeOfFollowup,
-      //   follow_up_date: dayjs(values.followUpdate),
-      //   enquiry_id: data.enquiry_id,
+      id: id,
+      tab: 3,
+      ...values,
     };
 
-    // try {
-    //   if (!SlectedRow) {
-    //     const resp = await AddFollowup(payload);
-    //     if (resp?.success) {
-    //       toast.success("FollowUp Added successfully");
-    //       actions.resetForm();
-    //       studentRefetch();
-    //     }
-    //   } else {
-    //     const resp = await updateFollowup(payload);
-    //     if (resp?.success) {
-    //       toast.success("FollowUp Updated successfully");
-    //       actions.resetForm();
-    //       studentRefetch();
-    //     }
-    //   }
-    // } catch (error) {
-    //   toast.error("Failed to add FollowUp");
-    // }
+    console.log(payload, "payload");
+
+    try {
+      const resp = await UpdateStaffDetails(payload);
+      if (resp?.success) {
+        toast.success("Staff updated successfully.");
+        actions.resetForm();
+        staffRefetch();
+        setSlectedTab(4);
+      } else {
+        toast.error("Failed to update staff.");
+      }
+    } catch (error) {
+      toast.error("Failed to update staff.");
+      console.error("Error updating staff:", error);
+    }
   };
 
   console.log(initialValues, "===sferw");
@@ -911,29 +808,61 @@ const OtherInformation = () => {
           <Form>
             {/* Uncomment and modify if needed for other fields */}
             {/* <FormSection title="General Information" details={fields} /> */}
-            <FormSection title="Passport Details" details={passportDetails} />
-            <FormSection title="Visa Details" details={visaDetails} />
-            <FormSection title="Other Details" details={otherDetails} />
-            <FormSection title="Spouse Details" details={spouseDetails} />
-            <FormSection title="Children Details" details={childrenDetails} />
+            <FormSection
+              title="Passport Details"
+              details={passportDetails}
+              values={values}
+            />
+            <FormSection
+              title="Visa Details"
+              details={visaDetails}
+              values={values}
+            />
+            <FormSection
+              title="Other Details"
+              details={otherDetails}
+              values={values}
+            />
+            <FormSection
+              title="Spouse Details"
+              details={spouseDetails}
+              values={values}
+            />
+            <FormSection
+              title="Children Details"
+              details={childrenDetails}
+              values={values}
+            />
             <FormSection
               title="Qualification Details"
               details={qualificationDetails}
+              values={values}
             />
             <FormSection
               title="Training Details"
               details={specializedDetails}
+              values={values}
             />
-            <FormSection title="Dependent Details" details={dependentDetails} />
+            <FormSection
+              title="Dependent Details"
+              details={dependentDetails}
+              values={values}
+            />
             <FormSection
               title="Previous Experience Details"
               details={preExperienceDetails}
+              values={values}
             />
             <FormSection
               title="Pf Nominee Details"
               details={pfNomineeDetails}
+              values={values}
             />
-            <FormSection title="Reference Details" details={referenceDetails} />
+            <FormSection
+              title="Reference Details"
+              details={referenceDetails}
+              values={values}
+            />
 
             <div className="flex justify-end my-5">
               <Button type="submit" variant="contained" color="primary">
@@ -949,16 +878,21 @@ const OtherInformation = () => {
 
 export default OtherInformation;
 
-const FormSection = ({ title, details }) => (
-  <Box className='mt-7'>
-    <span className="font-bold text-[18px] mt-7 "  >
-      {title}
-    </span>
+const FormSection = ({ title, details, values }) => (
+  <Box className="mt-7">
+    <span className="font-bold text-[18px] mt-7 ">{title}</span>
     <Grid className="border rounded-lg mt-3 px-6">
       <Box className="flex w-full flex-wrap py-3 justify-between">
         {details.map((field) => (
           <Box key={field.id} className="lg:w-[49%] w-full">
-            <Field {...field} />
+            <Field
+              name={field.name}
+              label={field.label}
+              component={field.component}
+              options={field.options}
+              disabled={field.disabled}
+              values={values}
+            />
           </Box>
         ))}
       </Box>

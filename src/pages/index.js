@@ -1,6 +1,5 @@
 import React from "react";
 import Home from "./home";
-import HeaderText from "@/components/Header";
 
 const index = () => {
   return (

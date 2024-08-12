@@ -31,7 +31,7 @@ const StaffDepartmentModal = ({ open, handleClose, selectedItem }) => {
   console.log(selectedItem, "--selectedItem");
   const [remark, setRemark] = useState("");
   useEffect(() => {
-    setRemark(selectedItem?.name||'');
+    setRemark(selectedItem?.name || "");
   }, [selectedItem]);
 
   const submitHandler = async () => {
@@ -44,8 +44,8 @@ const StaffDepartmentModal = ({ open, handleClose, selectedItem }) => {
         const res = await AddDepartment(payload);
         if (res?.success) {
           toast.success("Successfully Added...");
-      handleClose();
-
+          handleClose();
+          setRemark("");
         }
       } else {
         const res = await updateDepartment({
@@ -54,8 +54,8 @@ const StaffDepartmentModal = ({ open, handleClose, selectedItem }) => {
         });
         if (res?.success) {
           toast.success("Successfully Updated...");
-      handleClose();
-
+          handleClose();
+          setRemark("");
         }
       }
     } catch (error) {
@@ -72,7 +72,7 @@ const StaffDepartmentModal = ({ open, handleClose, selectedItem }) => {
     >
       <Box sx={style}>
         <Typography id="modal-title" mb={3} component="h4">
-         Staff Department
+          Staff Department
         </Typography>
 
         <Box sx={{ width: "100%" }}>

@@ -42,8 +42,7 @@ import { useQuery } from "react-query";
 import moment from "moment";
 import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
 import Config from "@/utilities/Config";
-// import FollowUpModal from "./FollowUpModal";
-import EnquiryMaster from "../enquiry-master";
+import EnquiryMaster from "@/pages/registration/student-enquiry/enquiry-master";
 
 const FollowUp = () => {
   const [searchText, setSearchText] = useState("");

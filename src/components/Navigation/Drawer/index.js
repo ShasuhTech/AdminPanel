@@ -552,6 +552,13 @@ const DrawerPath = ({
             </DrawerList>
             <DrawerList path={""} text={"Staff"} Icon={SchoolIcon} open={open}>
               <DrawerList
+                path={"/staff/staff-list"}
+                text={"Staff List"}
+                Icon={ServiceList}
+                open={open}
+                title={"Staff >> Staff List"}
+              />
+              <DrawerList
                 path={"/staff/add-staff"}
                 text={"Add Staff"}
                 Icon={ServiceList}

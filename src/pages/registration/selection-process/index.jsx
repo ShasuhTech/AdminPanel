@@ -11,7 +11,6 @@ import {
   TableBody,
   Table,
   CircularProgress,
-  TablePagination,
   MenuItem,
   Select,
   TextField,
@@ -19,7 +18,14 @@ import {
   Checkbox,
   FormControl,
 } from "@mui/material";
-import { GetStudentLsit } from "@/services/api";
+import {
+  AddSelectionProcess,
+  DeleteSelectionProcessId,
+  GetSelectionProcessList,
+  GetStudentLsit,
+  updateSelectionProcess,
+  // GetStudentLsit,
+} from "@/services/api";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
@@ -28,27 +34,53 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import * as Yup from "yup";
 import Config from "@/utilities/Config";
+import { toast } from "react-toastify";
 
 const SelectionProcess = () => {
   const [searchText, setSearchText] = useState("");
-  const [folloeupModeModal, setFolloeupModeModal] = useState(false);
+  const [openSelectionProcessModal, setOpenSelectionProcessModal] =
+    useState(false);
   const router = useRouter();
+  const [selectedRow, setselectedRow] = useState("");
 
   const {
     data: studentData,
     status: studentStatus,
     isLoading: studentLoading,
     refetch: studentRefetch,
-  } = useQuery("studentData", async () => {
+  } = useQuery("studentDataaa", async () => {
+    const payload = { status: "Registration" };
     const res = await GetStudentLsit();
-    console.log(res, "---sdf");
+    return res?.data;
+  });
+
+  const {
+    data: selectionProcessData,
+    status: selectionProcesstStatus,
+    isLoading: selectionProcessLoading,
+    refetch: selectionProcessRefetch,
+  } = useQuery("GetSelectionProcessList", async () => {
+    const res = await GetSelectionProcessList();
     return res?.data;
   });
   const handleclose = () => {
-    setFolloeupModeModal(false);
+    setOpenSelectionProcessModal(false);
+    selectionProcessRefetch();
+    studentRefetch();
   };
   const handleOpen = () => {
-    setFolloeupModeModal(true);
+    setOpenSelectionProcessModal(true);
+  };
+
+  const deleteHoliday = async (id) => {
+    alert("Are You sure you want to delete");
+    try {
+      const res = await DeleteSelectionProcessId(id);
+      if (res?.success) {
+        selectionProcessRefetch();
+        toast.success("Successfully Deleted...");
+      }
+    } catch (error) {}
   };
 
   return (
@@ -81,7 +113,7 @@ const SelectionProcess = () => {
                   position: "relative",
                 }}
               >
-                {false ? (
+                {studentLoading ? (
                   <TableRow>
                     <TableCell colSpan={12}>
                       <div
@@ -98,14 +130,17 @@ const SelectionProcess = () => {
                       </div>
                     </TableCell>
                   </TableRow>
-                ) : true ? (
+                ) : studentData?.length > 0 ? (
                   <>
-                    {[1, 1, 1, 1]?.map((row, index) => (
+                    {studentData?.map((row, index) => (
                       <Row
                         key={index}
                         row={row}
                         index={index}
                         router={router}
+                        deleteHoliday={deleteHoliday}
+                        setselectedRow={setselectedRow}
+                        setFolloeupModeModal={setOpenSelectionProcessModal}
                       />
                     ))}
                   </>
@@ -132,7 +167,11 @@ const SelectionProcess = () => {
           </TableContainer>
         </Paper>
       </div>{" "}
-      <RegStartModal open={folloeupModeModal} handleClose={handleclose} />
+      <RegStartModal
+        open={openSelectionProcessModal}
+        handleClose={handleclose}
+        selectedRow={selectedRow}
+      />
     </div>
   );
 };
@@ -141,28 +180,22 @@ export default SelectionProcess;
 
 const Row = (props) => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
-  const { row, salonDetails, setSalonDetails, index, router } = props;
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [age, setAge] = React.useState("");
+  const { row, index, deleteHoliday, setselectedRow, setFolloeupModeModal } =
+    props;
+
+  const [selectStatus, setSelectStatus] = React.useState("");
 
   const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setSelectStatus(event.target.value);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <React.Fragment>
       <TableRow
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
+            // background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -192,13 +225,16 @@ const Row = (props) => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={age}
-              // label="Age"
+              value={selectStatus}
               onChange={handleChange}
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {Config.SelectionStatus.map((item) => {
+                return (
+                  <MenuItem key={item.label} value={item.label}>
+                    {item.label}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </StyledTableCell>
@@ -210,12 +246,12 @@ const Row = (props) => {
   );
 };
 
-const RegStartModal = ({ open, handleClose }) => {
+const RegStartModal = ({ open, handleClose, selectedRow }) => {
   const initialValues = {
     class: "",
-    selection_process: "",
-    from_reg_No: "",
-    to_reg_no: "",
+    selectionStatus: "",
+    fromRegNo: "",
+    toRegNo: "",
     select_criteria1: "",
     select_condition1: "",
     select_value1: "",
@@ -227,11 +263,56 @@ const RegStartModal = ({ open, handleClose }) => {
     select_value3: "",
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
+  const handleSubmit = async (values, { setSubmitting, setStatus }) => {
+    const payload = {
+      class: values.class,
+      selectionStatus: values.selectionStatus,
+      fromRegNo: values.fromRegNo,
+      toRegNo: values.toRegNo,
+
+      ...(selectedRow?._id && { id: selectedRow._id }),
+    };
+    payload.criteria = [
+      {
+        selectCriteria: values.select_criteria1,
+        condition: values.select_condition1,
+        criteriaValue: values.select_value1,
+      },
+      {
+        selectCriteria: values.select_criteria2,
+        condition: values.select_condition2,
+        criteriaValue: values.select_value2,
+      },
+
+      {
+        selectCriteria: values.select_criteria3,
+        condition: values.select_condition3,
+        criteriaValue: values.select_value3,
+      },
+    ];
+
+    console.log(payload, "-f");
+
+    try {
+      const response = selectedRow
+        ? await updateSelectionProcess(payload)
+        : await AddSelectionProcess(payload);
+
+      if (response) {
+        toast.success(
+          `Selection Process ${
+            selectedRow ? "updated" : "created"
+          } successfully`
+        );
+        handleClose();
+      }
+    } catch (error) {
+      const errorMessage = "Something went wrong. Please try again.";
+      toast.error(errorMessage);
+      setStatus({ error: errorMessage });
+    } finally {
       setSubmitting(false);
-    }, 400);
+    }
   };
 
   return (
@@ -240,15 +321,15 @@ const RegStartModal = ({ open, handleClose }) => {
 
       <Formik
         initialValues={initialValues}
-        validationSchema={Yup.object({
-          name: Yup.string().required("Required"),
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Required"),
-          date: Yup.date().required("Required"),
-          time: Yup.date().required("Required"),
-        })}
-        validateOnBlur
+        // validationSchema={Yup.object({
+        //   name: Yup.string().required("Required"),
+        //   email: Yup.string()
+        //     .email("Invalid email address")
+        //     .required("Required"),
+        //   date: Yup.date().required("Required"),
+        //   time: Yup.date().required("Required"),
+        // })}
+        // validateOnBlur
         onSubmit={handleSubmit}
       >
         {({
@@ -286,7 +367,7 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Field
-                  name="selection_process"
+                  name="selectionStatus"
                   as={TextField}
                   select
                   label="Selection Status"
@@ -295,8 +376,8 @@ const RegStartModal = ({ open, handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  value={values.selection_process}
-                  helperText={<ErrorMessage name="selection_process" />}
+                  value={values.selectionStatus}
+                  helperText={<ErrorMessage name="selectionStatus" />}
                 >
                   {Config?.SelectionStatus.map((option) => (
                     <MenuItem key={option.label} value={option.label}>
@@ -307,32 +388,32 @@ const RegStartModal = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Field
-                  name="from_reg_No"
+                  name="fromRegNo"
                   as={TextField}
                   label="From Reg No"
                   variant="outlined"
                   // required
-                  value={values.from_reg_No}
+                  value={values.fromRegNo}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  helperText={<ErrorMessage name="from_reg_No" />}
+                  helperText={<ErrorMessage name="fromRegNo" />}
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Field
-                  name="to_reg_no"
+                  name="toRegNo"
                   as={TextField}
                   label="To Reg No"
                   variant="outlined"
                   // required
-                  value={values.to_reg_no}
+                  value={values.toRegNo}
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={false}
-                  helperText={<ErrorMessage name="to_reg_no" />}
+                  helperText={<ErrorMessage name="toRegNo" />}
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={5}>

@@ -11,22 +11,13 @@ import {
   TableBody,
   Table,
   CircularProgress,
-  TablePagination,
   MenuItem,
-  Select,
-  Menu,
-  IconButton,
-  InputLabel,
   TextField,
   Button,
-  Checkbox,
-  ListItemText,
-  FormControlLabel,
 } from "@mui/material";
 import {
   AddTimeSlot,
   DeleteTimeSlotId,
-  GetStudentLsit,
   GetTimeSlotList,
   updateTimeSlot,
 } from "@/services/api";
@@ -46,31 +37,26 @@ import dayjs from "dayjs";
 import SubmitButton from "@/components/CommonButton/SubmitButton";
 
 const TimeSlotMaster = () => {
-  const [searchText, setSearchText] = useState("");
+
   const [folloeupModeModal, setFolloeupModeModal] = useState(false);
   const [selectedRow, setselectedRow] = useState("");
   const router = useRouter();
-
   const {
     data: timeslotData,
-    status: timeslotStatus,
     isLoading: timeslotLoading,
     refetch: timeslotRefetch,
   } = useQuery("GetTimeSlotList", async () => {
     const res = await GetTimeSlotList();
-    console.log(res, "---sdf");
     return res?.data;
   });
   const handleclose = () => {
     setFolloeupModeModal(false);
+    timeslotRefetch();
   };
   const handleOpen = () => {
     setFolloeupModeModal(true);
     setselectedRow("");
   };
-  useEffect(() => {
-    timeslotRefetch();
-  }, [folloeupModeModal]);
 
   const deleteHoliday = async (id) => {
     alert("Are You sure you want to delete");

@@ -20,42 +20,53 @@ import {
 } from "@mui/material";
 import {
   AddAgeCriteria,
+  DeleteAgeCriteriaId,
   GetAgeCriteriaId,
-  GetStudentLsit,
+  GetAgeCriteriaList,
   updateAgeCriteria,
 } from "@/services/api";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import SimpleModal from "@/components/Modal/SimpleModal";
-import { Formik, Form, Field, ErrorMessage } from "formik";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
-import * as Yup from "yup";
 import Config from "@/utilities/Config";
-import { addHolidayList } from "@/services/Attendance";
 import dayjs from "dayjs";
 import CustomButton from "@/components/CommonButton/CustomButton";
+import { toast } from "react-toastify";
+import moment from "moment";
 
 const AgeCriteria = () => {
-  const [folloeupModeModal, setFolloeupModeModal] = useState(false);
+  const [ageCriteriaModalOpen, setAgeCriteriaModal] = useState(false);
   const router = useRouter();
+  const [selectedRow, setselectedRow] = useState("");
 
   const {
-    data: studentData,
-    status: studentStatus,
-    isLoading: studentLoading,
-    refetch: studentRefetch,
-  } = useQuery("studentData", async () => {
-    const res = await GetStudentLsit();
-    console.log(res, "---sdf");
+    data: ageCriteriaData,
+    isLoading: ageCriteriaLoading,
+    refetch: ageCriteriaRefetch,
+  } = useQuery("ageCriteria", async () => {
+    const res = await GetAgeCriteriaList();
     return res?.data;
   });
   const handleclose = () => {
-    setFolloeupModeModal(false);
+    setAgeCriteriaModal(false);
+    ageCriteriaRefetch();
   };
   const handleOpen = () => {
-    setFolloeupModeModal(true);
+    setAgeCriteriaModal(true);
+    setselectedRow("");
+  };
+
+  const deleteAgeCriteria = async (id) => {
+    alert("Are You sure you want to delete");
+    try {
+      const res = await DeleteAgeCriteriaId(id);
+      if (res?.success) {
+        ageCriteriaRefetch();
+        toast.success("Successfully Deleted...");
+      }
+    } catch (error) {}
   };
 
   return (
@@ -88,7 +99,7 @@ const AgeCriteria = () => {
                   position: "relative",
                 }}
               >
-                {false ? (
+                {ageCriteriaLoading ? (
                   <TableRow>
                     <TableCell colSpan={12}>
                       <div
@@ -105,15 +116,17 @@ const AgeCriteria = () => {
                       </div>
                     </TableCell>
                   </TableRow>
-                ) : true ? (
+                ) : ageCriteriaData?.length > 0 ? (
                   <>
-                    {[1, 1, 1, 1]?.map((row, index) => (
+                    {ageCriteriaData?.map((row, index) => (
                       <Row
                         key={index}
                         row={row}
                         index={index}
                         router={router}
-                        // selectedItem={selectedItem}
+                        deleteAgeCriteria={deleteAgeCriteria}
+                        setselectedRow={setselectedRow}
+                        setAgeCriteriaModal={setAgeCriteriaModal}
                       />
                     ))}
                   </>
@@ -140,7 +153,11 @@ const AgeCriteria = () => {
           </TableContainer>
         </Paper>
       </div>{" "}
-      <RegStartModal open={folloeupModeModal} handleClose={handleclose} />
+      <AgeCriteriaModal
+        open={ageCriteriaModalOpen}
+        handleClose={handleclose}
+        selectedRow={selectedRow}
+      />
     </div>
   );
 };
@@ -148,7 +165,7 @@ const AgeCriteria = () => {
 export default AgeCriteria;
 
 const Row = (props) => {
-  const { row, salonDetails, setSalonDetails, index, router, selectedItem } =
+  const { row, index, deleteAgeCriteria, setselectedRow, setAgeCriteriaModal } =
     props;
 
   return (
@@ -168,26 +185,43 @@ const Row = (props) => {
           <Typography>{index + 1}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "100px" }}>
-          <Typography>{"Nursary"}</Typography>
+          <Typography>{row?.class}</Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"2023"}</Typography>
-        </StyledTableCell>
-
-        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"01/07/2023"}</Typography>
+          <Typography>{row?.session}</Typography>
         </StyledTableCell>
 
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{"01/07/2023"}</Typography>
+          <Typography>
+            {moment(row?.min_birth_date).format("DD-MM-YYYY")}
+          </Typography>
+        </StyledTableCell>
+
+        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
+          <Typography>
+            {moment(row?.max_birt_date).format("DD-MM-YYYY")}
+          </Typography>
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "250px" }}>
-          <Typography>{"Comments"}</Typography>
+          <Typography>{row?.remark}</Typography>
         </StyledTableCell>
 
         <StyledTableCell align="left" style={{ minWidth: "100px", gap: 2 }}>
-          <Button variant="outlined">Edit</Button>
-          <Button sx={{ marginLeft: "10px" }} variant="outlined" color="error">
+          <Button
+            onClick={() => {
+              setselectedRow(row);
+              setAgeCriteriaModal(true);
+            }}
+            variant="outlined"
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={() => deleteAgeCriteria(row?._id)}
+            sx={{ marginLeft: "10px" }}
+            variant="outlined"
+            color="error"
+          >
             Delete
           </Button>
         </StyledTableCell>
@@ -196,8 +230,8 @@ const Row = (props) => {
   );
 };
 
-const RegStartModal = ({ open, handleClose, selectedItem }) => {
-  const [selectClass, setselectClass] = useState()
+const AgeCriteriaModal = ({ open, handleClose, selectedRow }) => {
+  const [selectClass, setselectClass] = useState();
   const [minDateBirth, setminDateBirth] = useState(dayjs(new Date()));
   const [maxDateBirth, setmaxDateBirth] = useState(dayjs(new Date()));
   const [session, setsession] = useState("");
@@ -205,19 +239,20 @@ const RegStartModal = ({ open, handleClose, selectedItem }) => {
 
   const submitHandler = async () => {
     const payload = {
-      from: minDateBirth,
-      holiday_type: session,
+      class: selectClass,
+      min_birth_date: minDateBirth,
+      max_birt_date: maxDateBirth,
+      session: session,
       remark: remark,
     };
-    if (value !== "single") {
-      payload.to = maxDateBirth;
-    }
 
     try {
-      if (!selectedItem?._id) {
+      if (!selectedRow?._id) {
         await AddAgeCriteria(payload);
+        toast.success("Age Criteria Successfully Added");
       } else {
-        await updateAgeCriteria({ ...payload, id: selectedItem._id });
+        await updateAgeCriteria({ ...payload, id: selectedRow._id });
+        toast.success("Age Criteria Successfully Updated");
       }
       handleClose();
     } catch (error) {
@@ -228,40 +263,45 @@ const RegStartModal = ({ open, handleClose, selectedItem }) => {
   const { data: HolidayData, refetch: HolidayRefetch } = useQuery(
     "GetAgeCriteriaById",
     async () => {
-      if (!selectedItem?._id) return null;
-      const res = await GetAgeCriteriaId(selectedItem._id);
+      if (!selectedRow?._id) return null;
+      const res = await GetAgeCriteriaId(selectedRow._id);
       return res?.data;
     },
     {
-      enabled: !!selectedItem?._id,
+      enabled: !!selectedRow?._id,
     }
   );
 
   useEffect(() => {
-    if (selectedItem?._id) {
+    if (selectedRow?._id) {
       HolidayRefetch();
     }
-  }, [selectedItem?._id]);
+  }, [selectedRow?._id]);
 
   useEffect(() => {
-    if (selectedItem?._id) {
-      if (HolidayData) {
-        console.log("Fetched Holiday Data:", HolidayData);
-        setminDateBirth(
-          HolidayData?.from ? dayjs(HolidayData?.from) : dayjs(new Date())
-        );
-        setmaxDateBirth(HolidayData?.to ? dayjs(HolidayData?.to) : dayjs(new Date()));
-        setsession(HolidayData?.holiday_type || "");
-        setRemark(HolidayData?.remark || "");
-      }
+    if (selectedRow?._id) {
+      setminDateBirth(
+        selectedRow?.min_birth_date
+          ? dayjs(selectedRow?.min_birth_date)
+          : dayjs(new Date())
+      );
+      setmaxDateBirth(
+        selectedRow?.max_birt_date
+          ? dayjs(selectedRow?.max_birt_date)
+          : dayjs(new Date())
+      );
+      setsession(selectedRow?.session || "");
+      setRemark(selectedRow?.remark || "");
+      setselectClass(selectedRow?.class || "");
     } else {
-      // Reset to initial state when selectedItem?._id is undefined
+      // Reset to initial state when selectedRow?._id is undefined
       setminDateBirth(dayjs(new Date()));
       setmaxDateBirth(dayjs(new Date()));
       setsession("");
       setRemark("");
+      setselectClass("");
     }
-  }, [HolidayData, selectedItem?._id]);
+  }, [HolidayData, selectedRow?._id]);
 
   return (
     <SimpleModal open={open} handleClose={handleClose}>
@@ -274,9 +314,9 @@ const RegStartModal = ({ open, handleClose, selectedItem }) => {
             <Select
               labelId="holiday-type-label"
               id="holiday-type"
-              value={session}
+              value={selectClass}
               label="Class"
-              onChange={(e) => setsession(e.target.value)}
+              onChange={(e) => setselectClass(e.target.value)}
             >
               {Config?.ClassList.map((item) => (
                 <MenuItem key={item.value} value={item.value}>
@@ -312,15 +352,15 @@ const RegStartModal = ({ open, handleClose, selectedItem }) => {
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
           <FormControl fullWidth>
-            <InputLabel id="holiday-type-label">Class</InputLabel>
+            <InputLabel id="holiday-type-label">Session</InputLabel>
             <Select
               labelId="holiday-type-label"
               id="holiday-type"
               value={session}
-              label="Class"
+              label="Session"
               onChange={(e) => setsession(e.target.value)}
             >
-              {Config?.ClassList.map((item) => (
+              {Config?.joiningYear.map((item) => (
                 <MenuItem key={item.value} value={item.value}>
                   {item.label}
                 </MenuItem>
@@ -344,7 +384,7 @@ const RegStartModal = ({ open, handleClose, selectedItem }) => {
             type="submit"
             variant="contained"
             color="primary"
-            // disabled={isSubmitting}
+            onClick={submitHandler}
           >
             Submit
           </CustomButton>
