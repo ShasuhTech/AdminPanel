@@ -351,3 +351,24 @@ export const DeleteSelectionProcessId = async (payload) => {
   const response = await axiosInstance.delete(`/selection-process/${payload}`);
   return response?.data;
 };
+
+export const AddConfigs = async (payload) => {
+  const response = await axiosInstance.post("/config", payload);
+  return response?.data;
+};
+export const updateConfigs = async (payload) => {
+  const response = await axiosInstance.put("/config", payload);
+  return response?.data;
+};
+export const GetConfigsList = async (payload) => {
+  const response = await axiosInstance.post("/configs",payload);
+  return response?.data;
+};
+export const GetConfigsId = async (payload) => {
+  const response = await axiosInstance.get(`/config/${payload}`);
+  return response?.data;
+};
+export const DeleteConfigsId = async (payload) => {
+  const response = await axiosInstance.delete(`/config/${payload}`);
+  return response?.data;
+};

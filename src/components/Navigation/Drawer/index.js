@@ -325,6 +325,14 @@ const DrawerPath = ({
               title={"Dashboards"}
               ind={1}
             />
+            <DrawerList
+              path={"/master"}
+              text={"Master"}
+              Icon={HomeIcon}
+              open={open}
+              title={"Master"}
+              ind={1}
+            />
             {/* School */}
             <DrawerList path={""} text={"School"} Icon={SchoolIcon} open={open}>
               <DrawerList
@@ -521,13 +529,7 @@ const DrawerPath = ({
                 title={"Attendance >> Attendance Management"}
               />
 
-              <DrawerList
-                path={"/attendance/bulk-attendance-entry"}
-                text={"Bulk Attendance Entry"}
-                Icon={ServiceList}
-                open={open}
-                title={"Attendance >> Bulk Attendance Entry"}
-              />
+             
               <DrawerList
                 path={"/attendance/holiday-assigner"}
                 text={"Holiday Assigner"}
@@ -550,6 +552,7 @@ const DrawerPath = ({
                 title={"Attendance >>Leave Approval"}
               />
             </DrawerList>
+            {/* Staff */}
             <DrawerList path={""} text={"Staff"} Icon={SchoolIcon} open={open}>
               <DrawerList
                 path={"/staff/staff-list"}
@@ -559,67 +562,11 @@ const DrawerPath = ({
                 title={"Staff >> Staff List"}
               />
               <DrawerList
-                path={"/staff/add-staff"}
-                text={"Add Staff"}
+                path={"/staff/master"}
+                text={"Master"}
                 Icon={ServiceList}
                 open={open}
-                title={"Staff >> Add Staff"}
-              />
-              <DrawerList
-                path={"/staff/account-type"}
-                text={"Account Type"}
-                Icon={ServiceList}
-                open={open}
-                title={"Staff >> Account Type"}
-              />
-              <DrawerList
-                path={"/staff/staff-category"}
-                text={"Staff Category"}
-                Icon={ServiceList}
-                open={open}
-                title={"Staff >> Staff Category"}
-              />
-              <DrawerList
-                path={"/staff/staff-department"}
-                text={"Staff Department"}
-                Icon={ServiceList}
-                open={open}
-                title={"Staff >> Staff Department"}
-              />
-              <DrawerList
-                path={"/staff/staff-occupation"}
-                text={"Staff Occupation"}
-                Icon={ServiceList}
-                open={open}
-                title={"Staff >> Staff Occupation"}
-              />
-              <DrawerList
-                path={"/staff/staff-designation"}
-                text={"Staff Designation"}
-                Icon={ServiceList}
-                open={open}
-                title={"Staff >> Staff designation"}
-              />
-              <DrawerList
-                path={"/staff/staff-educational-qualification"}
-                text={"Staff Qualification"}
-                Icon={ServiceList}
-                open={open}
-                title={"Staff >> Staff qualification"}
-              />
-              <DrawerList
-                path={"/staff/staff-nature-of-appointment"}
-                text={"Nature Of Appointment"}
-                Icon={ServiceList}
-                open={open}
-                title={"Staff >> Staff Nature Of Appointment"}
-              />
-              <DrawerList
-                path={"/staff/staff-subject"}
-                text={"Staff Subject"}
-                Icon={ServiceList}
-                open={open}
-                title={"Staff >> Staff subject"}
+                title={"Staff >> Master"}
               />
             </DrawerList>
           </List>
