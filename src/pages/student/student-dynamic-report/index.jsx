@@ -22,6 +22,7 @@ import {
   ListItemText,
   Checkbox,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { GetStudentLsit } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
@@ -76,30 +77,84 @@ const PageSize = [
   },
 ];
 
+const columnList = [
+  { name: "Sl No" },
+  { name: "Adm No" },
+  { name: "Name" },
+  { name: "Roll No" },
+  { name: "Adm Type" },
+  { name: "Fee Group" },
+  { name: "DOB" },
+  { name: "DOA" },
+  { name: "Gender" },
+  { name: "Emergency No" },
+  { name: "Religion" },
+  { name: "Nationality" },
+  { name: "Email" },
+  { name: "Adharcard No" },
+  { name: "Permanent Add" },
+  { name: "Persent Add" },
+  { name: "Father Name" },
+  { name: "Mother Name" },
+  { name: "Father No" },
+  { name: "Mother No" },
+  { name: "Sibling Name" },
+  { name: "Sibling class-sec" },
+];
+
 const StudentDynamicReport = () => {
   const router = useRouter();
+  const names = [];
+
   const [searchText, setSearchText] = useState("");
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
-  const [selectAdmissionNo, setSelectAdmissionNo] = useState();
-  const [studentDetailsModal, setstudentDetailsModal] = useState(false);
-  const [transferCertModal, settransferCertModal] = useState(false);
-  const [dropOuttModal, setdropOuttModal] = useState(false);
-  const [auditLOgModal, setauditLOgModal] = useState(false);
-  const [selectedStudent, setSelectStudent] = useState();
   const [selectReportType, setSelectReportType] = useState();
-  const names = [];
   const [classSectionName, setClassSectionName] = useState([]);
-  const [selectDate, setSelectDate] = useState(dayjs(new Date()));
+  const [columnName, setColumnName] = useState([]);
+  const [selectDateFrom, setSelectDateFrom] = useState(dayjs(new Date()));
+  const [selectDateTo, setSelectDateTo] = useState(dayjs(new Date()));
+  const [orientation, setOrientation] = useState("");
+  const [pageSize, setPageSize] = useState("");
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setClassSectionName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setClassSectionName(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const handleSelectAllClick = () => {
+    if (columnName.length === columnList.length) {
+      setColumnName([]);
+    } else {
+      setColumnName(columnList.map((item) => item.name));
+    }
+  };
+
+  const handleChangeColumn = (event) => {
+    const value = event.target.value;
+    const allSelected = value.length === columnList.length;
+    const isSelectAll = value.indexOf("all") > -1;
+
+    if (isSelectAll) {
+      handleSelectAllClick();
+    } else {
+      setColumnName(value);
+    }
+  };
+
+  const handleChangeOrientation = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setOrientation(value);
+  };
+  const handleChangePageSize = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPageSize(value);
   };
 
   Config.ClassList.forEach((classItem) => {
@@ -135,40 +190,23 @@ const StudentDynamicReport = () => {
     console.log(res, "---sdf");
     return res?.data;
   });
-  const handleclose = () => {
-    setstudentDetailsModal(false);
-  };
-  const handleOpen = (data) => {
-    setstudentDetailsModal(true);
-    setSelectStudent(data);
-  };
-  const handlecloseTc = () => {
-    settransferCertModal(false);
-  };
-  const handleOpenTc = (data) => {
-    settransferCertModal(true);
-    setSelectStudent(data);
-  };
-  const handlecloseDropout = () => {
-    setdropOuttModal(false);
-  };
-  const handleOpenDropout = (data) => {
-    setdropOuttModal(true);
-    setSelectStudent(data);
-  };
-  const handlecloseAuditLog = () => {
-    setauditLOgModal(false);
-  };
-  const handleOpenAuditLog = (data) => {
-    setauditLOgModal(true);
-    setSelectStudent(data);
+
+  const handleSubmit = () => {
+    const payload = {
+      report_type: selectReportType,
+      form_date: selectDateFrom,
+      to_date: selectDateTo,
+      selected_class_section: classSectionName,
+      select_column: columnName,
+    };
+    console.log(payload,'--dsfewr')
   };
 
   const handleFilterClick = () => {
     studentRefetch();
+    handleSubmit()
   };
   const handleResetClick = () => {
-    setSearchText("");
     setSelectClass();
     setSelectSection();
     setSelectReportType();
@@ -198,28 +236,14 @@ const StudentDynamicReport = () => {
         pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
         heightLeft -= pageHeight;
       }
-      pdf.save("table.pdf");
+      pdf.save(
+        `Dynamic Report.pdf ${moment(new Date()).format("DD-MM-YYYY hh:mm:ss")}`
+      );
     });
   };
 
   const csvHandler = async ({ page }) => {
     exportToCSV(studentData, "StudentList.csv");
-    // setLoading(true);
-    // try {
-    //   const payload = {
-    //     q: searchText,
-    //     page,
-    //     // status: filter?.status,
-    //   };
-    //   const res = await serviceList(payload);
-    //   if (res?.code === 200) {
-    //     exportToCSV(res?.data, "service_report.csv");
-    //   }
-    //   // setLoading(false);
-    // } catch (err) {
-    //   // setLoading(false);
-    //   console.error("Error fetching salon data:", err);
-    // }
   };
 
   const exportToExcel = () => {
@@ -266,11 +290,11 @@ const StudentDynamicReport = () => {
           <Grid item justifyContent={"center"} xs={12} sm={6} md={3}>
             <DatePicker
               label="From Date"
-              value={selectDate}
+              value={selectDateFrom}
               fullWidth
               className="w-[100%]"
               onChange={(newValue) => {
-                setSelectDate(newValue);
+                setSelectDateFrom(newValue);
               }}
               renderInput={(params) => (
                 <TextField
@@ -285,11 +309,11 @@ const StudentDynamicReport = () => {
           <Grid item justifyContent={"center"} xs={12} sm={6} md={3}>
             <DatePicker
               label="To Date"
-              value={selectDate}
+              value={selectDateTo}
               fullWidth
               className="w-[100%]"
               onChange={(newValue) => {
-                setSelectDate(newValue);
+                setSelectDateTo(newValue);
               }}
               renderInput={(params) => (
                 <TextField
@@ -335,14 +359,12 @@ const StudentDynamicReport = () => {
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
-                multiple
-                value={classSectionName}
-                onChange={handleChange}
+                value={orientation}
+                onChange={handleChangeOrientation}
                 input={<OutlinedInput label="Orientation" />}
-                renderValue={(selected) => selected.join(", ")}
                 MenuProps={MenuProps}
               >
-                {Orientation.map((item,ind) => (
+                {Orientation.map((item, ind) => (
                   <MenuItem key={ind} value={item.label}>
                     {item.label}
                   </MenuItem>
@@ -359,19 +381,53 @@ const StudentDynamicReport = () => {
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
-                multiple
-                value={classSectionName}
-                onChange={handleChange}
+                value={pageSize}
+                onChange={handleChangePageSize}
                 input={<OutlinedInput label="Page Size" />}
-                renderValue={(selected) => selected.join(", ")}
                 MenuProps={MenuProps}
               >
-                {PageSize.map((item,ind) => (
+                {PageSize.map((item, ind) => (
                   <MenuItem key={ind} value={item.label}>
                     {item.label}
                   </MenuItem>
                 ))}
               </Select>
+            </FormControl>
+          </Grid>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={3}>
+            <FormControl sx={{ width: "100%" }}>
+              <InputLabel id="demo-multiple-checkbox-label">
+                Select Column
+              </InputLabel>
+              <Tooltip title={columnName.join(", ")}>
+                <Select
+                  labelId="demo-multiple-checkbox-label"
+                  id="demo-multiple-checkbox"
+                  multiple
+                  value={columnName}
+                  onChange={handleChangeColumn}
+                  input={<OutlinedInput label="Select Column" />}
+                  renderValue={(selected) => selected.join(", ")}
+                  MenuProps={MenuProps}
+                >
+                  <MenuItem value="all">
+                    <Checkbox
+                      checked={columnName.length === columnList.length}
+                      indeterminate={
+                        columnName.length > 0 &&
+                        columnName.length < columnList.length
+                      }
+                    />
+                    <ListItemText primary="Select All" />
+                  </MenuItem>
+                  {columnList.map((name) => (
+                    <MenuItem key={name?.name} value={name?.name}>
+                      <Checkbox checked={columnName.indexOf(name?.name) > -1} />
+                      <ListItemText primary={name?.name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Tooltip>
             </FormControl>
           </Grid>
           <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
@@ -390,20 +446,6 @@ const StudentDynamicReport = () => {
           className="flex justify-end mb-5 mr-3"
           sx={{ mb: 2, mr: 2 }}
         >
-          {/* <Grid item xs={9} sm={4} md={1.5}>
-            <CustomButton
-              width={"160px"}
-              onClick={() =>
-                router.push({
-                  pathname: "/student/student-entry",
-                  query: { flag: true },
-                })
-              }
-            >
-              <AddIcon />
-              Add Student
-            </CustomButton>
-          </Grid> */}
           <Grid onClick={csvHandler} item xs={12} sm={4} md={1}>
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export CSV
@@ -432,29 +474,13 @@ const StudentDynamicReport = () => {
             <Table aria-label="collapsible table" id="my-table">
               <TableHead>
                 <TableRow style={{ fontWeight: "500", color: "#000" }}>
-                  <StyledTableCell align="center">Id</StyledTableCell>
-                  <StyledTableCell align="left">Name</StyledTableCell>
-                  <StyledTableCell align="left">Admission No</StyledTableCell>
-                  {/* <StyledTableCell align="center">Fee No</StyledTableCell> */}
-                  {/* <StyledTableCell align="center">Parent Id</StyledTableCell> */}
-                  <StyledTableCell align="center">Class-Sec</StyledTableCell>
-                  <StyledTableCell align="center">Stream</StyledTableCell>
-                  <StyledTableCell align="center">Roll No</StyledTableCell>
-                  <StyledTableCell align="center">gender</StyledTableCell>
-                  <StyledTableCell align="center">
-                    emergency_number
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Date Of Birth
-                  </StyledTableCell>
-                  {/* <StyledTableCell align="center">
-                    Admission Date
-                  </StyledTableCell>
-                  <StyledTableCell align="center">Joining Date</StyledTableCell> */}
-                  {/* <StyledTableCell align="center">
-                    admitted_class
-                  </StyledTableCell> */}
-                  <StyledTableCell align="center">Action</StyledTableCell>
+                  {columnName.map((item, ind) => {
+                    return (
+                      <StyledTableCell key={ind} align="center">
+                        {item}
+                      </StyledTableCell>
+                    );
+                  })}
                 </TableRow>
               </TableHead>
               <TableBody
@@ -488,10 +514,6 @@ const StudentDynamicReport = () => {
                         row={row}
                         index={index}
                         router={router}
-                        handleOpen={handleOpen}
-                        handleOpenTc={handleOpenTc}
-                        handleOpenDropout={handleOpenDropout}
-                        handleOpenAuditLog={handleOpenAuditLog}
                       />
                     ))}
                   </>
@@ -517,36 +539,8 @@ const StudentDynamicReport = () => {
             </Table>
           </TableContainer>
           <div className="mt-10" />
-          {/* <TablePagination
-            component="div"
-            rowsPerPageOptions={[]}
-            // count={pagination?.total || 0}
-            // rowsPerPage={15}
-            // page={pagination?.currentPage ? pagination?.currentPage - 1 : 0}
-            // onPageChange={handleChangePage}
-          /> */}
         </Paper>
       </div>{" "}
-      <StudentDetails
-        open={studentDetailsModal}
-        handleClose={handleclose}
-        data={selectedStudent}
-      />
-      <TransferCertificate
-        open={transferCertModal}
-        handleClose={handlecloseTc}
-        data={selectedStudent}
-      />
-      <DropOutModal
-        open={dropOuttModal}
-        handleClose={handlecloseDropout}
-        data={selectedStudent}
-      />
-      <AuditLogs
-        open={auditLOgModal}
-        handleClose={handlecloseAuditLog}
-        data={selectedStudent}
-      />
     </div>
   );
 };
@@ -554,34 +548,14 @@ const StudentDynamicReport = () => {
 export default StudentDynamicReport;
 
 const Row = (props) => {
-  const {
-    row,
-    salonDetails,
-    setSalonDetails,
-    index,
-    router,
-    handleOpen,
-    handleOpenTc,
-    handleOpenDropout,
-    handleOpenAuditLog,
-  } = props;
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const { row, index } = props;
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <React.Fragment>
       <TableRow
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
             overflow: "scroll",
@@ -589,172 +563,8 @@ const Row = (props) => {
           },
         }}
       >
-        <StyledTableCell
-          onClick={() => {
-            router.push({
-              pathname: "/student/student-entry",
-              query: { id: row?._id },
-            });
-          }}
-          align="center"
-        >
-          <Typography>{index + 1}</Typography>
-        </StyledTableCell>
-        <StyledTableCell
-          onClick={() => {
-            router.push({
-              pathname: "/student/student-entry",
-              query: { id: row?._id },
-            });
-          }}
-          align="left"
-          style={{ minWidth: "200px" }}
-        >
-          <Typography>
-            {(
-              (row?.name?.first_name || "") +
-              " " +
-              (row?.name?.middle_name || "") +
-              " " +
-              (row?.name?.last_name || "")
-            ).trim()}
-          </Typography>
-        </StyledTableCell>
-        <StyledTableCell
-          onClick={() => {
-            router.push({
-              pathname: "/student/student-entry",
-              query: { id: row?._id },
-            });
-          }}
-          align="left"
-          style={{ minWidth: "150px" }}
-        >
-          <Typography>{row?.admission_number}</Typography>
-        </StyledTableCell>
-        {/* <StyledTableCell
-          align="center"
-          style={{
-            minWidth: "150px",
-            maxWidth: "200px",
-            wordWrap: "break-word",
-          }}
-          onClick={() => {
-            router.push({
-              pathname: "/student/student-entry",
-              query: { id: row?._id },
-            });
-          }}
-        >
-          <Typography>{row?.fee_number}</Typography>
-        </StyledTableCell> */}
-        {/* <StyledTableCell
-          onClick={() => {
-            router.push({
-              pathname: "/student/student-entry",
-              query: { id: row?._id },
-            });
-          }}
-          align="center"
-          style={{ minWidth: "200px" }}
-        >
-          <Typography>{row?.parent_id}</Typography>
-        </StyledTableCell> */}
-        <StyledTableCell
-          onClick={() => {
-            router.push({
-              pathname: "/student/student-entry",
-              query: { id: row?._id },
-            });
-          }}
-          align="center"
-          style={{ minWidth: "100px" }}
-        >
-          <Typography>
-            {row?.class}
-            {row?.section && "-"}
-            {row?.section}
-          </Typography>
-        </StyledTableCell>
-        {/* <StyledTableCell
-          onClick={() => {
-            router.push({
-              pathname: "/student/student-entry",
-              query: { id: row?._id },
-            });
-          }}
-          align="center"
-          style={{ minWidth: "100px" }}
-        >
-          <Typography>{row?.section}</Typography>
-        </StyledTableCell> */}
         <StyledTableCell align="center" style={{ minWidth: "100px" }}>
-          <Typography>{row?.stream}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>{row?.roll_number}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "100px" }}>
-          <Typography>{row?.gender}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>{row?.emergency_number}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>
-            {moment(row?.date_of_birth).format("DD-MM-YYYY")}
-          </Typography>
-        </StyledTableCell>
-        {/* <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>
-            {moment(row?.joining_date).format("DD-MM-YYYY")}
-          </Typography>
-        </StyledTableCell>
-        <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>
-            {moment(row?.admission_date).format("DD-MM-YYYY")}
-          </Typography>
-        </StyledTableCell> */}
-
-        {/* <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <Typography>{row?.admitted_class}</Typography>
-        </StyledTableCell> */}
-
-        <StyledTableCell align="center" style={{ minWidth: "150px" }}>
-          <IconButton onClick={handleClick}>
-            {/* <mdiDotsVertical /> */}
-            <Icon path={mdiDotsVertical} size={1} />
-          </IconButton>
-          <Menu
-            id="action-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem
-              onClick={() => {
-                router.push({
-                  pathname: "/student/student-entry",
-                  query: { id: row?._id },
-                });
-              }}
-            >
-              <Typography>{"Update"}</Typography>
-            </MenuItem>
-            <MenuItem onClick={handleOpen}>
-              <Typography>{"Details"}</Typography>
-            </MenuItem>
-            <MenuItem onClick={() => handleOpenTc(row)}>
-              <Typography>{"TC"}</Typography>
-            </MenuItem>
-            <MenuItem onClick={() => handleOpenDropout(row)}>
-              <Typography>{"Drop Out"}</Typography>
-            </MenuItem>
-            <MenuItem onClick={() => handleOpenAuditLog(row)}>
-              <Typography>{"Audit Logs"}</Typography>
-            </MenuItem>
-          </Menu>
+          <Typography>{row?.class}</Typography>
         </StyledTableCell>
       </TableRow>
     </React.Fragment>

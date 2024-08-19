@@ -1096,32 +1096,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               }
                             />
                           </div>
-                          {/* <div className="lg:w-[32.5%]  w-[100%]">
-                            <Field
-                              name="permanent_telephone"
-                              as={TextField}
-                              label="Telephone"
-                              variant="outlined"
-                              fullWidth
-                              onBlur={handleBlur}
-                              // onChange={handleChange}
-                              onChange={(event) => {
-                                const value = event.target.value;
-                                if (/^\d*$/.test(value) && value.length <= 10) {
-                                  setFieldValue("permanent_telephone", value);
-                                }
-                              }}
-                              value={
-                                !confirmAddress
-                                  ? values?.permanent_telephone
-                                  : values.present_telephone
-                              }
-                              error={false}
-                              helperText={
-                                <ErrorMessage name="permanent_telephone" />
-                              }
-                            />
-                          </div> */}
+                         
                         </div>
                       </div>
                     </div>
