@@ -1,3 +1,4 @@
+'use client'
 import {
   Box,
   Button,
@@ -16,7 +17,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import DetailsTable from "./DetailsTable";
 import PieAnimation from "@/components/Charts/Dounght";
 import Barxchart from "@/components/Charts/BarChart";
-import { getTopSalonOrderDetails } from "@/services/api";
+import { getDashoardData, getTopSalonOrderDetails } from "@/services/api";
 import FullMap from "./Map";
 import { styled } from "@mui/material/styles";
 import { useRouter } from "next/router";
@@ -25,6 +26,8 @@ import { getSalonOrderDetails } from "@/services/api";
 import Seo from "@/components/Common/SEO";
 import { LineChart } from "@mui/x-charts";
 import dayjs from "dayjs";
+
+
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -57,6 +60,15 @@ const Home = () => {
       return resp.data;
     },
   });
+
+  const { data: countData } = useQuery({
+    queryKey: ["dataDashboard"],
+    queryFn: async () => {
+      const resp = await getDashoardData();
+      return resp.data;
+    },
+  });
+  console.log(countData, "countData---");
 
   const detailsData = responseData?.orderDetailsByTime || [];
   const doughnutData = responseData?.doughnut || [];
@@ -91,6 +103,9 @@ const Home = () => {
       setGreeting("Good Night, Admin");
     }
   }, []);
+
+
+
   return (
     <Box>
       <Seo />
@@ -101,209 +116,9 @@ const Home = () => {
       <Grid>Here&apos;s what&apos;s happening with your Dashboard today.</Grid>
       <Grid className="lg:w-[100%] md-[50%] w-[100%] lg:h-[100px] xl:h-[150px]">
         <Grid className="w-[100%] lg:flex  items-center gap-5 lg:h-[100px] mt-[45px]">
-          {detailsData.map((item, ind) => {
-            return (
-              <>
-                <Grid className="lg:w-[316.89px] h-[145.39px] lg:my-0 my-3 bg-white  rounded  overflow-hidden  shadow-lg py-5 px-1">
-                  <Grid>
-                    <Grid className=" py-2 px-2  w-[100%]">
-                      <Grid className="w-[100%] flex justify-between mb-5 -mt-3">
-                        <span className="text-[13px] text-gray-500 font-medium">
-                          DAILY BOOKINGS
-                        </span>
-                        {item?.growthToday >= 0 ? (
-                          <Grid className="flex justify-between gap-1">
-                            <img
-                              src={"/images/UpArrowIcon.png"}
-                              className="w-[12.48px] h-[13px] cursor-pointer"
-                            />
-                            <div className="w-[63px] h-[16px]  text-[12px] text-[#0AB39C]">
-                              +{item?.growthToday}%
-                            </div>
-                          </Grid>
-                        ) : (
-                          <Grid className="flex justify-between gap-1">
-                            <img
-                              src={"/images/DownArrowIcon.png"}
-                              className="w-[12.48px] h-[13px] cursor-pointer "
-                            />
-                            <div className="w-[63px] h-[16px] text-[12px] text-[#F06548]">
-                              {item?.growthToday}%
-                            </div>
-                          </Grid>
-                        )}
-                      </Grid>
-
-                      <Grid className="flex-col justify-between h-[69px]">
-                        <span className="text-[22px] text-[#495057] font-bold">
-                          {/* <CurrencyRupeeIcon style={{height:'22px', width:'15px'}}/> */}
-                          {item?.todayTotal / 100}
-                        </span>
-
-                        <div className="flex justify-between">
-                          <span
-                            className="text-[12px] font-medium underline text-[#405189] cursor-pointer mt-8"
-                            onClick={() =>
-                              router.push(
-                                `/report/booking?from=${new Date().toDateString()}&to=${new Date().toDateString()}`
-                              )
-                            }
-                          >
-                            View Daily Booking
-                          </span>
-                          {item?.growthToday >= 0 ? (
-                            <img
-                              src={"/images/TrendingIcon.png"}
-                              className="w-[48px] h-[48px] cursor-pointer "
-                            />
-                          ) : (
-                            <img
-                              src={"/images/TrendingDownItem.png"}
-                              className="w-[48px] h-[48px] cursor-pointer "
-                            />
-                          )}
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                {/* new montly card */}
-
-                <Grid className="lg:w-[316.89px] h-[145.39px] lg:my-0 my-3 bg-white  rounded  overflow-hidden  shadow-lg py-5 px-1">
-                  <Grid>
-                    <Grid className=" py-2 px-2  w-[100%]">
-                      <Grid className="w-[100%] flex justify-between mb-5 -mt-3">
-                        <span className="text-[13px] text-gray-500 font-medium">
-                          MONTHLY BOOKINGS
-                        </span>
-                        {item?.growthMonth >= 0 ? (
-                          <Grid className="flex justify-between gap-1">
-                            <img
-                              src={"/images/UpArrowIcon.png"}
-                              className="w-[12.48px] h-[13px] cursor-pointer "
-                            />
-                            <div className="w-[63px] h-[16px]  text-[12px] text-[#0AB39C]">
-                              +{item?.growthMonth}%
-                            </div>
-                          </Grid>
-                        ) : (
-                          <Grid className="flex justify-between gap-1">
-                            <img
-                              src={"/images/DownArrowIcon.png"}
-                              className="w-[12.48px] h-[13px] cursor-pointer "
-                            />
-                            <div className="w-[63px] h-[16px] text-[12px] text-[#F06548]">
-                              {item?.growthMonth}%
-                            </div>
-                          </Grid>
-                        )}
-                      </Grid>
-
-                      <Grid className="flex-col justify-between h-[69px]">
-                        <span className="text-[22px] text-[#495057] font-bold">
-                          {/* <CurrencyRupeeIcon style={{height:'22px', width:'15px'}}/> */}
-                          {item?.currentMonthTotal / 100}
-                        </span>
-
-                        <div className="flex justify-between">
-                          <span
-                            className="text-[12px] font-medium underline text-[#405189] cursor-pointer mt-8"
-                            onClick={() =>
-                              router.push(
-                                `/report/booking?from=${dayjs()
-                                  .startOf("month")
-                                  .toDate()}&to=${new Date().toDateString()}`
-                              )
-                            }
-                          >
-                            View Monthly Booking
-                          </span>
-                          {item?.growthMonth >= 0 ? (
-                            <img
-                              src={"/images/TrendingIcon.png"}
-                              className="w-[48px] h-[48px] cursor-pointer "
-                            />
-                          ) : (
-                            <img
-                              src={"/images/TrendingDownItem.png"}
-                              className="w-[48px] h-[48px] cursor-pointer "
-                            />
-                          )}
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-                {/* new yearly card */}
-                <Grid className="lg:w-[316.89px] h-[145.39px] lg:my-0 my-3 bg-white  rounded  overflow-hidden  shadow-lg py-5 px-1">
-                  <Grid>
-                    <Grid className=" py-2 px-2  w-[100%]">
-                      <Grid className="w-[100%] flex justify-between mb-5 -mt-3">
-                        <span className="text-[13px] text-gray-500 font-medium">
-                          YEARLY BOOKINGS
-                        </span>
-                        {item?.growthYear >= 0 ? (
-                          <Grid className="flex justify-between gap-1">
-                            <img
-                              src={"/images/UpArrowIcon.png"}
-                              className="w-[12.48px] h-[13px] cursor-pointer "
-                            />
-                            <div className="w-[63px] h-[16px] text-[12px] text-[#0AB39C]">
-                              +{item?.growthYear}%
-                            </div>
-                          </Grid>
-                        ) : (
-                          <Grid className="flex justify-between gap-1">
-                            <img
-                              src={"/images/DownArrowIcon.png"}
-                              className="w-[12.48px] h-[13px] cursor-pointer "
-                            />
-                            <div className="w-[63px] h-[16px]  text-[12px] text-[#F06548]">
-                              {item?.growthYear}%
-                            </div>
-                          </Grid>
-                        )}
-                      </Grid>
-
-                      <Grid className="flex-col justify-between h-[69px]">
-                        <span className="text-[22px] text-[#495057] font-bold">
-                          {/* <CurrencyRupeeIcon style={{height:'22px', width:'15px'}}/> */}
-                          {item?.currentYearTotal / 100}
-                        </span>
-
-                        <div className="flex justify-between">
-                          <span
-                            className="text-[12px] font-medium underline text-[#405189] cursor-pointer mt-8"
-                            onClick={() =>
-                              router.push(
-                                `/report/booking?from=${dayjs()
-                                  .startOf("year")
-                                  .toDate()}&to=${new Date().toDateString()}`
-                              )
-                            }
-                          >
-                            View Yearly Booking
-                          </span>
-                          {item?.growthYear >= 0 ? (
-                            <img
-                              src={"/images/TrendingIcon.png"}
-                              className="w-[48px] h-[48px] cursor-pointer "
-                            />
-                          ) : (
-                            <img
-                              src={"/images/TrendingDownItem.png"}
-                              className="w-[48px] h-[48px] cursor-pointer "
-                            />
-                          )}
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </>
-            );
-          })}
+          <div className="flex gap-4 flex-wrap mt-2 lg:p-0 px-4  no-scrollbar w-full ">
+          {}
+</div>
         </Grid>
       </Grid>
       {/*  */}
@@ -533,3 +348,5 @@ const Home = () => {
 };
 
 export default Home;
+
+

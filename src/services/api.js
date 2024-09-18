@@ -372,3 +372,17 @@ export const DeleteConfigsId = async (payload) => {
   const response = await axiosInstance.delete(`/config/${payload}`);
   return response?.data;
 };
+
+export const getDashoardData = async () => {
+  const response = await axiosInstance.get(`/dashboard-count`);
+  return response?.data;
+};
+
+export const schoolListDashboard = async (payload) => {
+  const response = await axiosInstance.post("/school-list",payload);
+  return response?.data;
+};
+export const dynamicDataSetting = async (payload) => {
+  const response = await axiosInstance.post("/dynamic-data",payload);
+  return response?.data;
+};
