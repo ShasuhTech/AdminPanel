@@ -400,7 +400,7 @@ const DrawerPath = ({
                 open={open}
                 title={"registration >>Student Transfer"}
               />
-              <DrawerList
+              {/* <DrawerList
                 path={"/registration/subject-assigner"}
                 text={"Subject Assigner"}
                 Icon={ServiceList}
@@ -413,7 +413,7 @@ const DrawerPath = ({
                 Icon={ServiceList}
                 open={open}
                 title={"registration >>Subject Master"}
-              />
+              /> */}
               <DrawerList
                 path={"/registration/time-slot-master"}
                 text={"Time Slot Master"}

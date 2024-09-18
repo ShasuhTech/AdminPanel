@@ -12,6 +12,7 @@ import {
   Table,
   CircularProgress,
   Button,
+  Tooltip,
 } from "@mui/material";
 import { GetStudentLsit } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
@@ -29,6 +30,7 @@ import {
   StatusSelection,
   ClassSelection,
 } from "@/components/ClassSelection";
+import { Plus } from "mdi-material-ui";
 
 const FollowUp = () => {
   const [searchText, setSearchText] = useState("");
@@ -121,7 +123,7 @@ const FollowUp = () => {
               fullWidth
               rootSx={{ p: 0, pb: 0, marginLeft: 0 }}
               variant="outlined"
-              // onFilterClick={handleFilterClick}
+            // onFilterClick={handleFilterClick}
             />
           </Grid>
           <Grid item justifyContent={"center"} xs={12} sm={4} md={2.5}>
@@ -137,13 +139,13 @@ const FollowUp = () => {
               classList={Config.ClassList}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={6} md={2.5}>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2}>
             <SectionSelection
               selectClass={selectSection}
               setSelectClass={setSelectSection}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={1}>
             <button onClick={handleFilterClick} className="filter-btncuston">
               <FilterAltIcon />
             </button>
@@ -156,21 +158,21 @@ const FollowUp = () => {
         </Grid>
         <Grid
           container
-          className="flex justify-end mb-5 mr-3"
-          sx={{ mb: 2, mr: 2 }}
+          className="flex justify-end mb-5 "
+          sx={{ mb: 2, gap: 1, px: 2 }}
         >
-          <Grid item xs={9} sm={4} md={1.9}>
+          <Grid >
             <CustomButton width={"200px"} onClick={handleOpenEnquiry}>
               <AddIcon />
               FollowUp Enquiry
             </CustomButton>
           </Grid>
-          <Grid item xs={12} sm={4} md={1}>
+          <Grid >
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export CSV
             </button>
           </Grid>
-          <Grid item xs={12} sm={4} md={1}>
+          <Grid >
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export PDF
             </button>
@@ -325,36 +327,51 @@ const Row = (props) => {
             {row?.student_status}
           </Typography>
         </StyledTableCell>
-        <StyledTableCell align="left" style={{ minWidth: "250px", gap: 2 }}>
+        <StyledTableCell align="left" style={{ minWidth: "300px", gap: 2 }}>
           {row?.student_status === "Follow-Up" && (
+
+            <Tooltip title={'Folloup'}>
+              <Button
+                onClick={() => handleOpen(row)}
+                sx={{ marginRight: "10px" }}
+                variant="outlined"
+                color="secondary"
+              >
+                <Plus />
+                {/* Follow Up */}
+                {/* <RiChatFollowUpFill /> */}
+              </Button>
+            </Tooltip>
+            // RiChatFollowUpFill
+            // MdAppRegistration
+            // TbListDetails
+          )}
+          <Tooltip title={'Registration'}>
             <Button
-              onClick={() => handleOpen(row)}
+              onClick={() =>
+                router.push({
+                  pathname: "/registration/student-registration",
+                  query: { id: row?._id },
+                })
+              }
               sx={{ marginRight: "10px" }}
               variant="outlined"
-              color="secondary"
+              color="success"
             >
-              Follow Up
+              <Plus />
+              {/* Registration */}
             </Button>
-          )}
-          <Button
-            onClick={() =>
-              router.push({
-                pathname: "/registration/student-registration",
-                query: { id: row?._id },
-              })
-            }
-            sx={{ marginRight: "10px" }}
-            variant="outlined"
-            color="success"
-          >
-            Registration
-          </Button>
-          <Button
-            onClick={() => handleButtonClick(row?._id)}
-            variant="outlined"
-          >
-            Details
-          </Button>
+          </Tooltip>
+          <Tooltip title={'Details'}>
+
+            <Button
+              onClick={() => handleButtonClick(row?._id)}
+              variant="outlined"
+            >
+              <Plus />
+              {/* Details */}
+            </Button>
+          </Tooltip>
         </StyledTableCell>
       </TableRow>
     </React.Fragment>

@@ -143,13 +143,13 @@ const StudentRegistrationDetails = () => {
               classList={Config.ClassList}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={6} md={2.5}>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2}>
             <SectionSelection
               selectClass={selectSection}
               setSelectClass={setSelectSection}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.7}>
             <button onClick={handleFilterClick} className="filter-btncuston">
               <FilterAltIcon />
             </button>
@@ -164,20 +164,20 @@ const StudentRegistrationDetails = () => {
         <Grid
           container
           className="flex justify-end mb-5 mr-3"
-          sx={{ mb: 2, mr: 2 }}
+          sx={{ mb: 2, px: 2,gap:1 }}
         >
-          <Grid item xs={9} sm={4} md={2}>
-            <CustomButton width={"210px"} onClick={handleOpenEnquiry}>
+          <Grid >
+            <CustomButton width={"100%"} onClick={handleOpenEnquiry}>
               <AddIcon />
               Student Registration
             </CustomButton>
           </Grid>
-          <Grid item xs={12} sm={4} md={1}>
+          <Grid >
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export CSV
             </button>
           </Grid>
-          <Grid item xs={12} sm={4} md={1}>
+          <Grid >
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export PDF
             </button>

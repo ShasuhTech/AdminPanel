@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Paper,
@@ -11,37 +11,26 @@ import {
   TableBody,
   Table,
   CircularProgress,
-  TablePagination,
   MenuItem,
-  Select,
   Menu,
   IconButton,
-  InputLabel,
-  TextField,
 } from "@mui/material";
 import {
   GetStudentLsit,
-  addServices,
-  adminCategory,
-  serviceList,
 } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
-import { toast } from "react-toastify";
 import { exportToCSV } from "@/components/Common";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import CustomButton from "@/components/CommonButton/CustomButton";
-import FormControl from "@mui/material/FormControl";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
-import { Plus } from "mdi-material-ui";
 import { useQuery } from "react-query";
 import moment from "moment";
 import StudentDetails from "@/components/SchoolManagemnt/Modal/DetailsModal";
-import { mdiCached, mdiDotsVertical } from "@mdi/js";
+import { mdiDotsVertical } from "@mdi/js";
 import Icon from "@mdi/react";
 import Config from "@/utilities/Config";
-import { border } from "@mui/system";
 import TransferCertificate from "@/components/SchoolManagemnt/Modal/TransferCertificate";
 import DropOutModal from "@/components/SchoolManagemnt/Modal/Dropout";
 import AuditLogs from "@/components/SchoolManagemnt/Modal/AuditLog";
@@ -59,7 +48,6 @@ const StudentList = () => {
   const [searchText, setSearchText] = useState("");
   const [selectClass, setSelectClass] = useState();
   const [selectSection, setSelectSection] = useState();
-  const [selectAdmissionNo, setSelectAdmissionNo] = useState();
   const [studentDetailsModal, setstudentDetailsModal] = useState(false);
   const [transferCertModal, settransferCertModal] = useState(false);
   const [dropOuttModal, setdropOuttModal] = useState(false);
@@ -197,7 +185,7 @@ const StudentList = () => {
               fullWidth
               rootSx={{ p: 0, pb: 0, marginLeft: 0 }}
               variant="outlined"
-              // onFilterClick={handleFilterClick}
+            // onFilterClick={handleFilterClick}
             />
           </Grid>
           <Grid item justifyContent={"center"} xs={12} sm={4} md={2}>
@@ -213,13 +201,13 @@ const StudentList = () => {
               classList={Config.ClassList}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={6} md={2.5}>
+          <Grid item justifyContent={"center"} xs={12} sm={6} md={2}>
             <SectionSelection
               selectClass={selectSection}
               setSelectClass={setSelectSection}
             />
           </Grid>
-          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.5}>
+          <Grid item justifyContent={"center"} xs={12} sm={4} md={0.7}>
             <button onClick={handleFilterClick} className="filter-btncuston">
               <FilterAltIcon />
             </button>
@@ -233,9 +221,9 @@ const StudentList = () => {
         <Grid
           container
           className="flex justify-end mb-5 mr-3"
-          sx={{ mb: 2, mr: 2 }}
+          sx={{ mb: 2, px: 2,gap:2 }}
         >
-          <Grid item xs={9} sm={4} md={1.5}>
+          <Grid >
             <CustomButton
               width={"160px"}
               onClick={() =>
@@ -249,12 +237,12 @@ const StudentList = () => {
               Add Student
             </CustomButton>
           </Grid>
-          <Grid onClick={csvHandler} item xs={12} sm={4} md={1}>
+          <Grid onClick={csvHandler} >
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export CSV
             </button>
           </Grid>
-          <Grid item xs={12} sm={4} md={1}>
+          <Grid >
             <button
               onClick={exportPDF}
               className="border-2 rounded-lg px-4 py-2.5 "
@@ -262,7 +250,7 @@ const StudentList = () => {
               Export PDF
             </button>
           </Grid>
-          <Grid item xs={12} sm={4} md={1}>
+          <Grid >
             <button
               onClick={exportToExcel}
               className="border-2 rounded-lg px-4 py-2.5"
@@ -433,7 +421,7 @@ const Row = (props) => {
             cursor: "pointer",
           },
         }}
-        
+
       >
         <StyledTableCell
           onClick={() => {

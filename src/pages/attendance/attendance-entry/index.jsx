@@ -2,9 +2,6 @@
 
 import React, { useState } from "react";
 import { Card } from "@mui/material";
-
-import TCDetails from "@/components/SchoolManagemnt/TransferCertificate/Details";
-import TCHistory from "@/components/SchoolManagemnt/TransferCertificate/History";
 import CustomTabs from "@/components/customeTab";
 import StudentWiseAttendance from "@/components/Attendance/StudentWiseAttendance";
 import ClassWiseAttendance from "@/components/Attendance/ClassWiseAttendance";

@@ -12,11 +12,12 @@ const CustomTabs = ({ tabs, selectedTab, onSelectTab,XS }) => {
             sx={{
               mt: 2,
               py:1.2,
+              
               borderRadius:'10px',
               backgroundColor: selectedTab === tab.id ? '#1F3A8A' : '#000',
               color: 'white',
               '&:hover': {
-                backgroundColor: selectedTab === tab.id ? '#1F3A8A' : '#000',
+                backgroundColor: selectedTab === tab.id ? '#1F3A8A' : '#33435c',
               },
             }}
           >
