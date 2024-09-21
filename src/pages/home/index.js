@@ -1,33 +1,25 @@
-'use client'
+"use client";
 import {
   Box,
-  Button,
   Grid,
   LinearProgress,
-  Radio,
   Typography,
   linearProgressClasses,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import TrendingUp from "mdi-material-ui/TrendingUp";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import { ChevronUpCircle } from "mdi-material-ui";
-import { ChevronDownCircle } from "mdi-material-ui";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import DetailsTable from "./DetailsTable";
-import PieAnimation from "@/components/Charts/Dounght";
 import Barxchart from "@/components/Charts/BarChart";
-import { getDashoardData, getTopSalonOrderDetails } from "@/services/api";
+import {
+  getDashoardData,
+  getTopSalonOrderDetails,
+  schoolListDashboard,
+} from "@/services/api";
 import FullMap from "./Map";
 import { styled } from "@mui/material/styles";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { getSalonOrderDetails } from "@/services/api";
 import Seo from "@/components/Common/SEO";
-import { LineChart } from "@mui/x-charts";
-import dayjs from "dayjs";
-
-
+import CustomButton from "@/components/CommonButton/CustomButton";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -44,11 +36,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 const Home = () => {
   const router = useRouter();
-  const [selectedValue, setSelectedValue] = React.useState("a");
-
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
+  const [greeting, setGreeting] = useState("");
 
   const { data: responseData } = useQuery({
     queryKey: ["topSalonOrderDetails"],
@@ -61,37 +49,74 @@ const Home = () => {
     },
   });
 
-  const { data: countData } = useQuery({
-    queryKey: ["dataDashboard"],
-    queryFn: async () => {
-      const resp = await getDashoardData();
-      return resp.data;
-    },
-  });
-  console.log(countData, "countData---");
-
-  const detailsData = responseData?.orderDetailsByTime || [];
-  const doughnutData = responseData?.doughnut || [];
-  const topTenSalonData = responseData?.topTenData || [];
   const salonSalesByLocation = responseData?.location || [];
   const salonRevenue = responseData?.revenueData || [];
   console.log(responseData, salonRevenue, "responseData");
   // console.log(salonRevenue,"salonRevenue")
 
-  // const {
-  //   data: detailsData,
-  //   status,
-  //   isLoading,
-  //   refetch,
-  // } = useQuery("adminCategory", async () => {
-  //   const res = await getSalonOrderDetails();
-  //   return res?.data;
-  // });
-  // console.log(detailsData)
-
-  console.log(doughnutData, "doughnutData");
-
-  const [greeting, setGreeting] = useState("");
+  const {
+    data: dataDash,
+    status,
+    isLoading,
+    refetch,
+  } = useQuery("dataDash", async () => {
+    const res = await getDashoardData();
+    return res?.data;
+  });
+  const {
+    data: schoolList,
+    status: schoolStatus,
+    isLoading: schoolLoading,
+    refetch: schoolRefetch,
+  } = useQuery("schoolListDashboard", async () => {
+    const res = await schoolListDashboard();
+    return res?.data;
+  });
+  const mapData = [
+    {
+      cityName: "Noida",
+      cityLatitude: 28.5355,
+      cityLongitude: 77.391,
+      totalOrders: 892,
+      orderPercentage: "88.3",
+    },
+    {
+      cityName: "Greater Noida",
+      cityLatitude: 28.4744,
+      cityLongitude: 77.504,
+      totalOrders: 89,
+      orderPercentage: "8.8",
+    },
+    {
+      cityName: "Delhi",
+      cityLatitude: 28.6667,
+      cityLongitude: 77.2167,
+      totalOrders: 16,
+      orderPercentage: "60.6",
+    },
+    {
+      cityName: "Gurgaon",
+      cityLatitude: 28.6667,
+      cityLongitude: 77.2167,
+      totalOrders: 16,
+      orderPercentage: "40.6",
+    },
+    {
+      cityName: "Pune",
+      cityLatitude: 28.6667,
+      cityLongitude: 77.2167,
+      totalOrders: 16,
+      orderPercentage: "10.6",
+    },
+    {
+      cityName: "Mumbai",
+      cityLatitude: 28.6667,
+      cityLongitude: 77.2167,
+      totalOrders: 16,
+      orderPercentage: "40.6",
+    },
+   
+  ];
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -104,8 +129,6 @@ const Home = () => {
     }
   }, []);
 
-
-
   return (
     <Box>
       <Seo />
@@ -114,18 +137,31 @@ const Home = () => {
         {greeting}
       </Grid>
       <Grid>Here&apos;s what&apos;s happening with your Dashboard today.</Grid>
-      <Grid className="lg:w-[100%] md-[50%] w-[100%] lg:h-[100px] xl:h-[150px]">
-        <Grid className="w-[100%] lg:flex  items-center gap-5 lg:h-[100px] mt-[45px]">
-          <div className="flex gap-4 flex-wrap mt-2 lg:p-0 px-4  no-scrollbar w-full ">
-          {}
-</div>
-        </Grid>
+      <Grid className="lg:w-[100%] md-[50%] w-[100%] lg:h-[100px] xl:h-[150px] mt-6">
+        <div className="flex items-center  flex-wrap gap-4">
+          {dataDash &&
+            Object.keys(dataDash)?.map((item, ind) => {
+              return (
+                <div
+                  key={ind}
+                  // onClick={() => cardClick(item)}
+                  className="border h-[120px] hover:bg-black justify-center items-center flex lg:w-[19%] w-[100%] shadow-lg bg-gray-700 cursor-pointer p-5 rounded-[15px]"
+                >
+                  <span className="text-white text-[20px] capitalize">
+                    {item.replace(/([A-Z])/g, " $1").replace('Count','')}
+                  </span>
+                  <span className="text-white text-[20px] ml-4">
+                    {dataDash[item]}
+                  </span>
+                </div>
+              );
+            })}
+        </div>
       </Grid>
-      {/*  */}
 
       {/* new graph and location */}
       <Grid className=" lg:flex gap-5 my-5 ">
-        <Grid className="lg:w-[60%] bg-white rounded-lg overflow-auto">
+        <Grid className="lg:w-[70%] bg-white rounded-lg overflow-auto">
           <Grid className="flex justify-between border-b text-center items-center gap-4 p-5">
             <span className={"font-bold text-[15px]"}>Revenue</span>
             <Grid className="gap-2 flex">
@@ -144,13 +180,14 @@ const Home = () => {
             </Grid>
           </Grid>
 
-          <Grid style={{ marginTop: "100px" }}>
+          {/* <Grid style={{ marginTop: "100px" }}>
             {responseData?.revenueData && (
               <Barxchart salonRevenue={responseData.revenueData} />
             )}
-          </Grid>
+          </Grid> */}
+          <Barxchart salonRevenue={""} />
         </Grid>
-        <Grid className="lg:w-[40%] lg:mt-0 mt-5 overflow-hidden bg-white rounded-lg">
+        <Grid className="lg:w-[30%] lg:mt-0 mt-5 overflow-hidden bg-white rounded-lg">
           <Grid className="flex justify-between  text-center items-center p-5">
             <span className={"text-[16px] font-semibold"}>
               Sales by Locations
@@ -167,10 +204,10 @@ const Home = () => {
               backgroundColor: "#bacbcc",
             }}
           ></div>
-          <FullMap salonSalesByLocation={salonSalesByLocation} />
+          {/* <FullMap salonSalesByLocation={salonSalesByLocation} /> */}
 
           <Grid className="mb-5">
-            {salonSalesByLocation.map((location, index) => (
+            {mapData.map((location, index) => (
               <Grid key={index} className="p-3">
                 <Grid className="flex justify-between">
                   <span
@@ -193,153 +230,47 @@ const Home = () => {
         </Grid>
       </Grid>
 
-      {/*  */}
-      <Grid className="lg:flex  gap-5  ">
-        <Grid className="lg:w-[30%] md:w-[100%] p-4 bg-white rounded-md overflow-hidden border shadow-lg lg:h-[700px] xl:h-[670px]">
-          <Grid className="display-flex">
-            <span className="text-[16px] font-semibold">Order Details</span>
-            <img
-              src={"/images/ExportReport_1.svg"}
-              className="w-[92.91px] h-[27.06px] cursor-pointer flex ml-auto mt-[-25px] mb-2"
-            />
-
-            <hr className=" w-full" />
-          </Grid>
-          <Grid className=" text-center justify-center items-center  my-[20px]">
-            {doughnutData.length > 0 && (
-              <PieAnimation doughnutData={doughnutData} />
-            )}
-            <Grid className="grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:grid-cols-2 gap-3 mt-2 justify-center items-center">
-              {/* {doughnutData.slice(1).map((item, ind) => {
-                return (
-                  <Grid key={ind} className="flex items-center gap-1 mb-1">
-                    <div
-                      style={{ backgroundColor: item?.color }}
-                      className="h-[20px] w-[20px] rounded-md"
-                    ></div>
-                    <Typography variant="h6" fontWeight={600}>
-                      {item?.label}
-                    </Typography>
-                  </Grid>
-                );
-              })} */}
-            </Grid>
-          </Grid>
-          <Grid className="my-5">
-            {doughnutData.map((item, ind) => {
-              return (
-                <Grid
-                  key={ind}
-                  className={`flex justify-between ${
-                    ind != 4 && "border-b border-dashed"
-                  } py-2`}
-                >
-                  <Grid className="flex gap-1 text-center items-center">
-                    <Grid
-                      style={{ backgroundColor: item?.color }}
-                      className="w-10 h-10 rounded-full text-white items-center flex justify-center text-center border"
-                    >
-                      <TrendingUp />
-                    </Grid>
-                    {/* <div style={{ color: "black" }}
-                         className="text-[15px] text-black font-medium">
-                          {item?.label}
-                          </div>
-                          <div style={{}}> <span style={{ color: item.color }}>●</span> Count</div> */}
-                    <div className="text-[15px] text-black font-medium">
-                      {item?.label}
-                      <div style={{ fontSize: "12px", textAlign: "left" }}>
-                        <span style={{ color: item.color }}>●</span>Count
-                      </div>
-                    </div>
-                  </Grid>
-                  <Grid className=" gap-1 text-center items-center">
-                    <Typography
-                      variant="h6"
-                      lassName="text-[4px] "
-                      style={{ color: "grey", fontWeight: "bolder" }}
-                    >
-                      <CurrencyRupeeIcon
-                        style={{ width: "15px", height: "15px" }}
-                      />{" "}
-                      {item?.value / 100}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      lassName="text-[5px] "
-                      style={{ color: "#52b0e3", textAlign: "right" }}
-                    >
-                      {item?.count}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Grid>
-        <Grid className="lg:w-[70%] md-[50%] w-[100%] lg:h-[700px] xl:h-[650px] gap-5">
-          <Grid className="w-[100%] bg-white rounded-md  overflow-hidden border shadow-lg  lg:h-[700px] xl:h-[670px]">
-            <Grid className="flex justify-between items-center">
-              <Grid item>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    p: 3,
-                    fontSize: 16,
-                    fontWeight: 500,
-                    textAlign: "left",
-                  }}
-                >
-                  {/* Top 10 {process.env.NEXT_PUBLIC_TITLE} */}
-                  Top 10 School
-                </Typography>
-              </Grid>
-              <Grid item>
-                <img
-                  src={"/images/GenerateReportButton.svg"}
-                  className="w-[125px] h-[27px] cursor-pointer mt-auto mb-auto mr-5"
-                />
-              </Grid>
-              {false && (
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <Grid className="flex text-center items-center">
-                    <Typography>Value</Typography>
-                    <Radio
-                      checked={selectedValue === "a"}
-                      onChange={handleChange}
-                      value="a"
-                      name="radio-buttons"
-                      slotProps={{ input: { "aria-label": "A" } }}
-                    />
-                  </Grid>
-                  <Grid className="flex text-center items-center">
-                    <Typography>Count</Typography>
-                    <Radio
-                      checked={selectedValue === "b"}
-                      onChange={handleChange}
-                      value="b"
-                      name="radio-buttons"
-                      slotProps={{ input: { "aria-label": "B" } }}
-                    />
-                  </Grid>
-                </Box>
-              )}
-            </Grid>
-            <Grid className="h-[550px]">
-              <DetailsTable topTenSalonData={topTenSalonData} />
-            </Grid>
-            <Grid className="flex justify-end m-3 mt-auto">
-              <Button
-                onClick={() =>
-                  router.push({
-                    pathname: "/report",
-                    query: { title: "Report" },
-                  })
-                }
+      {/* To 10 School Listig */}
+      <Grid className="lg:w-[100%] md-[50%] w-[100%] lg:h-[700px] xl:h-[650px] gap-5">
+        <Grid className="w-[100%] bg-white rounded-md  overflow-hidden border shadow-lg  lg:h-[700px] xl:h-[670px]">
+          <Grid className="flex justify-between items-center">
+            <Grid item>
+              <Typography
+                variant="h5"
+                sx={{
+                  p: 3,
+                  fontSize: 16,
+                  fontWeight: 500,
+                  textAlign: "left",
+                }}
               >
-                View All
-              </Button>
+                Top 10 School
+              </Typography>
             </Grid>
+            <Grid item>
+              <img
+                src={"/images/GenerateReportButton.svg"}
+                className="w-[125px] h-[27px] cursor-pointer mt-auto mb-auto mr-5"
+              />
+            </Grid>
+          </Grid>
+          <Grid className="h-[550px]">
+            <DetailsTable
+              topTenSchoolData={schoolList}
+              loading={schoolLoading}
+            />
+          </Grid>
+          <Grid className="flex justify-end m-3 mt-auto">
+            <CustomButton
+              onClick={() =>
+                router.push({
+                  pathname: "/school",
+                  query: { title: "Report" },
+                })
+              }
+            >
+              View All
+            </CustomButton>
           </Grid>
         </Grid>
       </Grid>
@@ -348,5 +279,3 @@ const Home = () => {
 };
 
 export default Home;
-
-

@@ -350,7 +350,7 @@ const AddServiceModal = ({ open, onClose, selectedItem }) => {
     { id: 1, label: "SHOOL INFO" },
     { id: 2, label: "ALLOTMENTS" },
     { id: 3, label: "PAYMENT TYPE" },
-    { id: 4, label: "SMS/WHATSAPP INTEGRATION" },
+    // { id: 4, label: "SMS/WHATSAPP INTEGRATION" },
     { id: 5, label: "SCHOOL LOGO" },
 
   ];
@@ -367,14 +367,14 @@ const AddServiceModal = ({ open, onClose, selectedItem }) => {
         tabs={tabs}
         selectedTab={selectedTab}
         onSelectTab={setSlectedTab}
-        XS={2.4}
+        XS={3}
       />
 
       <>
         {selectedTab === 1 && <SchoolBasicInfo setSlectedTab={setSlectedTab} />}
         {selectedTab === 2 && <SchoolAllotments setSlectedTab={setSlectedTab} />}
         {selectedTab === 3 && <SchoolPayemntType setSlectedTab={setSlectedTab} />}
-        {selectedTab === 4 && <SmsIntegration setSlectedTab={setSlectedTab} />}
+        {/* {selectedTab === 4 && <SmsIntegration setSlectedTab={setSlectedTab} />} */}
         {selectedTab === 5 && <SchoolLogo setSlectedTab={setSlectedTab} />}
       </>
      
