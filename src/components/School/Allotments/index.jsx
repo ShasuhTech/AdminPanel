@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -12,8 +14,12 @@ import {
 import axios from "axios";
 import { Box } from "@mui/system";
 import SubmitButton from "@/components/CommonButton/SubmitButton";
+import { AddSchool, updateSchool } from "@/services/School";
+import { toast } from "react-toastify";
 
-const SchoolAllotments = () => {
+const SchoolAllotments = ({ data }) => {
+  // const data = { _id: "66ef307da3b72c522fbb1cfe" };
+
   const optionsGroups = {
     Academic_cms: [
       "Homework Report",
@@ -250,16 +256,14 @@ const SchoolAllotments = () => {
   useEffect(() => {
     const fetchFormData = async () => {
       try {
-        const response = await axios.get("/api/fetch-school-data"); // Replace with your API endpoint
-        const fetchedData = response.data;
 
         const updatedInitialValues = getInitialValues();
-        Object.keys(fetchedData).forEach((key) => {
-          updatedInitialValues[key] = fetchedData[key] || [];
+        Object.keys(data).forEach((key) => {
+          updatedInitialValues[key] = data[key] || [];
           updatedInitialValues[
             `selectAll${capitalize(key.replace("selected", ""))}`
           ] =
-            fetchedData[key]?.length ===
+            data[key]?.length ===
             optionsGroups[key.replace("selected", "")]?.length;
         });
 
@@ -272,7 +276,7 @@ const SchoolAllotments = () => {
     };
 
     fetchFormData();
-  }, []);
+  }, [data]);
 
   // Handle select all toggle for any group
   const handleSelectAll = (
@@ -292,16 +296,26 @@ const SchoolAllotments = () => {
   };
 
   // Handle form submission
-  const handleFormSubmit = async (values, { setSubmitting }) => {
-    console.log(values, "--values");
-    // try {
-    //   const response = await axios.post("/api/submit-school-data", values); // Replace with your API endpoint
-    //   console.log("Form submitted successfully:", response.data);
-    // } catch (error) {
-    //   console.error("Error submitting form:", error);
-    // } finally {
-    //   setSubmitting(false);
-    // }
+  const handleSubmit = async (values) => {
+    const payload = values;
+    if (data) {
+      payload.id = data?._id;
+    }
+    console.log(payload);
+    try {
+      if (data) {
+        const resp = await updateSchool(payload);
+        toast.success("Successfully Updated");
+      } else {
+        const resp = await AddSchool(payload);
+        toast.success("Successfully Added");
+      }
+      // onClose();
+      console.log(resp);
+    } catch (error) {
+      console.error(error);
+      // Handle error appropriately
+    }
   };
 
   // Show loader while data is being fetched
@@ -315,7 +329,7 @@ const SchoolAllotments = () => {
         initialValues={initialValues}
         enableReinitialize={true}
         // validationSchema={getValidationSchema()}
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit}
       >
         {({
           values,
@@ -330,8 +344,8 @@ const SchoolAllotments = () => {
               {/* For each group of options */}
               {Object.keys(optionsGroups).map((groupKey) => (
                 <div key={groupKey} style={{ marginBottom: "20px" }}>
-                  <Box className='flex  items-center justify-between '>
-                  <Typography variant="h6" fontWeight={'600'}>
+                  <Box className="flex  items-center justify-between ">
+                    <Typography variant="h6" fontWeight={"600"}>
                       {groupKey.replace("_", " ").toUpperCase()}
                     </Typography>
                     <FormControlLabel
@@ -364,7 +378,6 @@ const SchoolAllotments = () => {
                       }
                       label={`Select All`}
                     />
-                   
                   </Box>
                   <Box className="border  p-6 rounded-lg">
                     {optionsGroups[groupKey].map((option, index) => (
@@ -412,11 +425,15 @@ const SchoolAllotments = () => {
               ))}
 
               {/* Submit button with loading state */}
-             <Box className='justify-end  flex'>
-             <SubmitButton variant="contained" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? <CircularProgress size={24} /> : "Submit"}
-              </SubmitButton>
-             </Box>
+              <Box className="justify-end  flex">
+                <SubmitButton
+                  variant="contained"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? <CircularProgress size={24} /> : "Submit"}
+                </SubmitButton>
+              </Box>
             </FormGroup>
           </Form>
         )}

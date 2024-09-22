@@ -215,7 +215,7 @@ const SchoolService = () => {
         <AddServiceModal
           open={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          selectedItem={selectedItem}
+          data={selectedItem}
         />
       </div>{" "}
     </div>

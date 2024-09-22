@@ -14,6 +14,10 @@ export const AddSchool = async (payload) => {
   const response = await axiosInstance.post("/school", payload);
   return response?.data;
 };
+export const updateSchool = async (payload) => {
+  const response = await axiosInstance.put("/school", payload);
+  return response?.data;
+};
 
 // export const cityData = async (payload) => {
 //   const response = await axiosInstance.post("/api/v1/cities", payload);
