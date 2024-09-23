@@ -13,7 +13,7 @@ import {
   TextField,
 } from "@mui/material";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
-import { GetStudentLsit } from "@/services/api";
+import { DeleteStudentById, GetStudentLsit } from "@/services/api";
 import { useQuery } from "react-query";
 import CustomButton from "@/components/CommonButton/CustomButton";
 import AssignTeacherModal from "./Modal";
@@ -71,7 +71,7 @@ const FollowUpMode = () => {
   const deleteFollowUp = async (id) => {
     alert("Are You sure you want to delete");
     try {
-      await DeleteFollowUpById(id);
+      await DeleteStudentById(id);
       HolidayRefetch();
     } catch (error) {}
   };

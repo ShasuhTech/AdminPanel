@@ -11,12 +11,12 @@ export const loginUser = async (payload) => {
   return response;
 };
 
-// export const getTopSalonOrderDetails = async (payload) => {
-//   const response = await axiosInstance.get("admin/salon/getTopSalonList", {
-//     params: payload,
-//   });
-//   return response?.data;
-// };
+export const getTopSalonOrderDetails = async (payload) => {
+  const response = await axiosInstance.get("admin/salon/getTopSalonList", {
+    params: payload,
+  });
+  return response?.data;
+};
 
 export const StateData = async (payload) => {
   const response = await axiosInstance.post("/states", payload);

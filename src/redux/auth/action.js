@@ -17,7 +17,7 @@ export const login = (email, password) => async (dispatch) => {
     setCookie(Cookies.TOKEN, responseData?.data?.token, 366);
 
     localStorage.setItem("token", responseData.data.token);
-    dispatch(authActions.login({ token: responseData.data.token }));
+    // dispatch(authActions.login({ token: responseData.data.token }));
     // dispatch({ type: LOGIN_SUCCESS, payload: responseData });
   } catch (error) {
     console.log(error)
