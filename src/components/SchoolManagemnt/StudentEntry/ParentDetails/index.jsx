@@ -354,7 +354,7 @@ const ParentDetails = ({ studenData }) => {
                         ))}
                       </Field>
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="father_designation"
                         as={TextField}
@@ -367,7 +367,7 @@ const ParentDetails = ({ studenData }) => {
                         helperText={<ErrorMessage name="father_designation" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="father_org_name"
                         as={TextField}
@@ -410,7 +410,7 @@ const ParentDetails = ({ studenData }) => {
                 </div>
 
                 <div className="  flex-wrap flex mt-5  gap-4">
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="father_nationality"
                       as={TextField}
@@ -431,14 +431,14 @@ const ParentDetails = ({ studenData }) => {
                       ))}
                     </Field>
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <CountrySelect
                       name="father_country"
                       label="Country"
                       value={values.father_country}
                     />
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <StateSelect
                       name="father_state"
                       label="Father's State"
@@ -469,7 +469,7 @@ const ParentDetails = ({ studenData }) => {
                         onBlur={() => {}}
                       /> */}
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <CitySelectFather
                       name="father_city"
                       label="Father's City"
@@ -496,7 +496,7 @@ const ParentDetails = ({ studenData }) => {
                         onBlur={() => {}}
                       /> */}
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="father_pincode"
                       as={TextField}
@@ -509,7 +509,7 @@ const ParentDetails = ({ studenData }) => {
                       helperText={<ErrorMessage name="father_pincode" />}
                     />
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="father_annual_income"
                       as={TextField}
@@ -522,7 +522,7 @@ const ParentDetails = ({ studenData }) => {
                       helperText={<ErrorMessage name="father_annual_income" />}
                     />
                   </div>
-                  {/* <div className="lg:w-[32.5%] w-[100%]">
+                  {/* <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="father_telephone"
                           as={TextField}
@@ -535,7 +535,7 @@ const ParentDetails = ({ studenData }) => {
                           helperText={<ErrorMessage name="father_telephone" />}
                         />
                       </div> */}
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="father_mobile"
                       as={TextField}
@@ -627,7 +627,7 @@ const ParentDetails = ({ studenData }) => {
                         ))}
                       </Field>
                     </div>
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="mother_designation"
                         as={TextField}
@@ -641,7 +641,7 @@ const ParentDetails = ({ studenData }) => {
                       />
                     </div>
 
-                    <div className="lg:w-[32.5%] w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="mother_org_name"
                         as={TextField}
@@ -684,7 +684,7 @@ const ParentDetails = ({ studenData }) => {
                 </div>
 
                 <div className="  flex-wrap flex mt-5  gap-4">
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="mother_nationality"
                       as={TextField}
@@ -705,14 +705,14 @@ const ParentDetails = ({ studenData }) => {
                       ))}
                     </Field>
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <CountrySelect
                       name="mother_country"
                       label="Country"
                       value={values.mother_country}
                     />
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <StateSelect
                       name="mother_state"
                       label="Mother's State"
@@ -724,7 +724,7 @@ const ParentDetails = ({ studenData }) => {
                       }}
                     />
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <CitySelectMother
                       name="mother_city"
                       label="Mother's City"
@@ -732,7 +732,7 @@ const ParentDetails = ({ studenData }) => {
                       state={motherState}
                     />
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="mother_pincode"
                       as={TextField}
@@ -745,7 +745,7 @@ const ParentDetails = ({ studenData }) => {
                       helperText={<ErrorMessage name="mother_pincode" />}
                     />
                   </div>
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="mother_annual_income"
                       as={TextField}
@@ -758,7 +758,7 @@ const ParentDetails = ({ studenData }) => {
                       helperText={<ErrorMessage name="mother_annual_income" />}
                     />
                   </div>
-                  {/* <div className="lg:w-[32.5%] w-[100%]">
+                  {/* <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="mother_telephone"
                           as={TextField}
@@ -771,7 +771,7 @@ const ParentDetails = ({ studenData }) => {
                           helperText={<ErrorMessage name="mother_telephone" />}
                         />
                       </div> */}
-                  <div className="lg:w-[32.5%] w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="mother_mobile"
                       as={TextField}

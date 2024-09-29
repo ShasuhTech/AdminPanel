@@ -30,7 +30,10 @@ import {
   StatusSelection,
   ClassSelection,
 } from "@/components/ClassSelection";
-import { Plus } from "mdi-material-ui";
+import { FolderClock, Plus } from "mdi-material-ui";
+import { RiChatFollowUpLine } from "react-icons/ri";
+import { MdAppRegistration } from "react-icons/md";
+import { TbListDetails } from "react-icons/tb";
 
 const FollowUp = () => {
   const [searchText, setSearchText] = useState("");
@@ -123,7 +126,7 @@ const FollowUp = () => {
               fullWidth
               rootSx={{ p: 0, pb: 0, marginLeft: 0 }}
               variant="outlined"
-            // onFilterClick={handleFilterClick}
+              // onFilterClick={handleFilterClick}
             />
           </Grid>
           <Grid item justifyContent={"center"} xs={12} sm={4} md={2.5}>
@@ -161,18 +164,18 @@ const FollowUp = () => {
           className="flex justify-end mb-5 "
           sx={{ mb: 2, gap: 1, px: 2 }}
         >
-          <Grid >
+          <Grid>
             <CustomButton width={"200px"} onClick={handleOpenEnquiry}>
               <AddIcon />
               FollowUp Enquiry
             </CustomButton>
           </Grid>
-          <Grid >
+          <Grid>
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export CSV
             </button>
           </Grid>
-          <Grid >
+          <Grid>
             <button className="border-2 rounded-lg px-4 py-2.5 ">
               Export PDF
             </button>
@@ -186,9 +189,7 @@ const FollowUp = () => {
                   <StyledTableCell align="center">Sl.No</StyledTableCell>
                   <StyledTableCell align="center">Enquiry No</StyledTableCell>
                   <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell align="center">
-                    Class-Sec
-                  </StyledTableCell>
+                  <StyledTableCell align="center">Class-Sec</StyledTableCell>
                   <StyledTableCell align="center">Year</StyledTableCell>
                   <StyledTableCell align="center">Status</StyledTableCell>
                   <StyledTableCell align="center">Action</StyledTableCell>
@@ -327,26 +328,21 @@ const Row = (props) => {
             {row?.student_status}
           </Typography>
         </StyledTableCell>
-        <StyledTableCell align="left" style={{ minWidth: "300px", gap: 2 }}>
+        <StyledTableCell align="left" style={{ minWidth: "200px", gap: 2 }}>
           {row?.student_status === "Follow-Up" && (
-
-            <Tooltip title={'Folloup'}>
+            <Tooltip title={"Folloup"}>
               <Button
                 onClick={() => handleOpen(row)}
-                sx={{ marginRight: "10px" }}
+                sx={{ marginRight: "10px",py:0.5 }}
                 variant="outlined"
                 color="secondary"
+
               >
-                <Plus />
-                {/* Follow Up */}
-                {/* <RiChatFollowUpFill /> */}
+                <RiChatFollowUpLine className="text-[20px]" />
               </Button>
             </Tooltip>
-            // RiChatFollowUpFill
-            // MdAppRegistration
-            // TbListDetails
           )}
-          <Tooltip title={'Registration'}>
+          <Tooltip title={"Registration"}>
             <Button
               onClick={() =>
                 router.push({
@@ -354,21 +350,21 @@ const Row = (props) => {
                   query: { id: row?._id },
                 })
               }
-              sx={{ marginRight: "10px" }}
+              sx={{ marginRight: "10px",py:0.5 }}
               variant="outlined"
               color="success"
             >
-              <Plus />
+              <MdAppRegistration   className="text-[20px]" />
               {/* Registration */}
             </Button>
           </Tooltip>
-          <Tooltip title={'Details'}>
-
+          <Tooltip title={"Details"}>
             <Button
               onClick={() => handleButtonClick(row?._id)}
               variant="outlined"
+              sx={{ py:0.5 }}
             >
-              <Plus />
+              <TbListDetails  className="text-[20px]"  />
               {/* Details */}
             </Button>
           </Tooltip>

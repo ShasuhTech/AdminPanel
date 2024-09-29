@@ -489,81 +489,77 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
 
   const optionalString = Yup.string()
     .nullable()
-    .transform((_, val) => (val === "" ? null : val));
+    ;
 
   const validationSchema = Yup.object().shape({
-    // search: optionalString,
-    // enquiry_id: optionalString,
-    // first_name: Yup.string().required("First name is required"),
-    // middle_name: optionalString,
-    // last_name: Yup.string().required("Last name is required"),
-    // gender: Yup.string().required("Gender is required"),
-    // dob: Yup.date().required("Date of birth is required").nullable(),
-    // class: optionalString,
-    // present_class: optionalString,
-    // joining_year: optionalString,
-    // present_school: optionalString,
-    // reason: optionalString,
-    // nationality: optionalString,
-    // social_category: optionalString,
-    // email: Yup.string()
-    //   .email("Invalid email format")
-    //   .required("Email is required"),
-    // same_present_add: optionalString,
-    // emergency_no: Yup.string().required("Emergency number is required"),
-    // present_address: optionalString,
-    // present_city: optionalString,
-    // present_state: optionalString,
-    // present_pincode: optionalString,
-    // present_locality: optionalString,
-    // present_country: optionalString.default("india"),
-    // present_telephone: optionalString,
-    // permanent_address: optionalString,
-    // permanent_city: optionalString,
-    // permanent_state: optionalString,
-    // permanent_pincode: optionalString,
-    // permanent_locality: optionalString,
-    // permanent_country: optionalString.default("india"),
-    // permanent_telephone: optionalString,
-    // father_name: optionalString,
-    // father_qualifications: optionalString,
-    // father_occupation: optionalString,
-    // father_email: Yup.string().email("Invalid email format"),
-    // father_org_name: optionalString,
-    // father_org_address: optionalString,
-    // father_nationality: optionalString,
-    // father_country: optionalString,
-    // father_state: optionalString,
-    // father_city: optionalString,
-    // father_pincode: optionalString,
-    // father_annual_income: Yup.number()
-    //   .nullable()
-    //   .transform((_, val) => (val === "" ? null : val)),
-    // father_mobile: optionalString,
-    // mother_name: optionalString,
-    // mother_qualifications: optionalString,
-    // mother_occupation: optionalString,
-    // mother_email: Yup.string().email("Invalid email format"),
-    // mother_org_name: optionalString,
-    // mother_org_address: optionalString,
-    // mother_nationality: optionalString,
-    // mother_country: optionalString,
-    // mother_state: optionalString,
-    // mother_city: optionalString,
-    // mother_pincode: optionalString,
-    // mother_annual_income: Yup.number()
-    //   .nullable()
-    //   .transform((_, val) => (val === "" ? null : val)),
-    // mother_mobile: optionalString,
+    search: optionalString,
+    enquiry_id: optionalString,
+    first_name: Yup.string().required("First name is required"),
+    middle_name: optionalString,
+    last_name: Yup.string().required("Last name is required"),
+    gender: Yup.string().required("Gender is required"),
+    dob: Yup.date().required("Date of birth is required").nullable(),
+    class: Yup.string().required('Please Select Class'),
+    present_class: Yup.string().required('Please Select Present Class'),
+    joining_year: Yup.string().required('Please Select Joining Year'),
+    present_school: optionalString,
+    reason: optionalString,
+    nationality: Yup.string().required('Please Select Nationality'),
+    social_category: optionalString,
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    same_present_add: optionalString,
+    emergency_no: Yup.string().required("Emergency number is required"),
+    present_address: Yup.string().required("Present Address is required"),
+    present_city: Yup.string().required("Present City is required"),
+    present_state: Yup.string().required("Present State is required"),
+    present_pincode: Yup.string().required("Present PinCode is required"),
+    present_locality: optionalString,
+    present_country: Yup.string().required("Present Country is required"),
+    present_telephone: Yup.string().required("Present Telephone is required"),
+    permanent_address: optionalString,
+    permanent_city: optionalString,
+    permanent_state: optionalString,
+    permanent_pincode: optionalString,
+    permanent_locality: optionalString,
+    permanent_country: optionalString,
+    permanent_telephone: optionalString,
+    father_name: optionalString,
+    father_qualifications: optionalString,
+    father_occupation: optionalString,
+    father_email: Yup.string().email("Invalid email format"),
+    father_org_name: optionalString,
+    father_org_address: optionalString,
+    father_nationality: optionalString,
+    father_country: optionalString,
+    father_state: optionalString,
+    father_city: optionalString,
+    father_pincode: optionalString,
+    father_annual_income: optionalString,
+    father_mobile: optionalString,
+    mother_name: optionalString,
+    mother_qualifications: optionalString,
+    mother_occupation: optionalString,
+    mother_email: Yup.string().email("Invalid email format"),
+    mother_org_name: optionalString,
+    mother_org_address: optionalString,
+    mother_nationality: optionalString,
+    mother_country: optionalString,
+    mother_state: optionalString,
+    mother_city: optionalString,
+    mother_pincode: optionalString,
+    mother_annual_income:optionalString ,
+    mother_mobile: optionalString,
   });
   console.log(initialValues, "---");
   return (
-    <SimpleModal open={open} handleClose={handleClose} width={"80%"}>
+    <SimpleModal open={open} handleClose={handleClose} width={"80%"} height={'95%'}>
       <Typography variant="h5">Follow Up</Typography>
       <div className="overflow-scroll h-[750px]">
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
           onSubmit={handleSubmit}
           enableReinitialize={data ? true : false}
         >
@@ -603,12 +599,15 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           select
                           label="Class"
                           variant="outlined"
+                          required
                           fullWidth
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          error={false}
+                          error={touched['class'] && Boolean(errors['class'])}
+                          helperText={touched['class'] && errors['class']}
+                          // error={false}
                           value={values.class}
-                          helperText={<ErrorMessage name="class" />}
+                          // helperText={<ErrorMessage name="class" />}
                         >
                           {Config?.ClassList.map((option) => (
                             <MenuItem key={option.label} value={option.label}>
@@ -619,7 +618,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                       </div>
                       {/* Not Required */}
 
-                      {/* <div className="lg:w-[32.5%] w-[100%]">
+                      {/* <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="enquiry_id"
                       as={TextField}
@@ -634,22 +633,22 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                       helperText={<ErrorMessage name="enquiry_id" />}
                     />
                   </div> */}
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="first_name"
                           as={TextField}
                           label="First Name"
                           variant="outlined"
-                          // required
+                          required
                           value={values.first_name}
                           fullWidth
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          error={false}
-                          helperText={<ErrorMessage name="first_name" />}
+                          error={touched['first_name'] && Boolean(errors['first_name'])}
+                          helperText={touched['first_name'] && errors['first_name']}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="middle_name"
                           as={TextField}
@@ -663,22 +662,23 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           helperText={<ErrorMessage name="middle_name" />}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="last_name"
                           as={TextField}
                           label="Last Name"
                           variant="outlined"
-                          // required
+                          required
                           value={values.last_name}
                           fullWidth
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          error={false}
-                          helperText={<ErrorMessage name="last_name" />}
+                    
+                          error={touched['last_name'] && Boolean(errors['last_name'])}
+                          helperText={touched['last_name'] && errors['last_name']}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="gender"
                           as={TextField}
@@ -688,9 +688,9 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           fullWidth
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          error={false}
+                          error={touched['gender'] && Boolean(errors['gender'])}
+                          helperText={touched['gender'] && errors['gender']}
                           value={values.gender}
-                          helperText={<ErrorMessage name="gender" />}
                         >
                           {Config.genders?.map((option) => (
                             <MenuItem key={option.label} value={option.label}>
@@ -700,7 +700,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                         </Field>
                       </div>
 
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <DatePicker
                           label="Date Of Birth"
                           value={
@@ -717,8 +717,8 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               variant="outlined"
                               fullWidth
                               // required
-                              error={false}
-                              helperText={<ErrorMessage name="dob" />}
+                              error={touched['dob'] && Boolean(errors['dob'])}
+                          helperText={touched['dob'] && errors['dob']}
                             />
                           )}
                         />
@@ -756,9 +756,8 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           fullWidth
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          error={false}
-                          value={values.joining_year}
-                          helperText={<ErrorMessage name="joining_year" />}
+                          error={touched['joining_year'] && Boolean(errors['joining_year'])}
+                          helperText={touched['joining_year'] && errors['joining_year']}                          value={values.joining_year}
                         >
                           {Config?.joiningYear.map((option) => (
                             <MenuItem key={option.label} value={option.label}>
@@ -768,29 +767,29 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                         </Field>
                       </div>
                       {
-                        <div className="lg:w-[32.4%]  w-[100%]">
-                          <Field
-                            name="selected_status"
-                            as={TextField}
-                            select
-                            label="Selected Status"
-                            variant="outlined"
-                            fullWidth
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            error={false}
-                            value={values.selected_status}
-                            helperText={<ErrorMessage name="selected_status" />}
-                          >
-                            {Config?.StreamList.map((option) => (
-                              <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                              </MenuItem>
-                            ))}
-                          </Field>
-                        </div>
+                        // <div className="lg:w-[32.4%]  w-[100%]">
+                        //   <Field
+                        //     name="selected_status"
+                        //     as={TextField}
+                        //     select
+                        //     label="Selected Status"
+                        //     variant="outlined"
+                        //     fullWidth
+                        //     onBlur={handleBlur}
+                        //     onChange={handleChange}
+                        //     error={false}
+                        //     value={values.selected_status}
+                        //     helperText={<ErrorMessage name="selected_status" />}
+                        //   >
+                        //     {Config?.StreamList.map((option) => (
+                        //       <MenuItem key={option.value} value={option.value}>
+                        //         {option.label}
+                        //       </MenuItem>
+                        //     ))}
+                        //   </Field>
+                        // </div>
                       }
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="present_school"
                           as={TextField}
@@ -804,7 +803,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           helperText={<ErrorMessage name="present_school" />}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="reason"
                           as={TextField}
@@ -814,11 +813,11 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.reason}
-                          error={false}
-                          helperText={<ErrorMessage name="reason" />}
+                          error={touched['reason'] && Boolean(errors['reason'])}
+                          helperText={touched['reason'] && errors['reason']}  
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="nationality"
                           as={TextField}
@@ -828,9 +827,9 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           fullWidth
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          error={false}
                           value={values.nationality}
-                          helperText={<ErrorMessage name="nationality" />}
+                          error={touched['nationality'] && Boolean(errors['nationality'])}
+                          helperText={touched['nationality'] && errors['nationality']}  
                         >
                           {Config?.Nationalities?.map((option) => (
                             <MenuItem key={option.label} value={option.label}>
@@ -839,7 +838,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="social_category"
                           as={TextField}
@@ -860,7 +859,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="email"
                           as={TextField}
@@ -869,11 +868,11 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           fullWidth
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          error={false}
-                          helperText={<ErrorMessage name="email" />}
+                          error={touched['email'] && Boolean(errors['email'])}
+                          helperText={touched['email'] && errors['email']}  
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%]  w-[100%]">
                         <Field
                           name="emergency_no"
                           as={TextField}
@@ -890,8 +889,8 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               setFieldValue("emergency_no", value);
                             }
                           }}
-                          error={false}
-                          helperText={<ErrorMessage name="emergency_no" />}
+                          error={touched['emergency_no'] && Boolean(errors['emergency_no'])}
+                          helperText={touched['emergency_no'] && errors['emergency_no']}  
                         />
                       </div>
                     </div>
@@ -911,19 +910,21 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             fullWidth
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            error={false}
-                            helperText={<ErrorMessage name="present_address" />}
+                            error={touched['present_address'] && Boolean(errors['present_address'])}
+                          helperText={touched['present_address'] && errors['present_address']}  
                           />
                         </div>
                         <div className="flex  flex-wrap gap-4">
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <CountrySelect
                               name="present_country"
                               label="Present Country"
                               value={values.present_country}
+                              error={touched['present_country'] && Boolean(errors['present_country'])}
+                              helperText={touched['present_country'] && errors['present_country']}  
                             />
                           </div>
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <StateSelect
                               name="present_state"
                               label="Present State"
@@ -934,18 +935,22 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                                 setPresentState(selectedState);
                               }}
                               state={presentState}
+                              error={touched['present_state'] && Boolean(errors['present_state'])}
+                              helperText={touched['present_state'] && errors['present_state']}  
                             />
                           </div>
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <CitySelectPersent
                               name="present_city"
                               label="Present City"
                               value={values.present_city}
                               state={presentState}
+                              error={touched['present_city'] && Boolean(errors['present_city'])}
+                              helperText={touched['present_city'] && errors['present_city']}  
                             />
                           </div>
 
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <Field
                               name="present_pincode"
                               as={TextField}
@@ -954,13 +959,11 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               fullWidth
                               onBlur={handleBlur}
                               onChange={handleChange}
-                              error={false}
-                              helperText={
-                                <ErrorMessage name="present_pincode" />
-                              }
+                              error={touched['present_pincode'] && Boolean(errors['present_pincode'])}
+                              helperText={touched['present_pincode'] && errors['present_pincode']}  
                             />
                           </div>
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <Field
                               name="present_locality"
                               as={TextField}
@@ -969,10 +972,8 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               fullWidth
                               onBlur={handleBlur}
                               onChange={handleChange}
-                              error={false}
-                              helperText={
-                                <ErrorMessage name="present_locality" />
-                              }
+                              error={touched['present_locality'] && Boolean(errors['present_locality'])}
+                              helperText={touched['present_locality'] && errors['present_locality']}  
                             />
                           </div>
                         </div>
@@ -1017,7 +1018,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           />
                         </div>
                         <div className="flex  flex-wrap gap-4">
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <CountrySelect
                               name="permanent_country"
                               label="Permanet Country"
@@ -1025,7 +1026,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             />
                           </div>
 
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <StateSelect
                               name="permanent_state"
                               label="Permanent State"
@@ -1042,7 +1043,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               }}
                             />
                           </div>
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <CitySelectPermanent
                               name="permanent_city"
                               label="Permanent City"
@@ -1056,7 +1057,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             />
                           </div>
 
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <Field
                               name="permanent_pincode"
                               as={TextField}
@@ -1076,7 +1077,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                               }
                             />
                           </div>
-                          <div className="lg:w-[32.5%]  w-[100%]">
+                          <div className="lg:w-[32.2%]  w-[100%]">
                             <Field
                               name="permanent_locality"
                               as={TextField}
@@ -1122,7 +1123,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             helperText={<ErrorMessage name="father_name" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="father_qualifications"
                             as={TextField}
@@ -1147,7 +1148,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="father_occupation"
                             as={TextField}
@@ -1170,7 +1171,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           </Field>
                         </div>
 
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="father_email"
                             as={TextField}
@@ -1183,7 +1184,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             helperText={<ErrorMessage name="father_email" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="father_org_name"
                             as={TextField}
@@ -1211,7 +1212,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             }
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name="father_nationality"
                             as={TextField}
@@ -1235,14 +1236,14 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           </Field>
                         </div>
 
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <CountrySelect
                             name="father_country"
                             label="Country"
                             value={values.father_country}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <StateSelect
                             name="father_state"
                             label="State"
@@ -1254,7 +1255,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             }}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name={"father_city"}
                             as={TextField}
@@ -1273,7 +1274,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           </Field>
                         </div>
 
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name="father_pincode"
                             as={TextField}
@@ -1286,7 +1287,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             helperText={<ErrorMessage name="father_pincode" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name="father_annual_income"
                             as={TextField}
@@ -1301,7 +1302,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             }
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name="father_mobile"
                             as={TextField}
@@ -1343,7 +1344,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             helperText={<ErrorMessage name="mother_name" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="mother_qualifications"
                             as={TextField}
@@ -1368,7 +1369,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="mother_occupation"
                             as={TextField}
@@ -1391,7 +1392,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           </Field>
                         </div>
 
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="mother_email"
                             as={TextField}
@@ -1404,7 +1405,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             helperText={<ErrorMessage name="mother_email" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="mother_org_name"
                             as={TextField}
@@ -1432,7 +1433,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             }
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name="mother_nationality"
                             as={TextField}
@@ -1456,14 +1457,14 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           </Field>
                         </div>
 
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <CountrySelect
                             name="mother_country"
                             label="Country"
                             value={values.mother_country}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <StateSelect
                             name="mother_state"
                             label="State"
@@ -1475,7 +1476,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             }}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           {/* <CitySelectMother
                             name="mother_city"
                             label="City"
@@ -1500,7 +1501,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                           </Field>
                         </div>
 
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name="mother_pincode"
                             as={TextField}
@@ -1513,7 +1514,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             helperText={<ErrorMessage name="mother_pincode" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name="mother_annual_income"
                             as={TextField}
@@ -1528,7 +1529,7 @@ const EnquiryMaster = ({ handleClose, open, data }) => {
                             }
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32.2%]  w-[100%]">
                           <Field
                             name="mother_mobile"
                             as={TextField}

@@ -973,7 +973,7 @@ const StudentRegistration = ({
 
   console.log(new Date());
   return (
-    <SimpleModal open={open} handleClose={handleClose} width={"80%"}>
+    <SimpleModal open={open} handleClose={handleClose} width={"80%"} height={'95%'}>
       <div className="flex justify-between">
         <Typography variant="h5">Student Registration</Typography>
         {router?.query?.id && (
@@ -1035,7 +1035,7 @@ const StudentRegistration = ({
                             helperText={<ErrorMessage name="search" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="admission_no"
                             as={TextField}
@@ -1091,7 +1091,7 @@ const StudentRegistration = ({
                             helperText={<ErrorMessage name="first_name" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="middle_name"
                             as={TextField}
@@ -1105,7 +1105,7 @@ const StudentRegistration = ({
                             helperText={<ErrorMessage name="middle_name" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="last_name"
                             as={TextField}
@@ -1190,7 +1190,7 @@ const StudentRegistration = ({
                           </div>
                         )}
 
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="gender"
                             as={TextField}
@@ -1215,7 +1215,7 @@ const StudentRegistration = ({
                     </div>
 {/* Student Details */}
                     <div className="  flex-wrap flex mt-5  gap-4">
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32%]  w-[100%]">
                         <Field
                           name="blood_group"
                           as={TextField}
@@ -1236,7 +1236,7 @@ const StudentRegistration = ({
                           ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32%]  w-[100%]">
                         <Field
                           name="emergency_no"
                           as={TextField}
@@ -1257,7 +1257,7 @@ const StudentRegistration = ({
                           helperText={<ErrorMessage name="emergency_no" />}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32%]  w-[100%]">
                         <Field
                           name="mother_tongue"
                           as={TextField}
@@ -1278,7 +1278,7 @@ const StudentRegistration = ({
                           ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32%]  w-[100%]">
                         <Field
                           name="religion"
                           as={TextField}
@@ -1299,7 +1299,7 @@ const StudentRegistration = ({
                           ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32%]  w-[100%]">
                         <DatePicker
                           label="Date Of Birth"
                           value={
@@ -1322,7 +1322,7 @@ const StudentRegistration = ({
                           )}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32%]  w-[100%]">
                         <Field
                           name="social_category"
                           as={TextField}
@@ -1343,7 +1343,7 @@ const StudentRegistration = ({
                           ))}
                         </Field>
                       </div>
-                      {/* <div className="lg:w-[32.5%]  w-[100%]">
+                      {/* <div className="lg:w-[32%]  w-[100%]">
                         <Field
                           name="locality"
                           as={TextField}
@@ -1447,7 +1447,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32%] w-[100%]">
                           <Field
                             name="father_designation"
                             as={TextField}
@@ -1462,7 +1462,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32%] w-[100%]">
                           <Field
                             name="father_org_name"
                             as={TextField}
@@ -1507,7 +1507,7 @@ const StudentRegistration = ({
                     </div>
 
                     <div className="  flex-wrap flex mt-5  gap-4">
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="father_nationality"
                           as={TextField}
@@ -1530,14 +1530,14 @@ const StudentRegistration = ({
                           ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <CountrySelect
                           name="father_country"
                           label="Country"
                           value={values.father_country}
                         />
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <StateSelect
                           name="father_state"
                           label="Father's State"
@@ -1568,7 +1568,7 @@ const StudentRegistration = ({
                         onBlur={() => {}}
                       /> */}
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <CitySelectFather
                           name="father_city"
                           label="Father's City"
@@ -1595,7 +1595,7 @@ const StudentRegistration = ({
                         onBlur={() => {}}
                       /> */}
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="father_pincode"
                           as={TextField}
@@ -1608,7 +1608,7 @@ const StudentRegistration = ({
                           helperText={<ErrorMessage name="father_pincode" />}
                         />
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="father_annual_income"
                           as={TextField}
@@ -1623,7 +1623,7 @@ const StudentRegistration = ({
                           }
                         />
                       </div>
-                      {/* <div className="lg:w-[32.5%] w-[100%]">
+                      {/* <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="father_telephone"
                           as={TextField}
@@ -1636,7 +1636,7 @@ const StudentRegistration = ({
                           helperText={<ErrorMessage name="father_telephone" />}
                         />
                       </div> */}
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="father_mobile"
                           as={TextField}
@@ -1735,7 +1735,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32%] w-[100%]">
                           <Field
                             name="mother_designation"
                             as={TextField}
@@ -1751,7 +1751,7 @@ const StudentRegistration = ({
                           />
                         </div>
 
-                        <div className="lg:w-[32.5%] w-[100%]">
+                        <div className="lg:w-[32%] w-[100%]">
                           <Field
                             name="mother_org_name"
                             as={TextField}
@@ -1796,7 +1796,7 @@ const StudentRegistration = ({
                     </div>
 
                     <div className="  flex-wrap flex mt-5  gap-4">
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="mother_nationality"
                           as={TextField}
@@ -1819,14 +1819,14 @@ const StudentRegistration = ({
                           ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <CountrySelect
                           name="mother_country"
                           label="Country"
                           value={values.mother_country}
                         />
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <StateSelect
                           name="mother_state"
                           label="Mother's State"
@@ -1838,7 +1838,7 @@ const StudentRegistration = ({
                           }}
                         />
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <CitySelectMother
                           name="mother_city"
                           label="Mother's City"
@@ -1846,7 +1846,7 @@ const StudentRegistration = ({
                           state={motherState}
                         />
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="mother_pincode"
                           as={TextField}
@@ -1859,7 +1859,7 @@ const StudentRegistration = ({
                           helperText={<ErrorMessage name="mother_pincode" />}
                         />
                       </div>
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="mother_annual_income"
                           as={TextField}
@@ -1874,7 +1874,7 @@ const StudentRegistration = ({
                           }
                         />
                       </div>
-                      {/* <div className="lg:w-[32.5%] w-[100%]">
+                      {/* <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="mother_telephone"
                           as={TextField}
@@ -1887,7 +1887,7 @@ const StudentRegistration = ({
                           helperText={<ErrorMessage name="mother_telephone" />}
                         />
                       </div> */}
-                      <div className="lg:w-[32.5%] w-[100%]">
+                      <div className="lg:w-[32%] w-[100%]">
                         <Field
                           name="mother_mobile"
                           as={TextField}
@@ -2034,14 +2034,14 @@ const StudentRegistration = ({
                         />
                       </div>
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <CountrySelect
                             name="present_country"
                             label="Country"
                             value={values.present_country}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           {
                             <Field
                               name="present_state"
@@ -2075,7 +2075,7 @@ const StudentRegistration = ({
                             </Field>
                           }
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="present_city"
                             as={TextField}
@@ -2098,7 +2098,7 @@ const StudentRegistration = ({
                           </Field>
                         </div>
 
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="present_pincode"
                             as={TextField}
@@ -2111,7 +2111,7 @@ const StudentRegistration = ({
                             helperText={<ErrorMessage name="present_pincode" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="present_locality"
                             as={TextField}
@@ -2126,7 +2126,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        {/* <div className="lg:w-[32.5%]  w-[100%]">
+                        {/* <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="present_telephone"
                             as={TextField}
@@ -2184,7 +2184,7 @@ const StudentRegistration = ({
                         />
                       </div>
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <CountrySelect
                             name="permanent_country"
                             label="Country"
@@ -2192,7 +2192,7 @@ const StudentRegistration = ({
                           />
                         </div>
 
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="permanent_state"
                             as={TextField}
@@ -2218,7 +2218,7 @@ const StudentRegistration = ({
                               ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="permanent_city"
                             as={TextField}
@@ -2244,7 +2244,7 @@ const StudentRegistration = ({
                               ))}
                           </Field>
                         </div>
-                        {/* <div className="lg:w-[32.5%]  w-[100%]">
+                        {/* <div className="lg:w-[32%]  w-[100%]">
                     <Field
                       name="permanent_country"
                       as={TextField}
@@ -2262,7 +2262,7 @@ const StudentRegistration = ({
                       helperText={<ErrorMessage name="permanent_country" />}
                     />
                   </div> */}
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="permanent_pincode"
                             as={TextField}
@@ -2282,7 +2282,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="permanent_locality"
                             as={TextField}
@@ -2302,7 +2302,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        {/* <div className="lg:w-[32.5%]  w-[100%]">
+                        {/* <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="permanent_telephone"
                             as={TextField}
@@ -2334,7 +2334,7 @@ const StudentRegistration = ({
                   <div className=" border  p-6 rounded-2xl mt-3">
                     <div className=" w-[100%] ">
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%] w-[100%] ">
+                        <div className="lg:w-[32%] w-[100%] ">
                           <Field
                             name="any_physical_disability"
                             as={TextField}
@@ -2357,7 +2357,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%]">
+                        <div className="w-[100%] lg:w-[32%]">
                           <Field
                             name="any_treatment_undertaken"
                             as={TextField}
@@ -2380,7 +2380,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%] mb-2 ">
+                        <div className="w-[100%] lg:w-[32%] mb-2 ">
                           <Field
                             name="any_allergies"
                             as={TextField}
@@ -2403,7 +2403,7 @@ const StudentRegistration = ({
                         </div>
                       </div>
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%] w-[100%] ">
+                        <div className="lg:w-[32%] w-[100%] ">
                           <Field
                             name="interest_hobbies"
                             as={TextField}
@@ -2418,7 +2418,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%] ">
+                        <div className="w-[100%] lg:w-[32%] ">
                           <Field
                             name="sports_game"
                             as={TextField}
@@ -2431,7 +2431,7 @@ const StudentRegistration = ({
                             helperText={<ErrorMessage name="sports_game" />}
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%] ">
+                        <div className="w-[100%] lg:w-[32%] ">
                           <Field
                             name="co_curriclar_activities"
                             as={TextField}
@@ -2446,7 +2446,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%] ">
+                        <div className="w-[100%] lg:w-[32%] ">
                           <Field
                             name="any_other_relevent_information"
                             as={TextField}
@@ -2475,7 +2475,7 @@ const StudentRegistration = ({
                   <div className=" border  p-6 rounded-2xl mt-3">
                     <div className=" lg:flex w-[100%] gap-4">
                       <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
-                        <div className="lg:lg:w-[32.5%] w-[100%]">
+                        <div className="lg:lg:w-[32%] w-[100%]">
                           <Field
                             name="school_name"
                             as={TextField}
@@ -2511,7 +2511,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="Pre_address"
                             as={TextField}
@@ -2524,14 +2524,14 @@ const StudentRegistration = ({
                             helperText={<ErrorMessage name="Pre_address" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <CountrySelect
                             name="previous_country"
                             label="Country"
                             value={values.previous_country}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           {
                             <Field
                               name="previous_state"
@@ -2567,7 +2567,7 @@ const StudentRegistration = ({
                             </Field>
                           }
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="previous_city"
                             as={TextField}
@@ -2590,7 +2590,7 @@ const StudentRegistration = ({
                           </Field>
                         </div>
 
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="previous_pincode"
                             as={TextField}
@@ -2605,7 +2605,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="previous_leaving"
                             as={TextField}
@@ -2620,7 +2620,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="tc_number"
                             as={TextField}
@@ -2633,7 +2633,7 @@ const StudentRegistration = ({
                             helperText={<ErrorMessage name="tc_number" />}
                           />
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <DatePicker
                             label="TC Date"
                             value={null}
@@ -2654,7 +2654,7 @@ const StudentRegistration = ({
                             )}
                           />
                         </div>
-                        {/* <div className="lg:lg:w-[32.5%] w-[100%]">
+                        {/* <div className="lg:lg:w-[32%] w-[100%]">
                           <Field
                             name="school_city_name"
                             as={TextField}
@@ -2692,7 +2692,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:lg:w-[32.5%] w-[100%]">
+                        <div className="lg:lg:w-[32%] w-[100%]">
                           <Field
                             name="year_of_passing"
                             as={TextField}
@@ -2882,7 +2882,7 @@ const StudentRegistration = ({
                   <div className=" border  p-6 rounded-2xl mt-3">
                     <div className=" lg:flex w-[100%] gap-4">
                       <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="board_details"
                             as={TextField}
@@ -2972,7 +2972,7 @@ const StudentRegistration = ({
                   <div className=" border  p-6 rounded-2xl mt-3">
                     <div className=" w-[100%] ">
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="stream_details"
                             as={TextField}
@@ -2993,7 +2993,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="stream_common_subject"
                             as={TextField}
@@ -3016,7 +3016,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="stream_group1"
                             as={TextField}
@@ -3037,7 +3037,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="stream_group2"
                             as={TextField}
@@ -3058,7 +3058,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="stream_group3"
                             as={TextField}
@@ -3079,7 +3079,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="stream_group4"
                             as={TextField}
@@ -3100,7 +3100,7 @@ const StudentRegistration = ({
                             ))}
                           </Field>
                         </div>
-                        <div className="lg:w-[32.5%]  w-[100%]">
+                        <div className="lg:w-[32%]  w-[100%]">
                           <Field
                             name="stream_group5"
                             as={TextField}
@@ -3196,7 +3196,7 @@ const StudentRegistration = ({
                     </div>
                     <div className=" w-[100%] ">
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%] w-[100%] mb-5">
+                        <div className="lg:w-[32%] w-[100%] mb-5">
                           <Field
                             name="sibling_same_inst_admission_no1"
                             as={TextField}
@@ -3211,7 +3211,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%] mb-5">
+                        <div className="w-[100%] lg:w-[32%] mb-5">
                           <Field
                             name="sibling_same_inst_name1"
                             as={TextField}
@@ -3274,7 +3274,7 @@ const StudentRegistration = ({
                         </div>
                       </div>
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%] w-[100%] mb-5">
+                        <div className="lg:w-[32%] w-[100%] mb-5">
                           <Field
                             name="sibling_same_inst_admission_no2"
                             as={TextField}
@@ -3289,7 +3289,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%] mb-5">
+                        <div className="w-[100%] lg:w-[32%] mb-5">
                           <Field
                             name="sibling_same_inst_name2"
                             as={TextField}
@@ -3304,7 +3304,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        {/* <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                        {/* <div className="w-[100%] lg:w-[32%]  mb-5">
                           <Field
                             name="sibling_same_inst_class_section2"
                             as={TextField}
@@ -3400,7 +3400,7 @@ const StudentRegistration = ({
                     </div>
                     <div className=" w-[100%] ">
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%] w-[100%] mb-5">
+                        <div className="lg:w-[32%] w-[100%] mb-5">
                           <Field
                             name="sibling_other_inst_admission_no1"
                             as={TextField}
@@ -3415,7 +3415,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%] mb-5">
+                        <div className="w-[100%] lg:w-[32%] mb-5">
                           <Field
                             name="sibling_other_inst_name1"
                             as={TextField}
@@ -3430,7 +3430,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        {/* <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                        {/* <div className="w-[100%] lg:w-[32%]  mb-5">
                           <Field
                             name="sibling_other_inst_class_section1"
                             as={TextField}
@@ -3493,7 +3493,7 @@ const StudentRegistration = ({
                         </div>
                       </div>
                       <div className="flex  flex-wrap gap-4">
-                        <div className="lg:w-[32.5%] w-[100%] mb-5">
+                        <div className="lg:w-[32%] w-[100%] mb-5">
                           <Field
                             name="sibling_other_inst_admission_no2"
                             as={TextField}
@@ -3508,7 +3508,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        <div className="w-[100%] lg:w-[32.5%] mb-5">
+                        <div className="w-[100%] lg:w-[32%] mb-5">
                           <Field
                             name="sibling_other_inst_name2"
                             as={TextField}
@@ -3523,7 +3523,7 @@ const StudentRegistration = ({
                             }
                           />
                         </div>
-                        {/* <div className="w-[100%] lg:w-[32.5%]  mb-5">
+                        {/* <div className="w-[100%] lg:w-[32%]  mb-5">
                           <Field
                             name="sibling_other_inst_class_section2"
                             as={TextField}

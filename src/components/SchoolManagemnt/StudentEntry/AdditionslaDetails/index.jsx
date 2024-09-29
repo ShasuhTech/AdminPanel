@@ -312,7 +312,7 @@ const AdditionalDetails = ({ studenData }) => {
             <span className="font-black text-[18px] ">Birth Details</span>
             <div className=" border  p-6 rounded-2xl mt-3">
               <div className="flex  flex-wrap w-[100%] gap-4">
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="place_of_birth"
                     as={TextField}
@@ -325,7 +325,7 @@ const AdditionalDetails = ({ studenData }) => {
                     helperText={<ErrorMessage name="place_of_birth" />}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                 <CountrySelect
                       name="country"
                       label="Country"
@@ -353,7 +353,7 @@ const AdditionalDetails = ({ studenData }) => {
 
                 </div>
 
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="certificate_no"
                     as={TextField}
@@ -366,7 +366,7 @@ const AdditionalDetails = ({ studenData }) => {
                     helperText={<ErrorMessage name="certificate_no" />}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <DatePicker
                     label="Date Of Birth"
                     value={null}
@@ -386,7 +386,7 @@ const AdditionalDetails = ({ studenData }) => {
                     )}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="certificate_corp_no"
                     as={TextField}
@@ -408,7 +408,7 @@ const AdditionalDetails = ({ studenData }) => {
             </span>
             <div className=" border  p-6 rounded-2xl mt-3">
               <div className="flex  flex-wrap w-[100%] gap-4">
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="school_name"
                     as={TextField}
@@ -421,7 +421,7 @@ const AdditionalDetails = ({ studenData }) => {
                     helperText={<ErrorMessage name="school_name" />}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="tc_no"
                     as={TextField}
@@ -434,7 +434,7 @@ const AdditionalDetails = ({ studenData }) => {
                     helperText={<ErrorMessage name="tc_no" />}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="leavign_reason"
                     as={TextField}
@@ -447,7 +447,7 @@ const AdditionalDetails = ({ studenData }) => {
                     helperText={<ErrorMessage name="leavign_reason" />}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="syllabus"
                     as={TextField}
@@ -467,7 +467,7 @@ const AdditionalDetails = ({ studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="class"
                     as={TextField}
@@ -487,7 +487,7 @@ const AdditionalDetails = ({ studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <DatePicker
                     label="TC Birth"
                     value={null}
@@ -520,7 +520,7 @@ const AdditionalDetails = ({ studenData }) => {
                     helperText={<ErrorMessage name="previous_address" />}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Autocomplete
                     options={Config.cities}
                     getOptionLabel={(option) => option.name}
@@ -541,7 +541,7 @@ const AdditionalDetails = ({ studenData }) => {
                     onBlur={() => {}}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Autocomplete
                     options={Config.cities}
                     getOptionLabel={(option) => option.name}
@@ -562,7 +562,7 @@ const AdditionalDetails = ({ studenData }) => {
                     onBlur={() => {}}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Autocomplete
                     options={Config.cities}
                     getOptionLabel={(option) => option.name}
@@ -583,7 +583,7 @@ const AdditionalDetails = ({ studenData }) => {
                     onBlur={() => {}}
                   />
                 </div>
-                <div className="w-[32.5%]">
+                <div className="w-[32.2%]">
                   <Field
                     name="previous_pincode"
                     as={TextField}
@@ -607,7 +607,7 @@ const AdditionalDetails = ({ studenData }) => {
               <div className=" border  p-6 rounded-2xl mt-3">
                 <div className=" lg:flex w-[100%] gap-4">
                   <div className="flex  flex-wrap lg:w-[100%] w-[100%] gap-4">
-                    <div className="lg:lg:w-[32.5%] w-[100%]">
+                    <div className="lg:lg:w-[32.2%] w-[100%]">
                       <Field
                         name="school_name"
                         as={TextField}
@@ -641,7 +641,7 @@ const AdditionalDetails = ({ studenData }) => {
                         ))}
                       </Field>
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%]  w-[100%]">
                       <Field
                         name="Pre_address"
                         as={TextField}
@@ -654,14 +654,14 @@ const AdditionalDetails = ({ studenData }) => {
                         helperText={<ErrorMessage name="Pre_address" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%]  w-[100%]">
                       <CountrySelect
                         name="previous_country"
                         label="Country"
                         value={values.previous_country}
                       />
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%]  w-[100%]">
                       {
                         <Field
                           name="previous_state"
@@ -695,7 +695,7 @@ const AdditionalDetails = ({ studenData }) => {
                         </Field>
                       }
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%]  w-[100%]">
                       <Field
                         name="previous_city"
                         as={TextField}
@@ -718,7 +718,7 @@ const AdditionalDetails = ({ studenData }) => {
                       </Field>
                     </div>
 
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%]  w-[100%]">
                       <Field
                         name="previous_pincode"
                         as={TextField}
@@ -731,7 +731,7 @@ const AdditionalDetails = ({ studenData }) => {
                         helperText={<ErrorMessage name="previous_pincode" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%]  w-[100%]">
                       <Field
                         name="previous_leaving"
                         as={TextField}
@@ -744,7 +744,7 @@ const AdditionalDetails = ({ studenData }) => {
                         helperText={<ErrorMessage name="previous_leaving" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%]  w-[100%]">
                       <Field
                         name="tc_number"
                         as={TextField}
@@ -757,7 +757,7 @@ const AdditionalDetails = ({ studenData }) => {
                         helperText={<ErrorMessage name="tc_number" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%]  w-[100%]">
                       <DatePicker
                         label="TC Date"
                         value={null}
@@ -778,7 +778,7 @@ const AdditionalDetails = ({ studenData }) => {
                         )}
                       />
                     </div>
-                    {/* <div className="lg:lg:w-[32.5%] w-[100%]">
+                    {/* <div className="lg:lg:w-[32.2%] w-[100%]">
                           <Field
                             name="school_city_name"
                             as={TextField}
@@ -816,7 +816,7 @@ const AdditionalDetails = ({ studenData }) => {
                         ))}
                       </Field>
                     </div>
-                    <div className="lg:lg:w-[32.5%] w-[100%]">
+                    <div className="lg:lg:w-[32.2%] w-[100%]">
                       <Field
                         name="year_of_passing"
                         as={TextField}

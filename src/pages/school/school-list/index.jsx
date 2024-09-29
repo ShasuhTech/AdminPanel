@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import {
   Typography,
@@ -11,37 +12,34 @@ import {
   TableBody,
   Table,
   CircularProgress,
-  TablePagination,
   MenuItem,
   Select,
   Button,
   InputLabel,
 } from "@mui/material";
-import { addServices, adminCategory, serviceList } from "@/services/api";
 import QuickSearchToolbar from "@/components/SearchBar";
-import { toast } from "react-toastify";
-import { exportToCSV } from "@/components/Common";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
 import CustomButton from "@/components/CommonButton/CustomButton";
 import FormControl from "@mui/material/FormControl";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import AddIcon from "@mui/icons-material/Add";
-import AddServiceModal from "./AddSchool";
 import { useQuery } from "react-query";
 import { GetSchoolList } from "@/services/School";
-import { Label } from "mdi-material-ui";
+import AddSchoolModal from "@/components/School/addschool";
 
-const SchoolService = () => {
+const SchoolList = () => {
   const [searchText, setSearchText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
+  const [filterType, setFilterType] = useState(""); // To manage select filter type
+
   const {
     data: schoolData,
     status: schoolStatus,
     isLoading: schoolLoading,
     refetch: schoolRefetch,
   } = useQuery("schoolData", async () => {
-    const payload = {};
+    const payload = {}; // Payload could be updated with filters
     const res = await GetSchoolList(payload);
     return res?.data;
   });
@@ -55,7 +53,15 @@ const SchoolService = () => {
     schoolRefetch();
   }, [isModalOpen]);
 
- 
+  const handleFilterClick = () => {
+    // Implement filtering logic
+    schoolRefetch();
+  };
+
+  const handleSelectChange = (event) => {
+    setFilterType(event.target.value);
+    // Implement additional filtering logic here if needed
+  };
 
   return (
     <div className="">
@@ -74,7 +80,7 @@ const SchoolService = () => {
           className="shadow-lg"
         >
           <Grid className="lg:flex px-2 justify-between  w-[100%]">
-            <Grid className="lg:flex  text-center items-center">
+            <Grid className="lg:flex text-center items-center">
               <div>
                 <QuickSearchToolbar
                   onChange={(event) => setSearchText(event.target.value)}
@@ -82,7 +88,6 @@ const SchoolService = () => {
                   value={searchText}
                   rootSx={{ p: 0, pb: 0, marginLeft: 0, width: "300px" }}
                   variant="outlined"
-                  // onFilterClick={handleFilterClick}
                 />
               </div>
               <div>
@@ -95,8 +100,8 @@ const SchoolService = () => {
                     labelId="demo-select-small-label"
                     id="demo-select-small"
                     label="Select Type"
-                    // value={gender}
-                    // onChange={handleGenderChange}
+                    value={filterType}
+                    onChange={handleSelectChange}
                   >
                     <MenuItem value={1}>All</MenuItem>
                     <MenuItem value={2}>Active</MenuItem>
@@ -106,18 +111,18 @@ const SchoolService = () => {
                 </FormControl>
               </div>
               <button
-                // onClick={handleFilterClick}
+                onClick={handleFilterClick}
                 className="border p-2 rounded-lg"
               >
                 <FilterAltIcon style={{ fontSize: "35px" }} />
               </button>
             </Grid>
 
-            <Grid className="gap-2 lg:flex  items-center text-center">
+            <Grid className="gap-2 lg:flex items-center text-center">
               <CustomButton
                 onClick={() => {
                   setIsModalOpen(true);
-                  setSelectedItem();
+                  setSelectedItem(null); // Reset selected item for new entry
                 }}
               >
                 <AddIcon />
@@ -127,7 +132,7 @@ const SchoolService = () => {
               <img
                 src={"/images/Export CSV.svg"}
                 className="w-[103px] h-[40px] cursor-pointer mr-5"
-                // onClick={csvHandler}
+                // onClick={csvHandler} // Implement csvHandler logic
               />
             </Grid>
           </Grid>
@@ -140,11 +145,7 @@ const SchoolService = () => {
                   <StyledTableCell align="center">Id</StyledTableCell>
                   <StyledTableCell align="left">School Name</StyledTableCell>
                   <StyledTableCell align="left">School Address</StyledTableCell>
-                  {/* <StyledTableCell align="center">
-                    School Aff Code
-                  </StyledTableCell> */}
                   <StyledTableCell align="left">School Website</StyledTableCell>
-                  {/* <StyledTableCell align="center">Designation</StyledTableCell> */}
                   <StyledTableCell align="left">
                     Contact Person Name
                   </StyledTableCell>
@@ -153,12 +154,7 @@ const SchoolService = () => {
                   <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
-              <TableBody
-                style={{
-                  height: "auto",
-                  position: "relative",
-                }}
-              >
+              <TableBody style={{ height: "auto", position: "relative" }}>
                 {schoolLoading ? (
                   <TableRow>
                     <TableCell colSpan={12}>
@@ -203,29 +199,19 @@ const SchoolService = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          {/* <TablePagination
-            component="div"
-            rowsPerPageOptions={[]}
-            // count={pagination?.total || 0}
-            rowsPerPage={15}
-            // page={pagination?.currentPage ? pagination?.currentPage - 1 : 0}
-            // onPageChange={handleChangePage}
-          /> */}
         </Paper>
-        <AddServiceModal
-          open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          data={selectedItem}
-        />
-      </div>{" "}
+      </div>
+      <AddSchoolModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        data={selectedItem}
+      />
     </div>
   );
 };
 
-export default SchoolService;
-
 const Row = (props) => {
-  const { row, salonDetails, setSalonDetails, editHandler } = props;
+  const { row, editHandler } = props;
   const [open, setOpen] = useState(false);
 
   return (
@@ -256,16 +242,6 @@ const Row = (props) => {
               row?.address?.city}
           </Typography>
         </StyledTableCell>
-        {/* <StyledTableCell
-          align="left"
-          style={{
-            minWidth: "150px",
-            maxWidth: "200px",
-            wordWrap: "break-word",
-          }}
-        >
-          <Typography>{row?.affiliation_code}</Typography>
-        </StyledTableCell> */}
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
           <Typography>
             <a
@@ -278,9 +254,6 @@ const Row = (props) => {
             </a>
           </Typography>
         </StyledTableCell>
-        {/* <StyledTableCell align="left" style={{ minWidth: "200px" }}>
-          <Typography>{row?.designation}</Typography>
-        </StyledTableCell> */}
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
           <Typography>{row?.contact_person_name}</Typography>
         </StyledTableCell>
@@ -310,3 +283,5 @@ const Row = (props) => {
     </React.Fragment>
   );
 };
+
+export default SchoolList;

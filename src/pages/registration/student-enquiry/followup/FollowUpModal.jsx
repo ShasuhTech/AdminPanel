@@ -124,8 +124,6 @@ const FollowUpModal = ({ open, handleClose, data }) => {
   };
 
   const validationSchema = Yup.object({
-    followUpdate: Yup.date().required("Required"),
-    nextfollowUpdate: Yup.date().required("Required"),
     modeOfFollowup: Yup.string().required("Required"),
     followUp: Yup.string().required("Required"),
     remarks: Yup.string().required("Required"),
@@ -228,14 +226,12 @@ const FollowUpModal = ({ open, handleClose, data }) => {
         const resp = await AddFollowup(payload);
         if (resp?.success) {
           toast.success("FollowUp Added successfully");
-          actions.resetForm();
           studentRefetch();
         }
       } else {
         const resp = await updateFollowup(payload);
         if (resp?.success) {
           toast.success("FollowUp Updated successfully");
-          actions.resetForm();
           studentRefetch();
         }
       }
@@ -281,13 +277,13 @@ const FollowUpModal = ({ open, handleClose, data }) => {
       open={open}
       handleClose={handleClose}
       width={"80%"}
-      height={"900px"}
+      height={"95%"}
       style={{ overflow: "scroll" }}
     >
       <Typography variant="h5">FollowUp Details</Typography>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
         onSubmit={handleSubmit}
         enableReinitialize
       >

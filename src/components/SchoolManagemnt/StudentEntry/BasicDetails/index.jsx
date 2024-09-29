@@ -372,7 +372,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       helperText={<ErrorMessage name="first_name" />}
                     />
                   </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="middle_name"
                       as={TextField}
@@ -386,7 +386,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       helperText={<ErrorMessage name="middle_name" />}
                     />
                   </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="last_name"
                       as={TextField}
@@ -402,7 +402,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     />
                   </div>
 
-                  <div className="lg:w-[32.4%]  w-[100%]">
+                  <div className="lg:w-[32.2%]  w-[100%]">
                     <Field
                       name="class"
                       as={TextField}
@@ -423,7 +423,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       ))}
                     </Field>
                   </div>
-                  <div className="lg:w-[32.4%]  w-[100%]">
+                  <div className="lg:w-[32.2%]  w-[100%]">
                     <Field
                       name="section"
                       as={TextField}
@@ -468,7 +468,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     </div>
                   )}
 
-                  <div className="lg:w-[32.5%]  w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="admission_no"
                       as={TextField}
@@ -489,7 +489,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       helperText={touched.admission_no && errors.admission_no}
                     />
                   </div>
-                  {/* <div className="lg:w-[32.5%]  w-[100%]">
+                  {/* <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="sibling_adm_no"
                       as={TextField}
@@ -539,7 +539,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       ))}
                     </Field>
                   </div>
-                  <div className="lg:w-[32.5%]  w-[100%]">
+                  <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="roll_no"
                       as={TextField}
@@ -556,7 +556,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
               </div>
 
               <div className="  flex-wrap flex mt-5  gap-4">
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="fee_group"
                     as={TextField}
@@ -577,7 +577,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="fee_apply_form"
                     as={TextField}
@@ -598,7 +598,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <DatePicker
                     label="Date Of Birth"
                     value={null}
@@ -619,7 +619,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     )}
                   />
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <DatePicker
                     label="Date Of Join"
                     value={null}
@@ -640,7 +640,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     )}
                   />
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <DatePicker
                     label="Date Of Admission"
                     value={null}
@@ -663,7 +663,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                   />
                 </div>
 
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="gender"
                     as={TextField}
@@ -684,7 +684,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                {/* <div className="lg:w-[32.5%]  w-[100%]">
+                {/* <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="father_name"
                     as={TextField}
@@ -698,7 +698,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                   />
                 </div>
 
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="mother_name"
                     as={TextField}
@@ -712,7 +712,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                   />
                 </div> */}
 
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="emergency_no"
                     as={TextField}
@@ -733,7 +733,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     helperText={<ErrorMessage name="emergency_no" />}
                   />
                 </div>
-                {/* <div className="lg:w-[32.5%]  w-[100%]">
+                {/* <div className="lg:w-[32.2%] w-[100%]">
                   <Autocomplete
                     options={cities}
                     getOptionLabel={(option) => option.name}
@@ -754,7 +754,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     onBlur={() => {}}
                   />
                 </div> */}
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="house"
                     as={TextField}
@@ -775,7 +775,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="social_category"
                     as={TextField}
@@ -797,7 +797,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                   </Field>
                 </div>
 
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="religion"
                     as={TextField}
@@ -818,7 +818,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="caste"
                     as={TextField}
@@ -839,7 +839,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="mother_tongue"
                     as={TextField}
@@ -860,7 +860,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="concession_type"
                     as={TextField}
@@ -881,7 +881,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="nationality"
                     as={TextField}
@@ -902,7 +902,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="blood_group"
                     as={TextField}
@@ -923,7 +923,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="boarding_category"
                     as={TextField}
@@ -944,7 +944,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="board_reg_no"
                     as={TextField}
@@ -957,7 +957,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     helperText={<ErrorMessage name="board_reg_no" />}
                   />
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="board"
                     as={TextField}
@@ -978,7 +978,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="board_roll_no"
                     as={TextField}
@@ -991,7 +991,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     helperText={<ErrorMessage name="board_roll_no" />}
                   />
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="email_id"
                     as={TextField}
@@ -1004,7 +1004,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     helperText={<ErrorMessage name="email_id" />}
                   />
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="school_bus"
                     as={TextField}
@@ -1025,7 +1025,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="route_stop_name"
                     as={TextField}
@@ -1038,7 +1038,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     helperText={<ErrorMessage name="route_stop_name" />}
                   />
                 </div>
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="adhar_card_no"
                     as={TextField}
@@ -1051,7 +1051,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     helperText={<ErrorMessage name="adhar_card_no" />}
                   />
                 </div>
-                {/* <div className="lg:w-[32.5%]  w-[100%]">
+                {/* <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="sms_no"
                     as={TextField}
@@ -1064,7 +1064,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     helperText={<ErrorMessage name="sms_no" />}
                   />
                 </div> */}
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="payment_mode"
                     as={TextField}
@@ -1085,7 +1085,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     ))}
                   </Field>
                 </div>
-                {/* <div className="lg:w-[32.5%]  w-[100%]">
+                {/* <div className="lg:w-[32.2%] w-[100%]">
                   <Autocomplete
                     options={cities}
                     getOptionLabel={(option) => option.name}
@@ -1106,7 +1106,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     onBlur={() => {}}
                   />
                 </div> */}
-                <div className="lg:w-[32.5%]  w-[100%]">
+                <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="remark"
                     as={TextField}
@@ -1121,7 +1121,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     helperText={<ErrorMessage name="remark" />}
                   />
                 </div>
-                {/* <div className="lg:w-[32.5%]  w-[100%]">
+                {/* <div className="lg:w-[32.2%] w-[100%]">
                   <Field
                     name="fee_remark"
                     as={TextField}
@@ -1159,14 +1159,14 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     />
                   </div>
                   <div className="flex  flex-wrap gap-4">
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <CountrySelect
                         name="present_country"
                         label="Country"
                         value={values.present_country}
                       />
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       {
                         <Field
                           name="present_state"
@@ -1200,7 +1200,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                         </Field>
                       }
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="present_city"
                         as={TextField}
@@ -1223,7 +1223,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       </Field>
                     </div>
 
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="present_pincode"
                         as={TextField}
@@ -1236,7 +1236,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                         helperText={<ErrorMessage name="present_pincode" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="present_locality"
                         as={TextField}
@@ -1249,7 +1249,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                         helperText={<ErrorMessage name="present_locality" />}
                       />
                     </div>
-                    {/* <div className="lg:w-[32.5%]  w-[100%]">
+                    {/* <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="present_telephone"
                             as={TextField}
@@ -1307,7 +1307,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                     />
                   </div>
                   <div className="flex  flex-wrap gap-4">
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <CountrySelect
                         name="permanent_country"
                         label="Country"
@@ -1315,7 +1315,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       />
                     </div>
 
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="permanent_state"
                         as={TextField}
@@ -1341,7 +1341,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                           ))}
                       </Field>
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="permanent_city"
                         as={TextField}
@@ -1367,7 +1367,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                           ))}
                       </Field>
                     </div>
-                    {/* <div className="lg:w-[32.5%]  w-[100%]">
+                    {/* <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="permanent_country"
                       as={TextField}
@@ -1385,7 +1385,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       helperText={<ErrorMessage name="permanent_country" />}
                     />
                   </div> */}
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="permanent_pincode"
                         as={TextField}
@@ -1403,7 +1403,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                         helperText={<ErrorMessage name="permanent_pincode" />}
                       />
                     </div>
-                    <div className="lg:w-[32.5%]  w-[100%]">
+                    <div className="lg:w-[32.2%] w-[100%]">
                       <Field
                         name="permanent_locality"
                         as={TextField}
@@ -1421,7 +1421,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                         helperText={<ErrorMessage name="permanent_locality" />}
                       />
                     </div>
-                    {/* <div className="lg:w-[32.5%]  w-[100%]">
+                    {/* <div className="lg:w-[32.2%] w-[100%]">
                           <Field
                             name="permanent_telephone"
                             as={TextField}
@@ -1466,7 +1466,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       />
                     </div>
                     <div className="flex  flex-wrap gap-4">
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         {
                           <Autocomplete
                             options={[]}
@@ -1499,7 +1499,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                           />
                         }
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         {
                           <Field
                             name="present_state"
@@ -1533,7 +1533,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                           </Field>
                         }
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="present_city"
                           as={TextField}
@@ -1556,7 +1556,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                         </Field>
                       </div>
 
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="present_pincode"
                           as={TextField}
@@ -1569,7 +1569,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                           helperText={<ErrorMessage name="present_pincode" />}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="present_locality"
                           as={TextField}
@@ -1582,7 +1582,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                           helperText={<ErrorMessage name="present_locality" />}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="present_telephone"
                           as={TextField}
@@ -1635,7 +1635,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       />
                     </div>
                     <div className="flex  flex-wrap gap-4">
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         {
                           <Autocomplete
                             options={[]}
@@ -1670,7 +1670,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                         }
                       </div>
 
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="permanent_state"
                           as={TextField}
@@ -1696,7 +1696,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                             ))}
                         </Field>
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="permanent_city"
                           as={TextField}
@@ -1722,7 +1722,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                             ))}
                         </Field>
                       </div>
-                      {/* <div className="lg:w-[32.5%]  w-[100%]">
+                      {/* <div className="lg:w-[32.2%] w-[100%]">
                     <Field
                       name="permanent_country"
                       as={TextField}
@@ -1740,7 +1740,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                       helperText={<ErrorMessage name="permanent_country" />}
                     />
                   </div> */}
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="permanent_pincode"
                           as={TextField}
@@ -1758,7 +1758,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                           helperText={<ErrorMessage name="permanent_pincode" />}
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="permanent_locality"
                           as={TextField}
@@ -1778,7 +1778,7 @@ const BasicDetails = ({ setSlectedTab, studenData }) => {
                           }
                         />
                       </div>
-                      <div className="lg:w-[32.5%]  w-[100%]">
+                      <div className="lg:w-[32.2%] w-[100%]">
                         <Field
                           name="permanent_telephone"
                           as={TextField}

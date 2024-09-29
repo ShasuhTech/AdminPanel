@@ -526,7 +526,7 @@ const PayInformation = ({ data, setSlectedTab, staffRefetch }) => {
           <Form>
             <Box className="flex w-[100%] flex-wrap mt-7">
               {fields.map((field) => (
-                <Box key={field.id} className="lg:w-[32.5%]  mr-3 w-[100%]">
+                <Box key={field.id} className="lg:w-[32.2%]  mr-3 w-[100%]">
                   <Field
                     name={field.name}
                     label={field.label}

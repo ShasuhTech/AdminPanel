@@ -10,37 +10,20 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useRouter } from "next/router";
 import HomeIcon from "@mui/icons-material/Home";
-import NearMeOutlined from "@mui/icons-material/NearMeOutlined";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
-import SalonSvg from "@/components/SvgIcons/SalonSvg";
-import ServicesSvg from "@/components/SvgIcons/ServicesSvg";
 import { Collapse, useMediaQuery } from "@mui/material";
 import { eraseCookie } from "@/utilities/cookies";
 import { Cookies } from "@/config/cookies";
-import LogoutIcon from "@mui/icons-material/Logout";
-import TableRowsIcon from "@mui/icons-material/TableRows";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
-import ServicesIcon from "@/components/SvgIcons/ServiceSvg";
-import ReportIcon from "@/components/SvgIcons/ReportSvg";
-import ActiveList from "@mui/icons-material/FactCheckOutlined";
-import InActiveList from "@mui/icons-material/DoNotDisturbOnOutlined";
-import Onboarding from "@mui/icons-material/DirectionsRunOutlined";
-import RequestChange from "@mui/icons-material/ManageHistoryOutlined";
-import OfferPending from "@mui/icons-material/Inventory2Outlined";
-import ComboPending from "@mui/icons-material/PendingActionsOutlined";
 import ServiceList from "@mui/icons-material/ListAltOutlined";
-import Booking from "@mui/icons-material/BookOnlineOutlined";
-import ProfileDetails from "@mui/icons-material/BadgeOutlined";
-import Rating from "@mui/icons-material/ReviewsOutlined";
-import RatingSalon from "@mui/icons-material/StarsOutlined";
 import SchoolIcon from "@mui/icons-material/School";
-// import PendingApproval from "@mui/icons-material/PendingActionsOutlined";
-import PendingApproval from "@mui/icons-material/WorkHistoryOutlined";
-// import { useMediaQuery } from "@material-ui/core";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PermDataSettingIcon from '@mui/icons-material/PermDataSetting';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import PersonAddAltSharpIcon from '@mui/icons-material/PersonAddAltSharp';
+import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
+
 
 const drawerWidth = 250;
 
@@ -265,7 +248,7 @@ const DrawerPath = ({
             <DrawerList
               path={"/"}
               text={"Dashboards"}
-              Icon={HomeIcon}
+              Icon={DashboardIcon}
               open={open}
               title={"Dashboards"}
               ind={1}
@@ -273,7 +256,7 @@ const DrawerPath = ({
 
             <DrawerList path={""} text={"School"} Icon={SchoolIcon} open={open}>
               <DrawerList
-                path={"/school"}
+                path={"/school/school-list"}
                 text={"School List"}
                 Icon={ServiceList}
                 open={open}
@@ -320,7 +303,7 @@ const DrawerPath = ({
             <DrawerList
               path={"/"}
               text={"Dashboards"}
-              Icon={HomeIcon}
+               Icon={DashboardIcon}
               open={open}
               title={"Dashboards"}
               ind={1}
@@ -328,7 +311,7 @@ const DrawerPath = ({
             <DrawerList
               path={"/master"}
               text={"Master"}
-              Icon={HomeIcon}
+              Icon={PermDataSettingIcon}
               open={open}
               title={"Master"}
               ind={1}
@@ -336,7 +319,7 @@ const DrawerPath = ({
             {/* School */}
             <DrawerList path={""} text={"School"} Icon={SchoolIcon} open={open}>
               <DrawerList
-                path={"/school"}
+               path={"/school/school-list"}
                 text={"School List"}
                 Icon={ServiceList}
                 open={open}
@@ -354,7 +337,7 @@ const DrawerPath = ({
             <DrawerList
               path={""}
               text={"Registration"}
-              Icon={SchoolIcon}
+              Icon={AppRegistrationIcon}
               open={open}
             >
               <DrawerList
@@ -433,7 +416,7 @@ const DrawerPath = ({
             <DrawerList
               path={""}
               text={"Student"}
-              Icon={SchoolIcon}
+              Icon={PersonAddAltSharpIcon}
               open={open}
             >
               <DrawerList
@@ -511,7 +494,7 @@ const DrawerPath = ({
             <DrawerList
               path={""}
               text={"Attendance"}
-              Icon={SchoolIcon}
+              Icon={AssignmentIcon}
               open={open}
             >
               <DrawerList
@@ -553,7 +536,7 @@ const DrawerPath = ({
               />
             </DrawerList>
             {/* Staff */}
-            <DrawerList path={""} text={"Staff"} Icon={SchoolIcon} open={open}>
+            <DrawerList path={""} text={"Staff"} Icon={ManageAccountsSharpIcon} open={open}>
               <DrawerList
                 path={"/staff/staff-list"}
                 text={"Staff List"}
