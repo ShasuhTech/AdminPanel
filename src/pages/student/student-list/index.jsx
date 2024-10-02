@@ -398,7 +398,6 @@ const Row = (props) => {
     handleOpenDropout,
     handleOpenAuditLog,
   } = props;
-  const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -414,11 +413,8 @@ const Row = (props) => {
         sx={{
           "& > *": {
             borderBottom: "unset",
-            background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
-            overflow: "scroll",
-            cursor: "pointer",
           },
         }}
 
@@ -431,6 +427,8 @@ const Row = (props) => {
             });
           }}
           align="center"
+          sx={{cursor:'pointer'}}
+
         >
           <Typography>{index + 1}</Typography>
         </StyledTableCell>
@@ -443,6 +441,8 @@ const Row = (props) => {
           }}
           align="left"
           style={{ minWidth: "200px" }}
+          sx={{cursor:'pointer'}}
+
         >
           <Typography>
             {(
@@ -463,6 +463,8 @@ const Row = (props) => {
           }}
           align="left"
           style={{ minWidth: "150px" }}
+          sx={{cursor:'pointer'}}
+
         >
           <Typography>{row?.admission_number}</Typography>
         </StyledTableCell>

@@ -3636,8 +3636,8 @@ const Row = (props) => {
             background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
-            overflow: "scroll",
-            cursor: "pointer",
+            // overflow: "scroll",
+            // cursor: "pointer",
           },
         }}
       >
@@ -3763,8 +3763,8 @@ const RowPreBoard = (props) => {
             background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
-            overflow: "scroll",
-            cursor: "pointer",
+            // overflow: "scroll",
+            // cursor: "pointer",
           },
         }}
       >
@@ -3833,8 +3833,8 @@ const RowBoard = (props) => {
             background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
-            overflow: "scroll",
-            cursor: "pointer",
+            // overflow: "scroll",
+            // cursor: "pointer",
           },
         }}
       >
@@ -3894,8 +3894,8 @@ const Row1 = ({ row, index, handleFileChange }) => {
             background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
-            overflow: "scroll",
-            cursor: "pointer",
+            // overflow: "scroll",
+            // cursor: "pointer",
           },
         }}
       >

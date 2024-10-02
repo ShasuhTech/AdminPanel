@@ -273,8 +273,8 @@ const Row = (props) => {
             background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
-            overflow: "scroll",
-            cursor: "pointer",
+            // overflow: "scroll",
+            // cursor: "pointer",
           },
         }}
       >
