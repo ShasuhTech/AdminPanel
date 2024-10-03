@@ -7,7 +7,7 @@ import SchoolBasicInfo from "@/components/School/BasicInfo";
 import SchoolAllotments from "@/components/School/Allotments";
 import SchoolPayemntType from "@/components/School/PaymentType";
 import SmsIntegration from "@/components/School/SMSIntegration";
-import SchoolLogo from "@/components/School/SchoolLogo";
+// import SchoolLogo from "@/components/School/SchoolLogo";
 
 const AddSchoolModal = ({ open, onClose, data }) => {
   const [selectedTab, setSlectedTab] = useState(1);
@@ -40,7 +40,7 @@ const AddSchoolModal = ({ open, onClose, data }) => {
         {selectedTab === 2 && <SchoolAllotments setSlectedTab={setSlectedTab} data={data} />}
         {selectedTab === 3 && <SchoolPayemntType setSlectedTab={setSlectedTab} />}
         {/* {selectedTab === 4 && <SmsIntegration setSlectedTab={setSlectedTab} />} */}
-        {selectedTab === 5 && <SchoolLogo setSlectedTab={setSlectedTab} />}
+        {/* {selectedTab === 5 && <SchoolLogo setSlectedTab={setSlectedTab} />} */}
       </>
      
     </SimpleModal>
