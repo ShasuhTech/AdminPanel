@@ -29,8 +29,8 @@ const CreateBank = () => {
     data: classData,
     isLoading: classLoading,
     refetch: classRefetch,
-  } = useQuery("gethouseList", async () => {
-    const payload = { type: "Bank" };
+  } = useQuery("getFeeGroupList", async () => {
+    const payload = { type: "FeeGroup" };
     const res = await GetConfigsListFee(payload);
     return res?.data;
   });
@@ -71,11 +71,18 @@ const CreateBank = () => {
               width="170px"
               py={2}
             >
-              Add Bank
+              Add Fee Group
             </CustomButton>
           </div>
 
-          <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10,justifyContent:'space-between' }}>
+          <Paper
+            sx={{
+              width: "100%",
+              overflow: "scroll",
+              boxShadow: 10,
+              justifyContent: "space-between",
+            }}
+          >
             <TableContainer>
               <Table aria-label="house table">
                 <TableHead>
@@ -123,9 +130,17 @@ const Row = ({ index, row, handleEdit, handleDelete }) => (
   <TableRow
     sx={{ "& > *": { borderBottom: "unset", fontWeight: 600, color: "#000" } }}
   >
-    <StyledTableCell width={'150px'}  align="center">{index + 1}</StyledTableCell>
-    <StyledTableCell width={'700px'} align="left">{row?.name}</StyledTableCell>
-    <StyledTableCell width={'200px'} align="center" sx={{ display: "flex", gap: 1,alignItems:'center' }}>
+    <StyledTableCell width={"150px"} align="center">
+      {index + 1}
+    </StyledTableCell>
+    <StyledTableCell width={"700px"} align="left">
+      {row?.name}
+    </StyledTableCell>
+    <StyledTableCell
+      width={"200px"}
+      align="center"
+      sx={{ display: "flex", gap: 1, alignItems: "center" }}
+    >
       <CustomButton
         onClick={() => handleEdit(row)}
         sx={{ marginRight: "10px" }}

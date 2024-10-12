@@ -386,3 +386,64 @@ export const dynamicDataSetting = async (payload) => {
   const response = await axiosInstance.post("/dynamic-data",payload);
   return response?.data;
 };
+export const AddConfigsFee = async (payload) => {
+  const response = await axiosInstance.post("/school-config", payload);
+  return response?.data;
+};
+export const updateConfigsFee = async (payload) => {
+  const response = await axiosInstance.put("/school-config", payload);
+  return response?.data;
+};
+export const GetConfigsListFee = async (payload) => {
+  const response = await axiosInstance.post("/school-configs",payload);
+  return response?.data;
+};
+export const GetConfigsIdFee = async (payload) => {
+  const response = await axiosInstance.get(`/school-config/${payload}`);
+  return response?.data;
+};
+export const DeleteConfigsIdFee = async (payload) => {
+  const response = await axiosInstance.delete(`/school-config/${payload}`);
+  return response?.data;
+};
+export const AddConfigsFeeAccount = async (payload) => {
+  const response = await axiosInstance.post("/fee-account", payload);
+  return response?.data;
+};
+export const updateConfigsFeeAccount = async (payload) => {
+  const response = await axiosInstance.put("/fee-account", payload);
+  return response?.data;
+};
+export const GetConfigsListFeeAccount = async () => {
+  const response = await axiosInstance.get("/fee-account");
+  return response?.data;
+};
+export const GetConfigsIdFeeAccount = async (payload) => {
+  const response = await axiosInstance.get(`/fee-account/${payload}`);
+  return response?.data;
+};
+export const DeleteConfigsIdFeeAccount = async (payload) => {
+  const response = await axiosInstance.delete(`/fee-account/${payload}`);
+  return response?.data;
+};
+
+export const AddConfigsFeeGrpMaster = async (payload) => {
+  const response = await axiosInstance.post("/fee-group", payload);
+  return response?.data;
+};
+export const updateConfigsFeeGrpMaster = async (payload) => {
+  const response = await axiosInstance.put("/fee-group", payload);
+  return response?.data;
+};
+export const GetConfigsListFeeGrpMaster = async () => {
+  const response = await axiosInstance.get("/fee-group");
+  return response?.data;
+};
+export const GetConfigsIdFeeGrpMaster = async (payload) => {
+  const response = await axiosInstance.get(`/fee-group/${payload}`);
+  return response?.data;
+};
+export const DeleteConfigsIdFeeGrpMaster = async (payload) => {
+  const response = await axiosInstance.delete(`/fee-group/${payload}`);
+  return response?.data;
+};

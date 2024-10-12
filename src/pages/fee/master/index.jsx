@@ -11,6 +11,10 @@ const data = [
     value: "fee-stream",
   },
   {
+    name: "Fee Group",
+    value: "fee-group",
+  },
+  {
     name: "Fee Group Master",
     value: "fee-group-master",
   },
@@ -118,41 +122,13 @@ const data = [
     name: "Cheque Bounce Details",
     value: "cheque-bounce-details",
   },
-  {
-    name: "",
-    value: "",
-  },
-  {
-    name: "",
-    value: "",
-  },
-  {
-    name: "",
-    value: "",
-  },
-  {
-    name: "",
-    value: "",
-  },
-  {
-    name: "",
-    value: "",
-  },
-  {
-    name: "",
-    value: "",
-  },
-  {
-    name: "",
-    value: "",
-  },
   
 ];
 
 const Configs = () => {
 const router = useRouter()
   const cardClick =(path)=>{
-    router.push(`/staff/${path}`)
+    router.push(`/fee/${path}`)
   }
 
   return (

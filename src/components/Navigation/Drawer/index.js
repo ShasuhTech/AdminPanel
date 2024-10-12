@@ -552,6 +552,16 @@ const DrawerPath = ({
                 title={"Staff >> Master"}
               />
             </DrawerList>
+            <DrawerList path={""} text={"Fee"} Icon={ManageAccountsSharpIcon} open={open}>
+             
+              <DrawerList
+                path={"/fee/master"}
+                text={"Master"}
+                Icon={ServiceList}
+                open={open}
+                title={"Fee >> Master"}
+              />
+            </DrawerList>
           </List>
           <Divider />
         </Drawer>

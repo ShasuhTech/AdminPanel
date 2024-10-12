@@ -2,9 +2,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 const defaultMeta = {
-  title: 'Salon Lounge',
-  site_name: 'Salon_Lounge Website',
-  description: 'Salon_Lounge Website Description',
+  title: 'School Express',
+  site_name: 'School_express Website',
+  description: 'School_express Website Description',
   url: process.env.NEXT_PUBLIC_WEB_URL || 'https://example.com', // Provide a default value for the URL
   image:
     'https://blackopal-images.s3.ap-south-1.amazonaws.com/property/images/justhomzjpg.jpg',
