@@ -24,7 +24,7 @@ import FormControl from "@mui/material/FormControl";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import AddIcon from "@mui/icons-material/Add";
 import { GetSchoolList } from "@/services/School";
-import AddSchoolModal from "@/components/School/AddSchool";
+// import AddSchoolModal from "@/components/School/AddSchool";
 import { useQuery } from "react-query";
 
 const SchoolList = () => {
