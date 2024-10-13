@@ -447,3 +447,24 @@ export const DeleteConfigsIdFeeGrpMaster = async (payload) => {
   const response = await axiosInstance.delete(`/fee-group/${payload}`);
   return response?.data;
 };
+
+export const AddConfigsPettyHead = async (payload) => {
+  const response = await axiosInstance.post("/petty-head", payload);
+  return response?.data;
+};
+export const updateConfigsPettyHead = async (payload) => {
+  const response = await axiosInstance.put("/petty-head", payload);
+  return response?.data;
+};
+export const GetConfigsListPettyHead = async () => {
+  const response = await axiosInstance.get("/petty-head");
+  return response?.data;
+};
+export const GetConfigsIdPettyHead = async (payload) => {
+  const response = await axiosInstance.get(`/petty-head/${payload}`);
+  return response?.data;
+};
+export const DeleteConfigsIdPettyHead = async (payload) => {
+  const response = await axiosInstance.delete(`/petty-head/${payload}`);
+  return response?.data;
+};
