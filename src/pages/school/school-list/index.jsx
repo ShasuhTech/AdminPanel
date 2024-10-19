@@ -26,6 +26,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { GetSchoolList } from "@/services/School";
 // import AddSchoolModal from "@/components/School/AddSchool";
 import { useQuery } from "react-query";
+import AddSchoolModal from "@/components/School/AddSchool";
 
 const SchoolList = () => {
   const [searchText, setSearchText] = useState("");
