@@ -264,8 +264,8 @@ const Home = () => {
             <CustomButton
               onClick={() =>
                 router.push({
-                  pathname: "/school",
-                  query: { title: "Report" },
+                  pathname: "/school/school-list",
+                  query: { title: "School List" },
                 })
               }
             >

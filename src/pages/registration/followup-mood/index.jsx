@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -190,7 +191,7 @@ const Row = (props) => {
             // background: open ? "#E5EFFC" : "",
             fontWeight: "600",
             color: "#000",
-            overflow: "scroll",
+            // overflow: "scroll",
             cursor: "pointer",
           },
         }}

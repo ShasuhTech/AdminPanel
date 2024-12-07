@@ -291,7 +291,7 @@ const Row = (props) => {
             borderBottom: "unset",
             fontWeight: "600",
             color: "#000",
-            overflow: "scroll",
+            // overflow: "scroll",
             cursor: "pointer",
           },
         }}
