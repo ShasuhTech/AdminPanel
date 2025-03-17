@@ -1,12 +1,19 @@
-
-
 import axiosInstance from "@/utilities/configureAxios";
 import axios from "axios";
 import { Pyramid } from "mdi-material-ui";
 
-
 export const GetSchoolList = async (payload) => {
-  const response = await axiosInstance.get("/school");
+  const response = await axiosInstance.get("/school", {
+    params: payload,
+  });
+  return response?.data;
+};
+export const GetSchoolListById = async (payload) => {
+  const response = await axiosInstance.get(`/school/${payload}`);
+  return response?.data;
+};
+export const GetSchoolListDelete = async (payload) => {
+  const response = await axiosInstance.delete(`/school/${payload}`);
   return response?.data;
 };
 

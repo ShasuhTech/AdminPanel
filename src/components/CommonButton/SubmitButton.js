@@ -4,7 +4,7 @@ import React from "react";
 const SubmitButton = ({children}) => {
   return (
     <Button
-      className="border w-[120px] py-3"
+      className="border w-[120px] py-2.5"
       sx={{ py: 1, bgcolor: "rgb(59 130 246 )", fontWeight: "bold" }}
       type="submit"
       variant="contained"

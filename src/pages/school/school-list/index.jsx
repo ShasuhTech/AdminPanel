@@ -16,6 +16,13 @@ import {
   Select,
   Button,
   InputLabel,
+  Pagination,
+  TablePagination,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import QuickSearchToolbar from "@/components/SearchBar";
 import { StyledTableCell } from "@/styles/TableStyle/indx";
@@ -23,31 +30,74 @@ import CustomButton from "@/components/CommonButton/CustomButton";
 import FormControl from "@mui/material/FormControl";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import AddIcon from "@mui/icons-material/Add";
-import { GetSchoolList } from "@/services/School";
-// import AddSchoolModal from "@/components/School/AddSchool";
+import { GetSchoolList, GetSchoolListDelete } from "@/services/School";
 import { useQuery } from "react-query";
 import AddSchoolModal from "@/components/School/AddSchool";
+import { Edit } from "@mui/icons-material";
+import { TrashCan } from "mdi-material-ui";
+import { SlLogin } from "react-icons/sl";
+import { MdLogin } from "react-icons/md";
+import { TbFileDownload } from "react-icons/tb";
+import { Tooltip } from "antd";
+import { toast } from "react-toastify";
+
+// Style for truncated text with ellipsis
+const truncatedTextStyle = {
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "150px", // Adjust based on your needs
+  display: "block",
+};
+const pageSize = 10; // Items per page
 
 const SchoolList = () => {
   const [searchText, setSearchText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [filterType, setFilterType] = useState(""); // To manage select filter type
+  const [currentPage, setCurrentPage] = useState(1);
+  // New state for delete confirmation
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const {
     data: schoolData,
     status: schoolStatus,
     isLoading: schoolLoading,
     refetch: schoolRefetch,
-  } = useQuery("schoolData", async () => {
-    const payload = {}; // Payload could be updated with filters
+  } = useQuery(["schoolData", currentPage], async () => {
+    const payload = { page: currentPage, limit: pageSize }; // Adjust payload if necessary
     const res = await GetSchoolList(payload);
-    return res?.data;
+    return res;
   });
-
+  console.log(schoolData, "=schoolDataschoolData");
   const editHandler = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
+  };
+
+  // Modified to show confirmation dialog first
+  const handleDeleteClick = (id) => {
+    setItemToDelete(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  // Actual delete operation
+  const confirmDelete = async () => {
+    try {
+      const resp = await GetSchoolListDelete(itemToDelete);
+      console.log(resp, "=sdffew");
+      if (resp?.success) {
+        toast.success("Successfully Deleted");
+        schoolRefetch();
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error Submission.");
+    } finally {
+      setDeleteConfirmOpen(false);
+      setItemToDelete(null);
+    }
   };
 
   useEffect(() => {
@@ -129,17 +179,29 @@ const SchoolList = () => {
                 <AddIcon />
                 Add School
               </CustomButton>
-
-              <img
-                src={"/images/Export CSV.svg"}
-                className="w-[103px] h-[40px] cursor-pointer mr-5"
-                // onClick={csvHandler} // Implement csvHandler logic
-              />
             </Grid>
           </Grid>
         </div>
-        <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
-          <TableContainer sx={{ overflowX: "auto" }}>
+        <Paper
+          sx={{
+            width: "100%",
+            overflow: "hidden",
+            boxShadow: 10,
+            position: "relative",
+          }}
+        >
+          <TableContainer
+            sx={{
+              overflowX: "auto",
+              "&::-webkit-scrollbar": {
+                height: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#888",
+                borderRadius: "4px",
+              },
+            }}
+          >
             <Table aria-label="collapsible table">
               <TableHead>
                 <TableRow style={{ fontWeight: "500", color: "#000" }}>
@@ -147,12 +209,21 @@ const SchoolList = () => {
                   <StyledTableCell align="left">School Name</StyledTableCell>
                   <StyledTableCell align="left">School Address</StyledTableCell>
                   <StyledTableCell align="left">School Website</StyledTableCell>
-                  <StyledTableCell align="left">
-                    Contact Person Name
-                  </StyledTableCell>
+                  <StyledTableCell align="left">Contact Name</StyledTableCell>
                   <StyledTableCell align="left">Email</StyledTableCell>
                   <StyledTableCell align="left">Phone No</StyledTableCell>
-                  <StyledTableCell align="center">Action</StyledTableCell>
+                  <StyledTableCell
+                    align="center"
+                    sx={{
+                      position: "sticky",
+                      right: 0,
+                      backgroundColor: "#f5f5f5",
+                      zIndex: 2,
+                      borderLeft: "1px solid rgba(224, 224, 224, 1)",
+                    }}
+                  >
+                    Action
+                  </StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody style={{ height: "auto", position: "relative" }}>
@@ -173,10 +244,15 @@ const SchoolList = () => {
                       </div>
                     </TableCell>
                   </TableRow>
-                ) : schoolData?.length > 0 ? (
+                ) : schoolData?.data?.length > 0 ? (
                   <>
-                    {schoolData?.map((row, index) => (
-                      <Row key={index} row={row} editHandler={editHandler} />
+                    {schoolData?.data?.map((row, index) => (
+                      <Row
+                        key={index}
+                        row={row}
+                        editHandler={editHandler}
+                        deleteHandler={handleDeleteClick}
+                      />
                     ))}
                   </>
                 ) : (
@@ -200,19 +276,84 @@ const SchoolList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <TablePagination
+            component="div"
+            rowsPerPageOptions={[]} // Disable rowsPerPage selection
+            count={schoolData?.totalCount || 0} // Assuming `totalItems` is the total number of records
+            rowsPerPage={pageSize}
+            page={currentPage - 1}
+            onPageChange={(event, newPage) => setCurrentPage(newPage + 1)} // Convert zero-based index to 1-based
+          />
         </Paper>
       </div>
-      <AddSchoolModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        data={selectedItem}
-      />
+      {isModalOpen && (
+        <AddSchoolModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          data={selectedItem}
+        />
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm Deletion"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this school? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteConfirmOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={confirmDelete} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
 
 const Row = (props) => {
-  const { row, editHandler } = props;
+  const { row, editHandler, deleteHandler } = props;
+
+  // Function to create truncated text with tooltip
+  const TruncatedText = ({ text, maxWidth = "150px" }) => {
+    const displayText = text || "N/A";
+
+    return (
+      <Tooltip title={displayText} placement="topLeft">
+        <div
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: maxWidth,
+            cursor: "pointer",
+          }}
+        >
+          {displayText}
+        </div>
+      </Tooltip>
+    );
+  };
+
+  // Format address
+  const formatAddress = () => {
+    const address = `${row?.address?.address || ""}, ${
+      row?.address?.street || ""
+    }, ${row?.address?.city || ""}`.replace(/^,|,$/g, "N/A");
+
+    return address || "N/A";
+  };
 
   return (
     <React.Fragment>
@@ -228,38 +369,37 @@ const Row = (props) => {
         <StyledTableCell align="center" style={{ minWidth: "50px" }}>
           <Typography>{row?.id || 1}</Typography>
         </StyledTableCell>
-        <StyledTableCell align="left" style={{ minWidth: "200px" }}>
-          <Typography>{row?.school_name}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="left" style={{ minWidth: "200px" }}>
-          <Typography>
-            {row?.address?.address +
-              "," +
-              row?.address?.street +
-              "," +
-              row?.address?.city}
-          </Typography>
+        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
+          <TruncatedText text={row?.school_name} maxWidth="140px" />
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>
-            <a
-              href={row?.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline text-blue-500"
-            >
-              {row?.website}
-            </a>
-          </Typography>
+          <TruncatedText text={formatAddress() || "Na"} maxWidth="140px" />
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "150px" }}>
-          <Typography>{row?.contact_person_name}</Typography>
+          {row?.website ? (
+            <Tooltip title={row.website}>
+              <a
+                href={row.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-blue-500"
+                style={{ ...truncatedTextStyle, display: "inline-block" }}
+              >
+                {row.website}
+              </a>
+            </Tooltip>
+          ) : (
+            "N/A"
+          )}
+        </StyledTableCell>
+        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
+          <TruncatedText text={row?.contact_person_name} maxWidth="140px" />
+        </StyledTableCell>
+        <StyledTableCell align="left" style={{ minWidth: "150px" }}>
+          <TruncatedText text={row?.email} maxWidth="140px" />
         </StyledTableCell>
         <StyledTableCell align="left" style={{ minWidth: "100px" }}>
-          <Typography>{row?.email}</Typography>
-        </StyledTableCell>
-        <StyledTableCell align="left" style={{ minWidth: "100px" }}>
-          <Typography>{row?.phone}</Typography>
+          <Typography>{row?.phone || "N/A"}</Typography>
         </StyledTableCell>
         <StyledTableCell
           align="center"
@@ -269,13 +409,40 @@ const Row = (props) => {
             gap: 4,
             alignItems: "center",
           }}
+          sx={{
+            position: "sticky",
+            right: 0,
+            backgroundColor: "#fff",
+            zIndex: 1,
+            borderLeft: "1px solid rgba(224, 224, 224, 1)",
+          }}
         >
-          <CustomButton width={80} py={2} onClick={() => editHandler(row)}>
-            Edit
-          </CustomButton>
-          <Button variant="outlined" color="error">
-            Delete
-          </Button>
+          <div className="flex justify-center items-center gap-2 ">
+            <Tooltip title={"Edit/View"}>
+              <Edit
+                size={"30px"}
+                onClick={() => editHandler(row)}
+                className="cursor-pointer text-blue-500"
+              />
+            </Tooltip>
+            <Tooltip title={"Delete"}>
+              <TrashCan
+                size={"25px"}
+                onClick={() => deleteHandler(row?._id)}
+                className="cursor-pointer text-red-500"
+              />
+            </Tooltip>
+
+            <Tooltip title={"Migration"}>
+              <TbFileDownload
+                size={"27px"}
+                className="cursor-pointer text-blue-500"
+              />
+            </Tooltip>
+            <Tooltip title={"School Login"}>
+              <MdLogin size={"25px"} className="cursor-pointer text-blue-500" />
+            </Tooltip>
+          </div>
         </StyledTableCell>
       </TableRow>
     </React.Fragment>

@@ -22,7 +22,7 @@ import Config from "@/utilities/Config";
 import CitySelectFather from "@/components/StateAndCity/City/FatherCity";
 import CitySelectMother from "@/components/StateAndCity/City/MotherCity";
 import { useRouter } from "next/router";
-import { GetStudentListById } from "@/services/api";
+import { GetStudentListById, UpdateStudent } from "@/services/api";
 
 const validationSchema = Yup.object().shape({
   // name: Yup.string().required("Name is required"),

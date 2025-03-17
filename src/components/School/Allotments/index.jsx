@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
@@ -17,7 +17,7 @@ import SubmitButton from "@/components/CommonButton/SubmitButton";
 import { AddSchool, updateSchool } from "@/services/School";
 import { toast } from "react-toastify";
 
-const SchoolAllotments = ({ data }) => {
+const SchoolAllotments = ({ data, setSlectedTab,refetchData }) => {
   // const data = { _id: "66ef307da3b72c522fbb1cfe" };
 
   const optionsGroups = {
@@ -223,7 +223,7 @@ const SchoolAllotments = ({ data }) => {
     ],
     web_manager: ["Web Page", "Page Section", "Media Asset", "Menu Manager"],
   };
-
+console.log(data,'=datadata')
   const getInitialValues = () => {
     const initialValues = {};
     Object.keys(optionsGroups).forEach((groupKey) => {
@@ -252,31 +252,35 @@ const SchoolAllotments = ({ data }) => {
     return Yup.object().shape(validationSchema);
   };
 
-  // Fetch data for autofill
-  useEffect(() => {
-    const fetchFormData = async () => {
-      try {
-
-        const updatedInitialValues = getInitialValues();
-        Object.keys(data).forEach((key) => {
-          updatedInitialValues[key] = data[key] || [];
+// Fetch data for autofill
+useEffect(() => {
+  const fetchFormData = async () => {
+    try {
+      const updatedInitialValues = getInitialValues();
+      Object.keys(data).forEach((key) => {
+        // Preserve the original data type
+        updatedInitialValues[key] = data[key]; // Don't add || [] to preserve type
+        
+        // For the selectAll logic, still check if it's an array
+        if (Array.isArray(data[key])) {
           updatedInitialValues[
             `selectAll${capitalize(key.replace("selected", ""))}`
           ] =
-            data[key]?.length ===
+            data[key].length ===
             optionsGroups[key.replace("selected", "")]?.length;
-        });
+        }
+      });
 
-        setInitialValues(updatedInitialValues);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
+      setInitialValues(updatedInitialValues);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
+  };
 
-    fetchFormData();
-  }, [data]);
+  fetchFormData();
+}, [data]);
 
   // Handle select all toggle for any group
   const handleSelectAll = (
@@ -301,18 +305,18 @@ const SchoolAllotments = ({ data }) => {
     if (data) {
       payload.id = data?._id;
     }
-    console.log(payload);
+    console.log(payload,values,'=sdfsdfsf');
     try {
       if (data) {
         const resp = await updateSchool(payload);
+        if (resp) {
+          setSlectedTab(3);
+          refetchData()
+        }
         toast.success("Successfully Updated");
-      } else {
-        const resp = await AddSchool(payload);
-        toast.success("Successfully Added");
       }
-      // onClose();
-      console.log(resp);
     } catch (error) {
+      toast.error(error?.response?.data?.message)
       console.error(error);
       // Handle error appropriately
     }
@@ -426,12 +430,8 @@ const SchoolAllotments = ({ data }) => {
 
               {/* Submit button with loading state */}
               <Box className="justify-end  flex">
-                <SubmitButton
-                  variant="contained"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? <CircularProgress size={24} /> : "Submit"}
+                <SubmitButton disabled={isSubmitting}>
+                  {isSubmitting ? <CircularProgress size={24} /> : "Next"}
                 </SubmitButton>
               </Box>
             </FormGroup>

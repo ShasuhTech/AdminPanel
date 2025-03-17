@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -17,13 +17,12 @@ import { eraseCookie } from "@/utilities/cookies";
 import { Cookies } from "@/config/cookies";
 import ServiceList from "@mui/icons-material/ListAltOutlined";
 import SchoolIcon from "@mui/icons-material/School";
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PermDataSettingIcon from '@mui/icons-material/PermDataSetting';
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import PersonAddAltSharpIcon from '@mui/icons-material/PersonAddAltSharp';
-import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
-
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PermDataSettingIcon from "@mui/icons-material/PermDataSetting";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import PersonAddAltSharpIcon from "@mui/icons-material/PersonAddAltSharp";
+import ManageAccountsSharpIcon from "@mui/icons-material/ManageAccountsSharp";
 
 const drawerWidth = 250;
 
@@ -88,9 +87,24 @@ const DrawerList = ({
   handleDrawerClose,
 }) => {
   const router = useRouter();
+  // Check if this path is active
   const isActive = router.pathname === path;
+
+  // Check if any child path is active
+  const isParentActive =
+    children && router.pathname.startsWith(path) && path !== "";
+
+  // State for sublist open/closed
   const [sublistOpen, setSublistOpen] = useState(false);
-  const isMobile = useMediaQuery("(max-width:600px)"); // Adjust breakpoint as needed
+
+  // Effect to automatically open parent when child is active
+  useEffect(() => {
+    if (isParentActive) {
+      setSublistOpen(true);
+    }
+  }, [router.pathname, isParentActive]);
+
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const toggleSublist = () => {
     setSublistOpen(!sublistOpen);
@@ -100,10 +114,9 @@ const DrawerList = ({
     if (!children) {
       router.push({
         pathname: path,
-        query: { title: title }, // Add your query parameter here
+        query: { title: title },
       });
-    }
-    if (logout) {
+    } else if (logout) {
       eraseCookie(Cookies.TOKEN);
     } else {
       toggleSublist();
@@ -120,20 +133,19 @@ const DrawerList = ({
         <ListItemButton
           button
           onClick={handleItemClick}
-          // onMouseEnter={handleDrawerOpen} // Add onMouseEnter event
-          // onMouseLeave={handleDrawerClose} // Add onMouseLeave event
           sx={{
             justifyContent: "initial",
             padding: "5px",
             marginTop: "15px",
             height: "36px",
             paddingLeft: open ? "20px" : "10px",
-            // color: isActive ? "#616477" : "#000000",
-            color: isActive ? "#000" : "#000000",
-            backgroundColor: isActive ? "#FFFFFF" : "transparent",
+            color: isActive || isParentActive ? "#000" : "#000000",
+            backgroundColor:
+              isActive || isParentActive ? "#FFFFFF" : "transparent",
             borderRadius: open ? "10px" : "0px",
             "&:hover": {
-              backgroundColor: isActive ? "#FFFFFF" : "#D9D9D933",
+              backgroundColor:
+                isActive || isParentActive ? "#FFFFFF" : "#D9D9D933",
               padding: "5px",
               height: "36px",
               paddingLeft: open ? "20px" : "10px",
@@ -143,10 +155,11 @@ const DrawerList = ({
         >
           <ListItemIcon sx={{ minWidth: 0, mr: 3.5, justifyContent: "center" }}>
             <Icon
-              className={`${!isActive ? "text-white" : "text-black"} `}
+              className={`${
+                !(isActive || isParentActive) ? "text-white" : "text-black"
+              } `}
               sx={!children && ind !== 1 && { fontSize: "15px" }}
-              // fill={!isActive ? "#000" : "#84484F"}
-              fill={!isActive ? "#fff" : "#fff"}
+              fill={!(isActive || isParentActive) ? "#fff" : "#fff"}
             />
           </ListItemIcon>
           <ListItemText
@@ -156,19 +169,23 @@ const DrawerList = ({
                 ? { fontSize: "13px" }
                 : { fontSize: "15px" }
             }
-            // primaryTypographyProps={{  fontWeight: "bold" }} // Adjust the font size here
-            // className={`${isActive ? "text-primary" : "text-[#616477]"} `}
-            className={`${isActive ? "text-black" : "text-[#fff]"} `}
+            className={`${
+              isActive || isParentActive ? "text-black" : "text-[#fff]"
+            } `}
           />
           {children && (
             <IconButton onClick={toggleSublist}>
               {sublistOpen ? (
                 <KeyboardArrowUpIcon
-                  className={`${isActive ? "text-primary" : "text-white"}`}
+                  className={`${
+                    isActive || isParentActive ? "text-primary" : "text-white"
+                  }`}
                 />
               ) : (
                 <KeyboardArrowDownIcon
-                  className={`${isActive ? "text-primary" : "text-white"}`}
+                  className={`${
+                    isActive || isParentActive ? "text-primary" : "text-white"
+                  }`}
                 />
               )}
             </IconButton>
@@ -214,8 +231,7 @@ const DrawerPath = ({
 }) => {
   const router = useRouter();
   const theme = useTheme();
-  console.log(open, "---");
-  const isMobile = useMediaQuery("(max-width:600px)"); // Adjust breakpoint as needed
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   return (
     <>
@@ -232,9 +248,6 @@ const DrawerPath = ({
               scrollbarWidth: "none",
               msOverflowStyle: "none",
             }}
-            // onMouseEnter={handleDrawerOpen} // Add onMouseEnter event
-            // onMouseLeave={handleDrawerClose} // Add onMouseLeave event
-            // onClick={handleDrawerClose}
           >
             <img
               onClick={() => router.push("/")}
@@ -254,7 +267,12 @@ const DrawerPath = ({
               ind={1}
             />
 
-            <DrawerList path={""} text={"School"} Icon={SchoolIcon} open={open}>
+            <DrawerList
+              path={"/school"}
+              text={"School"}
+              Icon={SchoolIcon}
+              open={open}
+            >
               <DrawerList
                 path={"/school/school-list"}
                 text={"School List"}
@@ -264,7 +282,7 @@ const DrawerPath = ({
               />
             </DrawerList>
             <DrawerList
-              path={""}
+              path={"/student"}
               text={"Student"}
               Icon={SchoolIcon}
               open={open}
@@ -303,7 +321,7 @@ const DrawerPath = ({
             <DrawerList
               path={"/"}
               text={"Dashboards"}
-               Icon={DashboardIcon}
+              Icon={DashboardIcon}
               open={open}
               title={"Dashboards"}
               ind={1}
@@ -317,9 +335,14 @@ const DrawerPath = ({
               ind={1}
             />
             {/* School */}
-            <DrawerList path={""} text={"School"} Icon={SchoolIcon} open={open}>
+            <DrawerList
+              path={"/school"}
+              text={"School"}
+              Icon={SchoolIcon}
+              open={open}
+            >
               <DrawerList
-               path={"/school/school-list"}
+                path={"/school/school-list"}
                 text={"School List"}
                 Icon={ServiceList}
                 open={open}
@@ -335,7 +358,7 @@ const DrawerPath = ({
             </DrawerList>
             {/* Registration */}
             <DrawerList
-              path={""}
+              path={"/registration"}
               text={"Registration"}
               Icon={AppRegistrationIcon}
               open={open}
@@ -383,20 +406,6 @@ const DrawerPath = ({
                 open={open}
                 title={"registration >>Student Transfer"}
               />
-              {/* <DrawerList
-                path={"/registration/subject-assigner"}
-                text={"Subject Assigner"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >>Subject Assigner"}
-              />
-              <DrawerList
-                path={"/registration/subject-master"}
-                text={"Subject Master"}
-                Icon={ServiceList}
-                open={open}
-                title={"registration >>Subject Master"}
-              /> */}
               <DrawerList
                 path={"/registration/time-slot-master"}
                 text={"Time Slot Master"}
@@ -414,7 +423,7 @@ const DrawerPath = ({
             </DrawerList>
             {/* Student */}
             <DrawerList
-              path={""}
+              path={"/student"}
               text={"Student"}
               Icon={PersonAddAltSharpIcon}
               open={open}
@@ -492,7 +501,7 @@ const DrawerPath = ({
             </DrawerList>
             {/* Attendance */}
             <DrawerList
-              path={""}
+              path={"/attendance"}
               text={"Attendance"}
               Icon={AssignmentIcon}
               open={open}
@@ -512,7 +521,6 @@ const DrawerPath = ({
                 title={"Attendance >> Attendance Management"}
               />
 
-             
               <DrawerList
                 path={"/attendance/holiday-assigner"}
                 text={"Holiday Assigner"}
@@ -536,7 +544,12 @@ const DrawerPath = ({
               />
             </DrawerList>
             {/* Staff */}
-            <DrawerList path={""} text={"Staff"} Icon={ManageAccountsSharpIcon} open={open}>
+            <DrawerList
+              path={"/staff"}
+              text={"Staff"}
+              Icon={ManageAccountsSharpIcon}
+              open={open}
+            >
               <DrawerList
                 path={"/staff/staff-list"}
                 text={"Staff List"}
@@ -552,8 +565,12 @@ const DrawerPath = ({
                 title={"Staff >> Master"}
               />
             </DrawerList>
-            <DrawerList path={""} text={"Fee"} Icon={ManageAccountsSharpIcon} open={open}>
-             
+            <DrawerList
+              path={"/fee"}
+              text={"Fee"}
+              Icon={ManageAccountsSharpIcon}
+              open={open}
+            >
               <DrawerList
                 path={"/fee/master"}
                 text={"Master"}

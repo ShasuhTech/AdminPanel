@@ -468,3 +468,8 @@ export const DeleteConfigsIdPettyHead = async (payload) => {
   const response = await axiosInstance.delete(`/petty-head/${payload}`);
   return response?.data;
 };
+
+export const AddFeeStructure = async (payload) => {
+  const response = await axiosInstance.post(`/fee-structure/${payload}`);
+  return response?.data;
+};

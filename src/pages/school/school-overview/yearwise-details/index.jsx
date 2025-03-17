@@ -1,259 +1,88 @@
-import { GetStudentLsit } from '@/services/api';
+import { GetStudentList } from '@/services/api';
 import { StyledTableCell } from '@/styles/TableStyle/indx';
 import { CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 
+const columns = [
+  "SESSION", "NEW", "TC", "DROPOUT", "TOTAL", "PN BOYS", "PN GIRLS", "N BOYS", "N GIRLS",
+  "KG BOYS", "KG GIRLS", "I BOYS", "I GIRLS", "II BOYS", "II GIRLS", "III BOYS", "III GIRLS",
+  "IV BOYS", "IV GIRLS", "V BOYS", "V GIRLS", "VI BOYS", "VI GIRLS", "VII BOYS", "VII GIRLS",
+  "VIII BOYS", "VIII GIRLS", "IX BOYS", "IX GIRLS", "X BOYS", "X GIRLS", "XI BOYS", "XI GIRLS",
+  "XII BOYS", "XII GIRLS"
+];
+
 const YearWiseDetails = () => {
-    const {
-        data: studentData,
-        status: studentStatus,
-        isLoading: studentLoading,
-        refetch: studentRefetch,
-      } = useQuery("studentData", async () => {
-        const res = await GetStudentLsit();
-        return res?.data;
-      });
-  return (
-    <Paper sx={{ width: "100%", overflow: "scroll", boxShadow: 10 }}>
-          <TableContainer sx={{ overflowX: "auto" }}>
-            <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow style={{ fontWeight: "500", color: "#000" ,}}>
-                  <StyledTableCell align="center">SESSION</StyledTableCell>
-                  <StyledTableCell align="center">NEW</StyledTableCell>
-                  <StyledTableCell align="center">TC</StyledTableCell>
-                  <StyledTableCell align="center">DROPOUT</StyledTableCell>
-                  <StyledTableCell align="center">TOTAL</StyledTableCell>
-                  <StyledTableCell align="center">PN BOYS</StyledTableCell>
-                  <StyledTableCell align="center">PN GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">N BOYS</StyledTableCell>
-                  <StyledTableCell align="center">N GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">KG BOYS</StyledTableCell>
-                  <StyledTableCell align="center">KG GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">I BOYS</StyledTableCell>
-                  <StyledTableCell align="center">I GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">II BOYS</StyledTableCell>
-                  <StyledTableCell align="center">II GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">III BOYS</StyledTableCell>
-                  <StyledTableCell align="center">III GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">IV BOYS</StyledTableCell>
-                  <StyledTableCell align="center">IV GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">V BOYS</StyledTableCell>
-                  <StyledTableCell align="center">V GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">VI BOYS</StyledTableCell>
-                  <StyledTableCell align="center">VI GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">VII BOYS</StyledTableCell>
-                  <StyledTableCell align="center">VII GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">VIII BOYS</StyledTableCell>
-                  <StyledTableCell align="center">VIII GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">IX BOYS</StyledTableCell>
-                  <StyledTableCell align="center">IX GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">X BOYS</StyledTableCell>
-                  <StyledTableCell align="center">X GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">XI BOYS</StyledTableCell>
-                  <StyledTableCell align="center">XI GIRLS</StyledTableCell>
-                  <StyledTableCell align="center">XII BOYS</StyledTableCell>
-                  <StyledTableCell align="center">XII GIRLS</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody
-                style={{
-                  height: "auto",
-                  position: "relative",
-                }}
-              >
-                {studentLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={12}>
-                      <div
-                        style={{
-                          position: "relative",
-                          height: "200px",
-                          width: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <CircularProgress />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ) : studentData?.length > 0 ? (
-                  <>
-                    {[1]?.map((row, index) => (
-                      <Row
-                        key={index}
-                        row={row}
-                        index={index}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={12}>
-                      <div
-                        style={{
-                          position: "relative",
-                          height: "200px",
-                          width: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        No Data Found
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+  const { data: studentData, isLoading } = useQuery("studentData", async () => {
+    const res = await GetStudentList();
+    return res?.data || [];
+  });
 
-         
-        </Paper>
-  )
-}
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-export default YearWiseDetails
-
-const Row = (props) => {
-    const { row, salonDetails, setSalonDetails, index } = props;
-    const [open, setOpen] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
-  
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-  
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-    return (
-      <React.Fragment>
-        <TableRow
-          sx={{
-            "& > *": {
-              borderBottom: "unset",
-              background: open ? "#E5EFFC" : "",
-              fontWeight: "600",
-              color: "#000",
-              // overflow: "scroll",
-              cursor: "pointer",
-            },
-          }}
-        >
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>{index + 1}</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>
-             232
-            </Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>16</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>05</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>300</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>20</Typography>
-          </StyledTableCell>
-          <StyledTableCell align="center" style={{ minWidth: "50px" }}>
-            <Typography>30</Typography>
-          </StyledTableCell>
-        </TableRow>
-      </React.Fragment>
-    );
+  const handleChangePage = (_, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
-  
+
+  return (
+    <Paper sx={{ width: "100%", overflow: "auto", boxShadow: 10 }}>
+      <TableContainer>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              {columns.map((col) => (
+                <StyledTableCell key={col} align="center">{col}</StyledTableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center" sx={{ height: 200 }}>
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            ) : studentData?.length > 0 ? (
+              studentData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                <Row key={index} row={row} index={index} />
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center" sx={{ height: 200 }}>
+                  No Data Found
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/* <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={studentData?.length || 0}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      /> */}
+    </Paper>
+  );
+};
+
+const Row = ({ row, index }) => {
+  return (
+    <TableRow>
+      <StyledTableCell align="center"><Typography>{index + 1}</Typography></StyledTableCell>
+      {columns.slice(1).map((col, i) => (
+        <StyledTableCell key={i} align="center">
+          <Typography>{row[col.toLowerCase().replace(/ /g, '_')] || 0}</Typography>
+        </StyledTableCell>
+      ))}
+    </TableRow>
+  );
+};
+
+export default YearWiseDetails;

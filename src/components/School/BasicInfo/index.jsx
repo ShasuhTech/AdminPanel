@@ -1,25 +1,26 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import { SelectField, TextFieldComponent } from "@/components/FormikComponent";
 import Config from "@/utilities/Config";
-import {  Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import SubmitButton from "@/components/CommonButton/SubmitButton";
-import { cityData, StateData } from "@/services/api";
+import { cityData, GetConfigsList, StateData } from "@/services/api";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { AddSchool, updateSchool } from "@/services/School";
+import { AddSchool, GetSchoolList, updateSchool } from "@/services/School";
 
 // Reusable Form Field Component
-const FormField = ({ field, errors, touched, handleChange }) => (
-  <Box className="lg:w-[49%] w-[100%]">
+const FormField = ({ field, errors, touched, handleChange, required }) => (
+  <Box className="mr-4 -mb-2">
     <Field
       name={field.name}
       label={field.label}
       component={field.component}
       options={field.options}
+      required={required}
       disabled={field.disabled}
       onChange={(event) => handleChange(event, field.name)}
     />
@@ -31,10 +32,10 @@ const FormField = ({ field, errors, touched, handleChange }) => (
   </Box>
 );
 
-const SchoolBasicInfo = ({data}) => {
+const SchoolBasicInfo = ({ data, setSlectedTab, refetchData,setStoreStudentId }) => {
   // const data = {_id:'66ef307da3b72c522fbb1cfe'};
 
-  const [state, setState] = useState(data?.state || "");
+  const [state, setState] = useState(data?.state || data?.address?.state || "");
 
   // Fetch state data
   const { data: allState, refetch: refetchStates } = useQuery(
@@ -44,6 +45,18 @@ const SchoolBasicInfo = ({data}) => {
       return res?.data;
     }
   );
+
+  console.log(data, "=sdfsfsdf");
+  const {
+    data: boardData,
+    isLoading: boardDataLoading,
+    refetch: boardDataRefetch,
+  } = useQuery("GetConfigsListd", async () => {
+    const payload = {};
+    payload.type = ["Board", "Country"];
+    const res = await GetConfigsList(payload);
+    return res?.data;
+  });
 
   // Fetch city data based on selected state
   const { data: allCity, refetch: refetchCities } = useQuery(
@@ -60,18 +73,20 @@ const SchoolBasicInfo = ({data}) => {
   // Refetch cities when state changes
   useEffect(() => {
     if (state) refetchCities();
-  }, [state, refetchCities]);
+  }, [state, refetchCities, data?.address?.state, data?.state]);
 
   const fields = [
     {
       id: "school_name",
       label: "School Name",
       name: "school_name",
+      required: true,
       component: TextFieldComponent,
     },
     {
       id: "abbervation",
       label: "School Abbreviation",
+      required: true,
       name: "abbervation",
       component: TextFieldComponent,
     },
@@ -86,7 +101,7 @@ const SchoolBasicInfo = ({data}) => {
       label: "Board",
       name: "borad",
       component: SelectField,
-      options: Config.Boards,
+      options: boardData?.Board,
     },
     {
       id: "school_code",
@@ -141,7 +156,7 @@ const SchoolBasicInfo = ({data}) => {
       label: "Country",
       name: "country",
       component: SelectField,
-      options: Config.CountryDta,
+      options: boardData?.Country,
     },
     {
       id: "state",
@@ -197,24 +212,28 @@ const SchoolBasicInfo = ({data}) => {
       id: "first_name",
       label: "First Name",
       name: "first_name",
+      required: true,
       component: TextFieldComponent,
     },
     {
       id: "last_name",
       label: "Last Name",
       name: "last_name",
+      required: true,
       component: TextFieldComponent,
     },
     {
       id: "mobile_no",
       label: "Mobile No",
       name: "mobile_no",
+      required: true,
       component: TextFieldComponent,
     },
     {
       id: "email",
       label: "Email",
       name: "email",
+      required: true,
       component: TextFieldComponent,
     },
   ];
@@ -230,11 +249,11 @@ const SchoolBasicInfo = ({data}) => {
     preferred_language: data?.preferred_language || "",
     website: data?.website || "",
     sub_domain: data?.sub_domain || "",
-    address: data?.address || "",
-    country: data?.country || "",
-    state: data?.state || "",
-    city: data?.city || "",
-    pincode: data?.pincode || "",
+    address: data?.address?.address || data?.address || "",
+    country: data?.country || data?.address?.country || "",
+    state: data?.state || data?.address?.state || "",
+    city: data?.city || data?.address?.city || "",
+    pincode: data?.pincode || data?.address?.pincode || "",
     phone: data?.phone || "",
     contact_name: data?.contact_name || "",
     contact_email: data?.contact_email || "",
@@ -248,25 +267,25 @@ const SchoolBasicInfo = ({data}) => {
   const validationSchema = Yup.object({
     school_name: Yup.string().required("School Name is required"),
     abbervation: Yup.string().required("School Abbreviation is required"),
-    registration_no: Yup.string().required("Registration No is required"),
-    borad: Yup.string().required("Board is required"),
-    school_code: Yup.string().required("School Code is required"),
-    pf_code: Yup.string().required("PF Code is required"),
-    society_name: Yup.string().required("Society Name is required"),
-    preferred_language: Yup.string().required("Preferred Language is required"),
-    website: Yup.string().url("Invalid website URL"),
-    sub_domain: Yup.string().required("Sub Domain is required"),
-    address: Yup.string().required("Address is required"),
-    country: Yup.string().required("Country is required"),
-    state: Yup.string().required("State is required"),
-    city: Yup.string().required("City is required"),
-    pincode: Yup.string().required("Pin Code is required"),
-    phone: Yup.string().required("Phone No is required"),
-    contact_name: Yup.string().required("Contact Name is required"),
-    contact_email: Yup.string()
-      .email("Invalid email")
-      .required("Contact Email is required"),
-    contact_no: Yup.string().required("Contact No is required"),
+    // registration_no: Yup.string().required("Registration No is required"),
+    // borad: Yup.string().required("Board is required"),
+    // school_code: Yup.string().required("School Code is required"),
+    // pf_code: Yup.string().required("PF Code is required"),
+    // society_name: Yup.string().required("Society Name is required"),
+    // preferred_language: Yup.string().required("Preferred Language is required"),
+    // website: Yup.string().url("Invalid website URL"),
+    // sub_domain: Yup.string().required("Sub Domain is required"),
+    // address: Yup.string().required("Address is required"),
+    // country: Yup.string().required("Country is required"),
+    // state: Yup.string().required("State is required"),
+    // city: Yup.string().required("City is required"),
+    // pincode: Yup.string().required("Pin Code is required"),
+    // phone: Yup.string().required("Phone No is required"),
+    // contact_name: Yup.string().required("Contact Name is required"),
+    // contact_email: Yup.string()
+    //   .email("Invalid email")
+    //   .required("Contact Email is required"),
+    // contact_no: Yup.string().required("Contact No is required"),
     first_name: Yup.string().required("First Name is required"),
     last_name: Yup.string().required("Last Name is required"),
     mobile_no: Yup.string().required("Mobile No is required"),
@@ -281,22 +300,28 @@ const SchoolBasicInfo = ({data}) => {
 
   const handleSubmit = async (values) => {
     const payload = values;
-    if(data){
-      payload.id=data?._id
+    if (data) {
+      payload.id = data?._id;
     }
     console.log(payload);
     try {
       if (data) {
         const resp = await updateSchool(payload);
-      toast.success("Successfully Updated");
-
+        toast.success("Successfully Updated");
+        if (resp) {
+          setSlectedTab(2);
+          refetchData();
+        }
       } else {
         const resp = await AddSchool(payload);
-      toast.success("Successfully Added");
+        if (resp) {
+          setSlectedTab(2);
+          refetchData();
+          setStoreStudentId(resp?._id)
+        }
 
+        toast.success("Successfully Added");
       }
-      // onClose();
-      console.log(resp);
     } catch (error) {
       console.error(error);
       // Handle error appropriately
@@ -307,7 +332,7 @@ const SchoolBasicInfo = ({data}) => {
     <div>
       <Formik
         initialValues={initialValues}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
         onSubmit={handleSubmit}
         enableReinitialize
       >
@@ -325,13 +350,14 @@ const SchoolBasicInfo = ({data}) => {
                 <Typography variant="h5" style={{ fontSize: "17px" }}>
                   {section.title}
                 </Typography>
-                <Box className="flex w-[100%] flex-wrap gap-2">
+                <Box className="grid grid-cols-3  w-full ">
                   {section.fields.map((field) => (
                     <FormField
                       key={field.id}
                       field={field}
                       errors={errors}
                       touched={touched}
+                      required={field?.required}
                       handleChange={(event) =>
                         handleChange(event, setFieldValue, field.name)
                       }
@@ -342,7 +368,7 @@ const SchoolBasicInfo = ({data}) => {
             ))}
 
             <Box className="flex justify-end p-4">
-              <SubmitButton />
+              <SubmitButton children={"Next"} />
             </Box>
           </Form>
         )}

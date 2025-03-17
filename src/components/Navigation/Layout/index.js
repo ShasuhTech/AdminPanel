@@ -56,7 +56,7 @@ export default function Layout({ children }) {
 
   const [open, setOpen] = React.useState(false); // Initially set to false
   const router = useRouter();
-  const [viewportWidth, setViewportWidth] =useState(window.innerWidth);
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -188,36 +188,6 @@ export default function Layout({ children }) {
                 )}
                 {/* <HeaderText title={'home'}/> */}
               </>
-              {/* <Typography variant="h5" className="text-white capitalize whitespace-nowrap " style={{fontSize:'medium'}} >
-                {pathName}
-              </Typography> */}
-              {/* <Grid container spacing={1} alignItems="center">
-           {pathParts.map((part, index) => (
-            <React.Fragment key={index}>
-              {index > 0 && (
-                 <Grid item>
-                 <ChevronRightIcon className="text-white" />
-                 </Grid>
-        
-                )}
-      <Grid item>
-        <Typography
-          variant="h5"
-          className={`capitalize whitespace-nowrap ${
-            // index < part.length -1  ? "hover:underline text-blue-400 cursor-pointer " : "text-gray-400"
-            // index === 3 ? 'text-gray-400' :  "hover:underline text-blue-400 cursor-pointer "
-            index === pathParts.length - 1 ? 'text-gray-400' : 'hover:underline text-blue-400 cursor-pointer'
-          }`}
-          style={{ fontSize: "medium", textOverflow: "ellipsis", overflow: "hidden", maxWidth:'400px'}}
-        >
-          {part}
-        </Typography>
-          </Grid>
-          </React.Fragment>
-            ))}
-    </Grid> */}
-
-              {/* breadcrum start */}
 
               {pathParts
                 .filter((part) => part.trim() !== "")
@@ -231,12 +201,12 @@ export default function Layout({ children }) {
                     case "Salon Details":
                       href = "/salon/Details";
                       break;
-                      case "Pending Combo":
-                      href = "/salon/pending-combos"
+                    case "Pending Combo":
+                      href = "/salon/pending-combos";
                       break;
-                      case "Pending-Offers":
-                        href = "/salon/pending-offers"
-                        break;
+                    case "Pending-Offers":
+                      href = "/salon/pending-offers";
+                      break;
                     default:
                       href = "/";
                   }
